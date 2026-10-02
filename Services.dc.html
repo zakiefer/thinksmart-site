@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Services — Think Smart Public Adjusting</title>
+<meta name="description" content="New claims, denied claims, estimate reviews and supplements. See how a licensed public adjuster documents your loss and negotiates your insurance settlement.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Think Smart Public Adjusting">
+<meta property="og:title" content="Services — Think Smart Public Adjusting">
+<meta property="og:description" content="New claims, denied claims, estimate reviews and supplements. See how a licensed public adjuster documents your loss and negotiates your insurance settlement.">
+<meta property="og:url" content="https://www.thinksmartpublicadjusting.com/Services.dc.html">
+<meta property="og:image" content="https://www.thinksmartpublicadjusting.com/media/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="media/favicon.png">
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<title>Services — Think Smart Public Adjusting</title>
-<link rel="icon" type="image/png" href="media/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -21,6 +31,22 @@
   ::selection { background: #F09A2E; color: #0B0E13; }
   @keyframes tsRise { from { opacity: 0; transform: translateY(110%); } to { opacity: 1; transform: translateY(0); } }
   @keyframes tsFade { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 600px) {
+    header[data-ref="nav"] { gap: 10px !important; padding-left: 14px !important; padding-right: 14px !important; }
+    header[data-ref="nav"] > a:first-child { gap: 8px !important; }
+    header[data-ref="nav"] > a:first-child img { width: 32px !important; height: 32px !important; }
+    header[data-ref="nav"] > a:first-child > span > span:first-child { font-size: 24px !important; white-space: nowrap; }
+    header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 8px !important; letter-spacing: .14em !important; white-space: nowrap; margin-top: 4px !important; }
+    header[data-ref="nav"] > div:last-child { gap: 8px !important; }
+    header[data-ref="nav"] a[href="Claim.dc.html"] { white-space: nowrap; letter-spacing: .08em !important; }
+    header[data-ref="nav"] [data-ref="burger"] { width: 40px !important; height: 40px !important; }
+    input, textarea, select { font-size: 16px !important; }
+  }
+  @media (max-width: 350px) {
+    header[data-ref="nav"] > a:first-child > span > span:first-child { font-size: 21px !important; }
+    header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
+    header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
+  }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     html { scroll-behavior: auto; }
@@ -74,7 +100,7 @@
 
 <section data-screen-label="Services Hero" style="position:relative; padding:calc(96px + 10vh) clamp(20px,4vw,56px) clamp(60px,9vh,110px); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden;">
   <div style="position:absolute; inset:0; opacity:.12; pointer-events:none;">
-    <video src="media/rain-macro-shingles.mp4" autoplay muted loop playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+    <video src="media/rain-macro-shingles.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,14,19,.6) 0%, rgba(11,14,19,.2) 50%, #0B0E13 100%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto;">
@@ -195,7 +221,7 @@
         </div>
       </div>
       <div data-rv="40" style="position:relative; background:#0B0E13; aspect-ratio:16/10; overflow:hidden;">
-        <video src="media/hero-storm-aerial.mp4" autoplay muted loop playsinline preload="metadata" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55;"></video>
+        <video src="media/hero-storm-aerial.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55;"></video>
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 30%, rgba(7,10,15,.85) 100%);"></div>
         <div style="position:absolute; left:24px; bottom:20px; right:24px; display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
           <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; text-transform:uppercase; font-size:32px; color:#EBE5D8;">Hurricane</span>

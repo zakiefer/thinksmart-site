@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  @media (max-width: 600px) { input[placeholder="Type your message…"] { font-size: 16px !important; } }
   @keyframes tsChatBlink { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
   @keyframes tsChatUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes tsChatDot { 0%, 80%, 100% { transform: translateY(0); opacity: .4; } 40% { transform: translateY(-4px); opacity: 1; } }
@@ -20,7 +21,7 @@
 
 <div>
   <sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed; bottom:104px; right:24px; z-index:96; width:min(380px, calc(100vw - 32px)); height:min(540px, 72vh); background:#10141B; border:1px solid rgba(235,229,216,.18); border-radius:6px; box-shadow:0 24px 64px rgba(0,0,0,.55); display:flex; flex-direction:column; overflow:hidden; animation:tsChatUp .35s cubic-bezier(.22,1,.36,1) both; font-family:'Archivo','Helvetica Neue',sans-serif;">
+    <div style="position:fixed; bottom:104px; right:clamp(16px,4vw,24px); z-index:96; width:min(380px, calc(100vw - 32px)); height:min(540px, 72vh); background:#10141B; border:1px solid rgba(235,229,216,.18); border-radius:6px; box-shadow:0 24px 64px rgba(0,0,0,.55); display:flex; flex-direction:column; overflow:hidden; animation:tsChatUp .35s cubic-bezier(.22,1,.36,1) both; font-family:'Archivo','Helvetica Neue',sans-serif;">
       <div style="display:flex; align-items:center; gap:14px; padding:16px 18px; background:#070A0F; border-bottom:1px solid rgba(235,229,216,.12);">
         <span style="width:42px; height:42px; border-radius:50%; background:#0B0E13; border:1px solid rgba(240,154,46,.5); display:flex; align-items:center; justify-content:center; flex:none;"><img src="media/mark.webp" alt="" style="width:26px; height:26px; object-fit:contain; display:block;"></span>
         <div style="display:flex; flex-direction:column; gap:3px; min-width:0;">
