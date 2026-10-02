@@ -48,6 +48,10 @@
     header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
     header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
   }
+  @media (max-height: 560px) {
+    [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
+    [data-ref="mobileMenu"] > a { font-size: 30px !important; }
+  }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     html { scroll-behavior: auto; }
@@ -84,7 +88,7 @@
   </div>
 </header>
 
-<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; padding:90px clamp(24px,8vw,64px) 60px;">
+<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.14; pointer-events:none;">
   <button data-mclose="1" aria-label="Close menu" style="position:absolute; top:20px; right:clamp(20px,4vw,56px); background:transparent; border:1px solid rgba(235,229,216,.3); color:#EBE5D8; width:44px; height:44px; border-radius:2px; font-size:20px; cursor:pointer;">×</button>
   <a href="Home.dc.html" data-mclose="1" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,9vw,64px); line-height:1.1; color:#EBE5D8; width:fit-content;">Home</a>
@@ -147,7 +151,7 @@
 </section>
 
 <section data-screen-label="The Adjuster" style="padding:clamp(80px,12vh,150px) clamp(20px,4vw,56px); background:#070A0F; border-bottom:1px solid rgba(235,229,216,.08);">
-  <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:clamp(32px,5vw,80px); align-items:center;">
+  <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(32px,5vw,80px); align-items:center;">
     <figure data-rv="80" style="margin:0; position:relative; overflow:hidden; border:1px solid rgba(235,229,216,.12); border-radius:4px; aspect-ratio:261/241; width:100%; max-width:520px; justify-self:center;">
       <img src="media/jonathan.webp" alt="Jonathan Nelson, President and CEO of Think Smart Public Adjusting" style="width:100%; height:100%; object-fit:cover; display:block;">
       <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 62%, rgba(7,10,15,.72) 100%); pointer-events:none;"></div>
@@ -280,7 +284,7 @@ class Component extends DCLogic {
     const burger = this._root.querySelector('[data-ref="burger"]');
     const mMenu = this._root.querySelector('[data-ref="mobileMenu"]');
     const applyNav = () => {
-      const m = window.innerWidth < 900;
+      const m = window.innerWidth < 1040;
       if (navLinks) navLinks.style.display = m ? 'none' : 'flex';
       if (navPhone) navPhone.style.display = m ? 'none' : 'inline-block';
       if (burger) burger.style.display = m ? 'flex' : 'none';

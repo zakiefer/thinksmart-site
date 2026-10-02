@@ -49,6 +49,10 @@
     header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
     header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
   }
+  @media (max-height: 560px) {
+    [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
+    [data-ref="mobileMenu"] > a { font-size: 30px !important; }
+  }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     html { scroll-behavior: auto; }
@@ -85,7 +89,7 @@
   </div>
 </header>
 
-<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; padding:90px clamp(24px,8vw,64px) 60px;">
+<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.14; pointer-events:none;">
   <button data-mclose="1" aria-label="Close menu" style="position:absolute; top:20px; right:clamp(20px,4vw,56px); background:transparent; border:1px solid rgba(235,229,216,.3); color:#EBE5D8; width:44px; height:44px; border-radius:2px; font-size:20px; cursor:pointer;">×</button>
   <a href="Home.dc.html" data-mclose="1" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,9vw,64px); line-height:1.1; color:#EBE5D8; width:fit-content;">Home</a>
@@ -114,7 +118,7 @@
 </section>
 
 <section data-screen-label="Contact Channels" style="padding:clamp(50px,8vh,100px) clamp(20px,4vw,56px); border-bottom:1px solid rgba(235,229,216,.08);">
-  <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1px; background:rgba(235,229,216,.12); border:1px solid rgba(235,229,216,.12);">
+  <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr)); gap:1px; background:rgba(235,229,216,.12); border:1px solid rgba(235,229,216,.12);">
     <a data-rv="0" href="tel:8127745049" style="background:#0B0E13; padding:36px 30px 44px; display:flex; flex-direction:column; gap:14px; transition:background .3s ease;" style-hover="background:#10141B;">
       <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.24em; color:rgba(235,229,216,.58);">FASTEST</span>
       <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; text-transform:uppercase; font-size:36px; line-height:1; color:#F09A2E;">Call now</span>
@@ -143,7 +147,7 @@
 </section>
 
 <section data-screen-label="Message Form" style="padding:clamp(70px,10vh,130px) clamp(20px,4vw,56px);">
-  <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:clamp(36px,5vw,90px); align-items:start;">
+  <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(36px,5vw,90px); align-items:start;">
     <div>
       <span data-rv="0" style="display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.3em; color:#F09A2E; margin-bottom:16px;">OR LEAVE A MESSAGE</span>
       <h2 data-rv="60" style="margin:0 0 20px; font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,5vw,80px); line-height:.92; color:#EBE5D8;">We'll call <span style="color:#F09A2E;">you.</span></h2>
@@ -161,7 +165,8 @@
 
     <div data-rv="120">
       <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
-        <form onSubmit="{{ submit }}" style="background:#10141B; border:1px solid rgba(235,229,216,.14); border-radius:4px; padding:clamp(24px,3vw,40px); display:flex; flex-direction:column; gap:20px;">
+        <form onSubmit="{{ submit }}" noValidate="{{ true }}" style="position:relative; background:#10141B; border:1px solid rgba(235,229,216,.14); border-radius:4px; padding:clamp(24px,3vw,40px); display:flex; flex-direction:column; gap:20px;">
+          <input name="_hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;">
             <label style="display:flex; flex-direction:column; gap:8px;">
               <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">NAME *</span>
@@ -174,7 +179,7 @@
           </div>
           <label style="display:flex; flex-direction:column; gap:8px;">
             <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">WHAT'S GOING ON?</span>
-            <textarea name="message" rows="5" placeholder="A hailstorm came through last week and my roof…" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; resize:vertical; min-height:120px; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;"></textarea>
+            <textarea name="message" rows="5" maxlength="4000" placeholder="A hailstorm came through last week and my roof…" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; resize:vertical; min-height:120px; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;"></textarea>
           </label>
           <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
             <button type="submit" disabled="{{ sending }}" style="background:#F09A2E; color:#0B0E13; border:none; font-weight:700; font-size:14px; letter-spacing:.12em; text-transform:uppercase; font-family:'Archivo',sans-serif; padding:17px 30px; border-radius:2px; cursor:pointer; transition:background .25s ease, opacity .25s ease; opacity:{{ submitOpacity }};" style-hover="background:#FFB042;">{{ submitLabel }}</button>
@@ -286,7 +291,7 @@ class Component extends DCLogic {
     const burger = this._root.querySelector('[data-ref="burger"]');
     const mMenu = this._root.querySelector('[data-ref="mobileMenu"]');
     const applyNav = () => {
-      const m = window.innerWidth < 900;
+      const m = window.innerWidth < 1040;
       if (navLinks) navLinks.style.display = m ? 'none' : 'flex';
       if (navPhone) navPhone.style.display = m ? 'none' : 'inline-block';
       if (burger) burger.style.display = m ? 'flex' : 'none';
@@ -344,11 +349,15 @@ class Component extends DCLogic {
       submit: (e) => {
         e.preventDefault();
         if (this.state.sending) return;
+        const els = e.target.elements;
+        if (els.phone) els.phone.setCustomValidity((els.phone.value.match(/\d/g) || []).length < 10 ? 'Please enter a 10-digit phone number so we can call you.' : '');
+        if (els.name) els.name.setCustomValidity(els.name.value.trim() ? '' : 'Please fill out this field.');
         if (e.target.checkValidity && !e.target.checkValidity()) {
           if (e.target.reportValidity) e.target.reportValidity();
           return;
         }
         const fd = new FormData(e.target);
+        if (fd.get('_hp')) { this.setState({ submitted: true }); return; } // bots fill the hidden field
         const fields = {
           'Full name': fd.get('name') || '',
           'Phone': fd.get('phone') || '',

@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+ini_set('display_errors', '0');
+
 const LEAD_TO          = 'thinksmartpublicadjusting@gmail.com';
 const MAX_BODY         = 20000;            // bytes, JSON leads
 const MAX_PHOTOS       = 10;
@@ -23,9 +25,15 @@ function out(bool $ok, string $msg = '', int $code = 200, array $extra = []): vo
     exit;
 }
 
-// Header values must never contain CR/LF (header injection).
+// Header values must never contain CR/LF or other control bytes (header injection;
+// PHP 8's mail() also throws on NUL bytes).
 function header_safe(string $s): string {
-    return trim((string)preg_replace('/[\r\n\t]+/', ' ', $s));
+    return trim((string)preg_replace('/[\x00-\x1F\x7F]+/', ' ', $s));
+}
+
+// Body values keep newlines and tabs but lose every other control byte.
+function body_safe(string $s): string {
+    return trim((string)preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', str_replace("\r", '', $s)));
 }
 
 function encode_subject(string $s): string {
@@ -40,8 +48,51 @@ function site_domain(): string {
     return $domain !== '' ? $domain : 'localhost';
 }
 
+function from_address(): string {
+    return 'noreply@' . site_domain();
+}
+
 function from_header(): string {
-    return 'Think Smart Website <noreply@' . site_domain() . '>';
+    return 'Think Smart Website <' . from_address() . '>';
+}
+
+// Sends with the envelope sender set to the From address so SPF/DMARC line up;
+// falls back to a plain send on hosts that refuse the -f switch.
+function send_mail(string $subject, string $body, array $headers): bool {
+    if (@mail(LEAD_TO, $subject, $body, $headers, '-f' . from_address())) {
+        return true;
+    }
+    return @mail(LEAD_TO, $subject, $body, $headers);
+}
+
+// Cross-site pages must not be able to drive this endpoint from a visitor's browser.
+function require_same_origin(): void {
+    $host   = strtolower((string)preg_replace('/:\d+$/', '', (string)($_SERVER['HTTP_HOST'] ?? '')));
+    $source = (string)($_SERVER['HTTP_ORIGIN'] ?? ($_SERVER['HTTP_REFERER'] ?? ''));
+    if ($source === '' || $host === '') {
+        return;
+    }
+    $sourceHost = strtolower((string)parse_url($source, PHP_URL_HOST));
+    if ($sourceHost !== '' && $sourceHost !== $host) {
+        out(false, 'cross-site request refused', 403);
+    }
+}
+
+// Keeps a copy of every lead in a folder ABOVE the web root, so a lead is never lost
+// if an email is junked or bounced. Skipped silently when that folder is unavailable.
+function store_copy(array $record): void {
+    $root = rtrim((string)($_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
+    if ($root === '' || $root === dirname($root)) {
+        return;
+    }
+    $dir = dirname($root) . '/thinksmart-leads';
+    if (!is_dir($dir) && !@mkdir($dir, 0700)) {
+        return;
+    }
+    $line = json_encode(['received' => gmdate('c')] + $record, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR);
+    if (is_string($line)) {
+        @file_put_contents($dir . '/leads-' . gmdate('Y-m') . '.log', $line . "\n", FILE_APPEND | LOCK_EX);
+    }
 }
 
 // Per-IP rate limit: at most 10 sends per minute and 60 per hour. A plain cooldown
@@ -93,7 +144,7 @@ function build_lead_mail(string $kind, string $caseNo, array $payload, string $i
             continue;
         }
         $key = header_safe(substr((string)$k, 0, 80));
-        $val = substr(str_replace("\r", '', trim((string)$v)), 0, 6000);
+        $val = body_safe((string)$v); // total size is already bounded by MAX_BODY
         if ($key === '' || $val === '') {
             continue;
         }
@@ -127,16 +178,19 @@ function build_lead_mail(string $kind, string $caseNo, array $payload, string $i
           . str_repeat('-', 40) . "\n\n"
           . implode("\n\n", $lines) . "\n";
 
+    // base64 keeps every line short: mail servers bounce messages with very long lines,
+    // and visitors do type whole paragraphs without a line break.
     $headers = [
-        'From'         => from_header(),
-        'MIME-Version' => '1.0',
-        'Content-Type' => 'text/plain; charset=UTF-8',
-        'X-Mailer'     => 'ThinkSmart-Lead-Mailer',
+        'From'                      => from_header(),
+        'MIME-Version'              => '1.0',
+        'Content-Type'              => 'text/plain; charset=UTF-8',
+        'Content-Transfer-Encoding' => 'base64',
+        'X-Mailer'                  => 'ThinkSmart-Lead-Mailer',
     ];
     if ($replyTo !== '') {
         $headers['Reply-To'] = $replyTo;
     }
-    return [encode_subject($subject), $body, $headers];
+    return [encode_subject($subject), chunk_split(base64_encode($body), 76, "\n"), $headers];
 }
 
 // Validates PHP's $_FILES['photos'] entry and returns only genuine images as
@@ -230,6 +284,7 @@ function main(): void {
     }
 
     $ip = (string)($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+    require_same_origin();
 
     // --- Photo upload (multipart) ---
     if (isset($_FILES['photos'])) {
@@ -241,14 +296,21 @@ function main(): void {
         if ($photos === []) {
             out(false, 'no valid photos', 400);
         }
-        $caseNo = (string)preg_replace('/[^A-Za-z0-9\- ]/', '', (string)($_POST['case_no'] ?? ''));
-        $name   = substr(header_safe((string)($_POST['name'] ?? '')), 0, 60);
-        [$subject, $body, $headers] = build_photo_mail(substr($caseNo, 0, 40), $name, $ip, $photos);
-        $sent = mail(LEAD_TO, $subject, $body, $headers);
+        $caseIn = $_POST['case_no'] ?? '';
+        $nameIn = $_POST['name'] ?? '';
+        $caseNo = substr((string)preg_replace('/[^A-Za-z0-9\- ]/', '', is_string($caseIn) ? $caseIn : ''), 0, 40);
+        $name   = substr(header_safe(is_string($nameIn) ? $nameIn : ''), 0, 60);
+        [$subject, $body, $headers] = build_photo_mail($caseNo, $name, $ip, $photos);
+        $sent = send_mail($subject, $body, $headers);
+        store_copy(['kind' => 'photos', 'case_no' => $caseNo, 'name' => $name, 'ip' => $ip, 'photos' => count($photos), 'emailed' => $sent]);
         out($sent, $sent ? 'ok' : 'mail() failed', 200, ['count' => $sent ? count($photos) : 0]);
     }
 
     // --- JSON lead ---
+    // A cross-site page cannot send this content type without a CORS preflight, which fails.
+    if (stripos((string)($_SERVER['CONTENT_TYPE'] ?? ''), 'application/json') !== 0) {
+        out(false, 'JSON only', 415);
+    }
     $raw = file_get_contents('php://input', false, null, 0, MAX_BODY + 1);
     if (!is_string($raw) || $raw === '') {
         out(false, 'empty body', 400);
@@ -266,9 +328,10 @@ function main(): void {
 
     rate_limit($ip);
 
-    $kindIn  = (string)($data['kind'] ?? '');
+    $kindIn  = $data['kind'] ?? '';
     $kind    = in_array($kindIn, ['chat', 'contact'], true) ? $kindIn : 'claim';
-    $caseNo  = substr((string)preg_replace('/[^A-Za-z0-9\- ]/', '', (string)($data['case_no'] ?? '')), 0, 40);
+    $caseIn  = $data['case_no'] ?? '';
+    $caseNo  = substr((string)preg_replace('/[^A-Za-z0-9\- ]/', '', is_string($caseIn) ? $caseIn : ''), 0, 40);
     $payload = (isset($data['payload']) && is_array($data['payload'])) ? $data['payload'] : [];
 
     $mail = build_lead_mail($kind, $caseNo, $payload, $ip);
@@ -276,7 +339,8 @@ function main(): void {
         out(false, 'missing payload', 400);
     }
     [$subject, $body, $headers] = $mail;
-    $sent = mail(LEAD_TO, $subject, $body, $headers);
+    $sent = send_mail($subject, $body, $headers);
+    store_copy(['kind' => $kind, 'case_no' => $caseNo, 'ip' => $ip, 'emailed' => $sent, 'payload' => $payload]);
     out($sent, $sent ? 'ok' : 'mail() failed');
 }
 

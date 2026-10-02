@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -95,14 +96,20 @@ class Component extends DCLogic {
     this._timers.push(t);
   }
 
+  // A phone-shaped or email-shaped token — not just "lots of digits", which would
+  // also match dates, dollar amounts, ZIP codes and claim numbers.
   _looksLikeContact(text) {
-    return (text.match(/\d/g) || []).length >= 7 || text.indexOf('@') !== -1;
+    const phone = /(?:\+?1[\s.\-]?)?\(?\b\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}\b/.test(text);
+    const email = /[^\s@]+@[^\s@]+\.[^\s@]+/.test(text);
+    return phone || email;
   }
 
   _deliver(kind) {
-    const transcript = this.state.messages
+    const full = this.state.messages
       .map((m) => (m.me ? 'Visitor: ' : 'Think Smart: ') + m.text)
       .join('\n');
+    // Keep the newest part of a very long chat: that is where the phone number is.
+    const transcript = full.length > 12000 ? '[earlier messages trimmed]\n' + full.slice(-12000) : full;
     const emailSend = fetch('https://formsubmit.co/ajax/thinksmartpublicadjusting@gmail.com', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
