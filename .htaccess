@@ -13,12 +13,15 @@ AddType video/mp4 .mp4
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Uncomment these two lines once the SSL certificate is active on the domain:
-# RewriteCond %{HTTPS} off
-# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# Uncomment these four lines once the SSL certificate is active for BOTH
+# thinksmartpublicadjusting.com and www.thinksmartpublicadjusting.com:
+# RewriteCond %{HTTPS} off [OR]
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+# RewriteRule ^ https://www.%1%{REQUEST_URI} [L,R=301]
 
 # Old Wix URLs -> new pages, so existing search results and bookmarks keep working.
-RewriteRule ^about/?$ /About.dc.html [R=301,L]
+RewriteRule ^(about|about-5|copy-of-meet)/?$ /About.dc.html [R=301,L]
 RewriteRule ^services/?$ /Services.dc.html [R=301,L]
 RewriteRule ^what-we-cover/?$ /Services.dc.html#cover [R=301,L,NE]
 RewriteRule ^frequently-asked-questions/?$ /FAQ.dc.html [R=301,L]

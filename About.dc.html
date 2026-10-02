@@ -14,6 +14,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://www.thinksmartpublicadjusting.com/About.dc.html">
 <link rel="icon" type="image/png" href="media/favicon.png">
 <script src="./support.js"></script>
 </head>
@@ -61,6 +62,8 @@
 
 <div style="position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.05; mix-blend-mode:overlay; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E&quot;);"></div>
 
+<a href="#main" style="position:fixed; left:-9999px; top:8px; z-index:100; background:#F09A2E; color:#0B0E13; padding:10px 14px; border-radius:2px; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase;" style-focus="left:8px;">Skip to content</a>
+
 <dc-import name="ChatWidget" hint-size="1px,1px"></dc-import>
 
 <header data-ref="nav" data-screen-label="Nav" style="position:fixed; top:0; left:0; right:0; z-index:80; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px clamp(20px,4vw,56px); transition:background .4s ease, border-color .4s ease, padding .4s ease; background:transparent; border-bottom:1px solid transparent;">
@@ -103,7 +106,7 @@
   </div>
 </div>
 
-<section data-screen-label="About Hero" style="position:relative; min-height:92vh; display:flex; align-items:flex-end; overflow:hidden;">
+<section id="main" data-screen-label="About Hero" style="position:relative; min-height:92vh; display:flex; align-items:flex-end; overflow:hidden;">
   <div style="position:absolute; inset:0;">
     <img src="media/adjuster-roof-gold.webp" alt="Adjuster documenting roof damage at golden hour" style="width:100%; height:110%; object-fit:cover; display:block;" data-plx="1">
   </div>
@@ -254,7 +257,8 @@ class Component extends DCLogic {
     this._plx = $$('[data-plx]');
     this._reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    $$('video').forEach((v) => { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const calmMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    $$('video').forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); return; } const p = v.play(); if (p && p.catch) p.catch(() => {}); });
 
     const revealEls = $$('[data-rv]');
     if (!this._reduced) {
@@ -299,11 +303,16 @@ class Component extends DCLogic {
     window.addEventListener('resize', applyNav);
     this._cleanup.push(() => window.removeEventListener('resize', applyNav));
     if (burger && mMenu) {
-      const openM = () => { mMenu.style.display = 'flex'; };
+      const closeM = () => { mMenu.style.display = 'none'; burger.setAttribute('aria-expanded', 'false'); };
+      const openM = () => { mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
+      const escM = (ev) => { if (ev.key === 'Escape' && mMenu.style.display === 'flex') { closeM(); burger.focus(); } };
+      burger.setAttribute('aria-expanded', 'false');
+      document.addEventListener('keydown', escM);
+      this._cleanup.push(() => document.removeEventListener('keydown', escM));
       burger.addEventListener('click', openM);
       this._cleanup.push(() => burger.removeEventListener('click', openM));
       Array.from(mMenu.querySelectorAll('[data-mclose]')).forEach((el) => {
-        el.addEventListener('click', () => { mMenu.style.display = 'none'; });
+        el.addEventListener('click', closeM);
       });
     }
 

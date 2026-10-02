@@ -14,6 +14,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://www.thinksmartpublicadjusting.com/Services.dc.html">
 <link rel="icon" type="image/png" href="media/favicon.png">
 <script src="./support.js"></script>
 </head>
@@ -61,6 +62,8 @@
 
 <div style="position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.05; mix-blend-mode:overlay; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E&quot;);"></div>
 
+<a href="#main" style="position:fixed; left:-9999px; top:8px; z-index:100; background:#F09A2E; color:#0B0E13; padding:10px 14px; border-radius:2px; font-weight:700; font-size:13px; letter-spacing:.08em; text-transform:uppercase;" style-focus="left:8px;">Skip to content</a>
+
 <dc-import name="ChatWidget" hint-size="1px,1px"></dc-import>
 
 <header data-ref="nav" data-screen-label="Nav" style="position:fixed; top:0; left:0; right:0; z-index:80; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px clamp(20px,4vw,56px); transition:background .4s ease, border-color .4s ease, padding .4s ease; background:transparent; border-bottom:1px solid transparent;">
@@ -103,7 +106,7 @@
   </div>
 </div>
 
-<section data-screen-label="Services Hero" style="position:relative; padding:calc(96px + 10vh) clamp(20px,4vw,56px) clamp(60px,9vh,110px); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden;">
+<section id="main" data-screen-label="Services Hero" style="position:relative; padding:calc(96px + 10vh) clamp(20px,4vw,56px) clamp(60px,9vh,110px); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden;">
   <div style="position:absolute; inset:0; opacity:.12; pointer-events:none;">
     <video src="media/rain-macro-shingles.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
   </div>
@@ -293,7 +296,7 @@
     <h2 data-rv="0" style="margin:0; font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(44px,6vw,96px); line-height:.9; color:#0B0E13; max-width:800px;">Not sure which fight is yours?</h2>
     <div data-rv="100" style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
       <a href="tel:8127745049" style="display:inline-flex; align-items:center; gap:12px; background:#0B0E13; color:#EBE5D8; font-weight:700; font-size:14px; letter-spacing:.12em; text-transform:uppercase; padding:18px 28px; border-radius:2px;" style-hover="color:#F09A2E;">Call 812-774-5049</a>
-      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(11,14,19,.65);">FREE CLAIM REVIEW — WE'LL TELL YOU STRAIGHT</span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(11,14,19,.75);">FREE CLAIM REVIEW — WE'LL TELL YOU STRAIGHT</span>
     </div>
   </div>
 </section>
@@ -356,7 +359,8 @@ class Component extends DCLogic {
     this._plx = $$('[data-plx]');
     this._reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    $$('video').forEach((v) => { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const calmMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    $$('video').forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); return; } const p = v.play(); if (p && p.catch) p.catch(() => {}); });
 
     const revealEls = $$('[data-rv]');
     if (!this._reduced) {
@@ -401,11 +405,16 @@ class Component extends DCLogic {
     window.addEventListener('resize', applyNav);
     this._cleanup.push(() => window.removeEventListener('resize', applyNav));
     if (burger && mMenu) {
-      const openM = () => { mMenu.style.display = 'flex'; };
+      const closeM = () => { mMenu.style.display = 'none'; burger.setAttribute('aria-expanded', 'false'); };
+      const openM = () => { mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
+      const escM = (ev) => { if (ev.key === 'Escape' && mMenu.style.display === 'flex') { closeM(); burger.focus(); } };
+      burger.setAttribute('aria-expanded', 'false');
+      document.addEventListener('keydown', escM);
+      this._cleanup.push(() => document.removeEventListener('keydown', escM));
       burger.addEventListener('click', openM);
       this._cleanup.push(() => burger.removeEventListener('click', openM));
       Array.from(mMenu.querySelectorAll('[data-mclose]')).forEach((el) => {
-        el.addEventListener('click', () => { mMenu.style.display = 'none'; });
+        el.addEventListener('click', closeM);
       });
     }
 
