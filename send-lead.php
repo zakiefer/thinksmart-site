@@ -54,7 +54,8 @@ if ($last !== false && (time() - $last) < 10) {
 }
 @touch($lock);
 
-$kind    = (($data['kind'] ?? '') === 'chat') ? 'chat' : 'claim';
+$kindIn  = (string)($data['kind'] ?? '');
+$kind    = in_array($kindIn, ['chat', 'contact'], true) ? $kindIn : 'claim';
 $caseNo  = preg_replace('/[^A-Za-z0-9\- ]/', '', (string)($data['case_no'] ?? ''));
 $payload = (isset($data['payload']) && is_array($data['payload'])) ? $data['payload'] : [];
 if ($payload === []) {
@@ -102,9 +103,13 @@ foreach ($payload as $k => $v) {
     }
 }
 
-$subject = $kind === 'chat'
-    ? 'Website chat lead'
-    : 'New claim intake' . ($name !== '' ? ' — ' . $name : '') . ($caseNo !== '' ? ' — ' . $caseNo : '');
+if ($kind === 'chat') {
+    $subject = 'Website chat lead';
+} elseif ($kind === 'contact') {
+    $subject = 'Website contact message' . ($name !== '' ? ' — ' . $name : '');
+} else {
+    $subject = 'New claim intake' . ($name !== '' ? ' — ' . $name : '') . ($caseNo !== '' ? ' — ' . $caseNo : '');
+}
 $subject = $headerSafe($subject);
 
 $body = "New website {$kind} lead\n"

@@ -1,0 +1,45 @@
+# Think Smart Public Adjusting — Apache config (GoDaddy cPanel).
+# Assumes the site is uploaded to the domain's web root (public_html).
+
+# Serve the homepage at the bare domain; index.html remains the fallback.
+DirectoryIndex Home.dc.html index.html
+
+Options -Indexes
+
+AddType image/webp .webp
+AddType video/mp4 .mp4
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Uncomment these two lines once the SSL certificate is active on the domain:
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Old Wix URLs -> new pages, so existing search results and bookmarks keep working.
+RewriteRule ^about/?$ /About.dc.html [R=301,L]
+RewriteRule ^services/?$ /Services.dc.html [R=301,L]
+RewriteRule ^what-we-cover/?$ /Services.dc.html#cover [R=301,L,NE]
+RewriteRule ^frequently-asked-questions/?$ /FAQ.dc.html [R=301,L]
+RewriteRule ^contact/?$ /Contact.dc.html [R=301,L]
+RewriteRule ^file-a-claim/?$ /Claim.dc.html [R=301,L]
+RewriteRule ^copy-of-file-a-claim(-1)?/?$ /Claim.dc.html [R=301,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+# Pages and the runtime revalidate on every visit so edits show up immediately.
+<FilesMatch "\.(html|js|php)$">
+Header set Cache-Control "no-cache"
+</FilesMatch>
+<FilesMatch "\.(webp|png|mp4|pdf)$">
+Header set Cache-Control "public, max-age=2592000"
+</FilesMatch>
+Header set X-Content-Type-Options "nosniff"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json
+</IfModule>
+
+AddDefaultCharset UTF-8
