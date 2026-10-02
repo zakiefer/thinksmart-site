@@ -32,6 +32,7 @@
   input::placeholder, textarea::placeholder { color: rgba(235,229,216,.35); }
   @keyframes tsRise { from { opacity: 0; transform: translateY(110%); } to { opacity: 1; transform: translateY(0); } }
   @keyframes tsFade { from { opacity: 0; } to { opacity: 1; } }
+  [id] { scroll-margin-top: 96px; }
   @media (max-width: 600px) {
     header[data-ref="nav"] { gap: 10px !important; padding-left: 14px !important; padding-right: 14px !important; }
     header[data-ref="nav"] > a:first-child { gap: 8px !important; }
@@ -130,7 +131,7 @@
         </div>
         <div style="margin-top:28px; display:flex; flex-wrap:wrap; gap:10px; animation:tsFade 1s ease .65s both;">
           <span style="background:#EDE8DC; border-radius:3px; padding:10px; display:inline-flex; box-shadow:0 8px 22px rgba(0,0,0,.4); transform:rotate(-3deg);"><img src="media/seal.webp" alt="Paid or free — Think Smart guarantee" style="width:118px; height:118px; object-fit:contain; display:block;"></span>
-          <a href="https://www.dropbox.com/request/3RmRbr6GW5UK3A6tyWh4" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.16em; color:rgba(235,229,216,.7); border:1px solid rgba(235,229,216,.2); padding:10px 14px; border-radius:2px;" style-hover="color:#F09A2E; border-color:#F09A2E;">SUBMIT PHOTOS →</a>
+          <a href="#photos" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.16em; color:rgba(235,229,216,.7); border:1px solid rgba(235,229,216,.2); padding:10px 14px; border-radius:2px;" style-hover="color:#F09A2E; border-color:#F09A2E;">SUBMIT PHOTOS →</a>
         </div>
       </div>
     </div>
@@ -200,11 +201,11 @@
             </div>
           </div>
 
-          <div style="display:flex; flex-direction:column; gap:10px;">
+          <div id="photos" style="display:flex; flex-direction:column; gap:10px;">
             <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">DAMAGE PHOTOS</span>
             <div onClick="{{ pickFiles }}" onDragOver="{{ dragOver }}" onDrop="{{ dropFiles }}" role="button" style="border:1px dashed rgba(235,229,216,.32); border-radius:2px; background:rgba(11,14,19,.6); padding:28px 20px; display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; text-align:center; transition:border-color .25s ease;" style-hover="border-color:#F09A2E;">
               <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.18em; color:#F09A2E;">⇪ DROP PHOTOS HERE — OR CLICK TO BROWSE</span>
-              <span style="font-size:13px; color:rgba(235,229,216,.58);">Roof, ceilings, siding, water lines — as many as you have.</span>
+              <span style="font-size:13px; color:rgba(235,229,216,.58);">Roof, ceilings, siding, water lines — up to 10 photos, sent with your case file.</span>
             </div>
             <input ref="{{ fileRef }}" onChange="{{ filesChosen }}" type="file" accept="image/*" multiple="{{ true }}" style="display:none;">
             <sc-if value="{{ hasPhotos }}" hint-placeholder-val="{{ false }}">
@@ -217,7 +218,7 @@
                 </sc-for>
               </div>
             </sc-if>
-            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65);">PREFER A LINK? <a href="https://www.dropbox.com/request/3RmRbr6GW5UK3A6tyWh4" target="_blank" rel="noopener" style="color:#F09A2E;">SEND VIA SECURE DROPBOX →</a></span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65);">MORE THAN 10, OR PREFER EMAIL? <a href="mailto:thinksmartpublicadjusting@gmail.com?subject=Damage%20photos" style="color:#F09A2E;">EMAIL YOUR PHOTOS →</a></span>
           </div>
 
           <label style="display:flex; flex-direction:column; gap:8px;">
@@ -245,7 +246,10 @@
           <p style="margin:0; font-size:17px; line-height:1.7; color:rgba(235,229,216,.75); max-width:520px;">Your case file is in. A licensed adjuster will call you within 24 hours to talk through the damage and the fastest path to payment.</p>
           <div style="display:flex; flex-direction:column; gap:12px; border-top:1px solid rgba(235,229,216,.12); padding-top:22px;">
             <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.6);">WHILE YOU WAIT</span>
-            <a href="https://www.dropbox.com/request/3RmRbr6GW5UK3A6tyWh4" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:10px; font-size:15px; color:#F09A2E; width:fit-content;">Upload photos of the damage →</a>
+            <sc-if value="{{ hasPhotoStatus }}" hint-placeholder-val="{{ false }}">
+              <span role="status" style="font-size:15px; line-height:1.6; color:rgba(235,229,216,.85); max-width:440px;">{{ photoStatusText }}</span>
+            </sc-if>
+            <a href="{{ photoMailto }}" style="display:inline-flex; align-items:center; gap:10px; font-size:15px; color:#F09A2E; width:fit-content;">Email photos of the damage →</a>
             <span style="font-size:14px; color:rgba(235,229,216,.65);">Urgent? Call <a href="tel:8127745049" style="color:#EBE5D8; border-bottom:1px solid rgba(235,229,216,.3);">812-774-5049</a> right now.</span>
           </div>
           <button onClick="{{ reset }}" type="button" style="align-self:flex-start; background:transparent; border:1px solid rgba(235,229,216,.25); color:rgba(235,229,216,.7); font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; padding:12px 18px; border-radius:2px; cursor:pointer;">FILE ANOTHER CLAIM</button>
@@ -329,7 +333,7 @@
       <div style="display:flex; flex-direction:column; gap:12px;">
         <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.26em; color:rgba(235,229,216,.65); margin-bottom:6px;">ACT NOW</span>
         <a href="Claim.dc.html" style="font-size:15px; color:#F09A2E; width:fit-content;">File a claim</a>
-        <a href="https://www.dropbox.com/request/3RmRbr6GW5UK3A6tyWh4" target="_blank" rel="noopener" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Submit photos</a>
+        <a href="#photos" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Submit photos</a>
         <a href="tel:8127745049" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Call 812-774-5049</a>
         <a href="mailto:thinksmartpublicadjusting@gmail.com" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Email us</a>
       </div>
@@ -348,7 +352,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { submitted: false, caseNo: '', photos: [], sending: false, sendError: false };
+  state = { submitted: false, caseNo: '', photos: [], sending: false, sendError: false, photoStatus: '', photoCount: 0 };
 
   componentDidMount() {
     document.title = 'File a Claim — Think Smart Public Adjusting';
@@ -356,6 +360,17 @@ class Component extends DCLogic {
     this._cleanup = [];
     this._chips = new Set();
     this._root = document.querySelector('x-dc') || document.body;
+    // The browser's own #anchor jump fires before the runtime has rendered anything, so redo it.
+    if (location.hash.length > 1) {
+      const jump = () => {
+        try {
+          const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+          if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
+        } catch (err) {}
+      };
+      setTimeout(jump, 80);
+      setTimeout(jump, 700);
+    }
     const $$ = (s) => Array.from(this._root.querySelectorAll(s));
     this._nav = this._root.querySelector('[data-ref="nav"]');
 
@@ -434,8 +449,56 @@ class Component extends DCLogic {
   }
 
   _addFiles(list) {
-    const arr = Array.from(list || []).filter((f) => f.type && f.type.indexOf('image/') === 0).map((f) => ({ name: f.name, url: URL.createObjectURL(f) }));
-    if (arr.length) this.setState((s) => ({ photos: s.photos.concat(arr) }));
+    const arr = Array.from(list || []).filter((f) => f.type && f.type.indexOf('image/') === 0).map((f) => ({ name: f.name, url: URL.createObjectURL(f), file: f }));
+    if (arr.length) this.setState((s) => ({ photos: s.photos.concat(arr).slice(0, 10) }));
+  }
+
+  // Phone photos are 3-12MB each; downscale to a 1600px JPEG so ten of them fit in one email.
+  _shrink(file) {
+    return new Promise((resolve) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      const done = (result) => { URL.revokeObjectURL(url); resolve(result); };
+      img.onload = () => {
+        try {
+          const scale = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight, 1));
+          const c = document.createElement('canvas');
+          c.width = Math.max(1, Math.round(img.naturalWidth * scale));
+          c.height = Math.max(1, Math.round(img.naturalHeight * scale));
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          c.toBlob((b) => done(b && b.size < file.size ? b : file), 'image/jpeg', 0.82);
+        } catch (err) { done(file); }
+      };
+      img.onerror = () => done(file);
+      img.src = url;
+    });
+  }
+
+  // Sends the photos to the site's own mailer as attachments. The case file itself has
+  // already been delivered, so a failure here only changes the confirmation message.
+  _uploadPhotos(photos, caseNo, name) {
+    Promise.all(photos.map((p) => this._shrink(p.file)))
+      .then((blobs) => {
+        const fd = new FormData();
+        fd.append('case_no', caseNo);
+        fd.append('name', name);
+        let total = 0;
+        let count = 0;
+        blobs.forEach((b) => {
+          if (total + b.size > 14 * 1024 * 1024) return;
+          total += b.size;
+          count += 1;
+          fd.append('photos[]', b, 'photo-' + count + '.jpg');
+        });
+        if (!count) return null;
+        return fetch('send-lead.php', { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
+          .then((r) => (r.ok ? r.json() : null));
+      })
+      .then((d) => {
+        const ok = !!(d && d.success === true && d.count > 0);
+        this.setState({ photoStatus: ok ? 'sent' : 'failed', photoCount: ok ? d.count : 0 });
+      })
+      .catch(() => this.setState({ photoStatus: 'failed', photoCount: 0 }));
   }
 
   renderVals() {
@@ -453,6 +516,15 @@ class Component extends DCLogic {
       caseNo: this.state.caseNo,
       sending: this.state.sending,
       sendError: this.state.sendError,
+      hasPhotoStatus: this.state.photoStatus !== '',
+      photoStatusText: this.state.photoStatus === 'sending'
+        ? 'Uploading your photos…'
+        : this.state.photoStatus === 'sent'
+          ? '✓ ' + this.state.photoCount + (this.state.photoCount === 1 ? ' photo' : ' photos') + ' received with your case file.'
+          : this.state.photoStatus === 'failed'
+            ? "Your photos didn't upload — please email them using the link below so they reach your adjuster."
+            : '',
+      photoMailto: 'mailto:thinksmartpublicadjusting@gmail.com?subject=' + encodeURIComponent('Damage photos' + (this.state.caseNo ? ' - ' + this.state.caseNo : '')),
       submitLabel: this.state.sending ? 'Sending your case file…' : 'Open my case file →',
       submitOpacity: this.state.sending ? '.6' : '1',
       submit: (e) => {
@@ -475,8 +547,8 @@ class Component extends DCLogic {
           'Insurance company': fd.get('carrier') || 'Not given',
           'Claim status': fd.get('status') || '',
           'What happened': fd.get('description') || 'Not given',
-          'Photos selected on site': this.state.photos.length
-            ? this.state.photos.map((p) => p.name).join(', ') + ' (ask for Dropbox upload)'
+          'Photos': this.state.photos.length
+            ? this.state.photos.length + ' selected — they arrive in a separate "Claim photos" email if the upload succeeds'
             : 'None',
           'Submitted from': location.href
         };
@@ -511,10 +583,18 @@ class Component extends DCLogic {
         })
           .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
           .catch(() => false);
-        Promise.all([emailSend, dbStore, serverSend])
-          .then(([emailOk, storeOk, serverOk]) => {
-            if (!emailOk && !storeOk && !serverOk) throw new Error('all delivery channels failed');
-            this.setState({ sending: false, submitted: true, caseNo: n }, () => {
+        // Show success as soon as any channel delivers; give up on a channel after 15s.
+        const firstSuccess = (ps) => new Promise((resolve) => {
+          let left = ps.length;
+          ps.forEach((p) => Promise.race([p, new Promise((r) => setTimeout(() => r(false), 15000))])
+            .then((ok) => { if (ok) resolve(true); else if (--left === 0) resolve(false); }));
+        });
+        firstSuccess([serverSend, emailSend, dbStore])
+          .then((delivered) => {
+            if (!delivered) throw new Error('all delivery channels failed');
+            const photos = this.state.photos.slice();
+            this.setState({ sending: false, submitted: true, caseNo: n, photoStatus: photos.length ? 'sending' : '', photoCount: 0 }, () => {
+              if (photos.length) this._uploadPhotos(photos, n, fields['Full name']);
               try {
                 const card = (this._root || document).querySelector('[data-ref="caseConfirm"]');
                 if (card) {
@@ -532,7 +612,7 @@ class Component extends DCLogic {
       },
       reset: () => {
         this._chips = new Set();
-        this.setState({ submitted: false, caseNo: '', photos: [], sending: false, sendError: false });
+        this.setState({ submitted: false, caseNo: '', photos: [], sending: false, sendError: false, photoStatus: '', photoCount: 0 });
       }
     };
   }

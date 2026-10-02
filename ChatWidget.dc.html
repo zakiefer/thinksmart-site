@@ -135,7 +135,13 @@ class Component extends DCLogic {
     })
       .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
       .catch(() => false);
-    return Promise.all([emailSend, dbStore, serverSend]).then((results) => results[0] || results[1] || results[2]);
+    // Resolve as soon as any channel delivers; give up on a channel after 15s.
+    return new Promise((resolve) => {
+      const ps = [serverSend, emailSend, dbStore];
+      let left = ps.length;
+      ps.forEach((p) => Promise.race([p, new Promise((r) => setTimeout(() => r(false), 15000))])
+        .then((ok) => { if (ok) resolve(true); else if (--left === 0) resolve(false); }));
+    });
   }
 
   _failText() {

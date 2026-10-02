@@ -37,6 +37,7 @@
   @keyframes tsTicker { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
   @keyframes tsPulse { 0% { transform: scaleY(.2); opacity: .2; } 50% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(.2); opacity: .2; } }
   @keyframes tsBlink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+  [id] { scroll-margin-top: 96px; }
   @media (max-width: 600px) {
     header[data-ref="nav"] { gap: 10px !important; padding-left: 14px !important; padding-right: 14px !important; }
     header[data-ref="nav"] > a:first-child { gap: 8px !important; }
@@ -437,7 +438,7 @@
       <a href="tel:8127745049" data-mag="1" style="display:inline-flex; align-items:center; gap:12px; background:#F09A2E; color:#0B0E13; font-weight:700; font-size:15px; letter-spacing:.1em; text-transform:uppercase; padding:20px 32px; border-radius:2px; transition:background .25s ease;" style-hover="background:#FFB042;">Call 812-774-5049</a>
       <a href="Claim.dc.html" data-mag="1" style="display:inline-flex; align-items:center; gap:12px; border:1px solid rgba(235,229,216,.4); color:#EBE5D8; font-weight:600; font-size:15px; letter-spacing:.1em; text-transform:uppercase; padding:20px 28px; border-radius:2px; transition:border-color .25s ease, color .25s ease;" style-hover="border-color:#F09A2E; color:#F09A2E;">File a claim online</a>
     </div>
-    <a data-rv="220" href="https://www.dropbox.com/request/3RmRbr6GW5UK3A6tyWh4" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.18em; color:rgba(235,229,216,.6); border-bottom:1px solid rgba(235,229,216,.3); padding-bottom:4px;" style-hover="color:#F09A2E; border-color:#F09A2E;">ALREADY HAVE DAMAGE PHOTOS? SUBMIT THEM →</a>
+    <a data-rv="220" href="Claim.dc.html#photos" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.18em; color:rgba(235,229,216,.6); border-bottom:1px solid rgba(235,229,216,.3); padding-bottom:4px;" style-hover="color:#F09A2E; border-color:#F09A2E;">ALREADY HAVE DAMAGE PHOTOS? SUBMIT THEM →</a>
   </div>
 </section>
 
@@ -459,7 +460,7 @@
       <div style="display:flex; flex-direction:column; gap:12px;">
         <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.26em; color:rgba(235,229,216,.65); margin-bottom:6px;">ACT NOW</span>
         <a href="Claim.dc.html" style="font-size:15px; color:#F09A2E; width:fit-content;">File a claim</a>
-        <a href="https://www.dropbox.com/request/3RmRbr6GW5UK3A6tyWh4" target="_blank" rel="noopener" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Submit photos</a>
+        <a href="Claim.dc.html#photos" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Submit photos</a>
         <a href="tel:8127745049" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Call 812-774-5049</a>
         <a href="mailto:thinksmartpublicadjusting@gmail.com" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Email us</a>
       </div>
@@ -483,6 +484,17 @@ class Component extends DCLogic {
     this._raf = null;
     this._cleanup = [];
     this._root = document.querySelector('x-dc') || document.body;
+    // The browser's own #anchor jump fires before the runtime has rendered anything, so redo it.
+    if (location.hash.length > 1) {
+      const jump = () => {
+        try {
+          const el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+          if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
+        } catch (err) {}
+      };
+      setTimeout(jump, 80);
+      setTimeout(jump, 700);
+    }
     const $ = (s) => this._root.querySelector(s);
     const $$ = (s) => Array.from(this._root.querySelectorAll(s));
     const byRef = (n) => $('[data-ref="' + n + '"]');

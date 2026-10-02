@@ -5,6 +5,7 @@
 DirectoryIndex Home.dc.html index.html
 
 Options -Indexes
+ErrorDocument 404 /404.html
 
 AddType image/webp .webp
 AddType video/mp4 .mp4
