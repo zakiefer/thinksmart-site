@@ -477,9 +477,17 @@ class Component extends DCLogic {
         })
           .then((r) => r.ok)
           .catch(() => false);
-        Promise.all([emailSend, dbStore])
-          .then(([emailOk, storeOk]) => {
-            if (!emailOk && !storeOk) throw new Error('all delivery channels failed');
+        // Same-origin PHP mailer: active on the business's own hosting, fails closed elsewhere.
+        const serverSend = fetch('send-lead.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ kind: 'claim', case_no: n, payload: fields })
+        })
+          .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
+          .catch(() => false);
+        Promise.all([emailSend, dbStore, serverSend])
+          .then(([emailOk, storeOk, serverOk]) => {
+            if (!emailOk && !storeOk && !serverOk) throw new Error('all delivery channels failed');
             this.setState({ sending: false, submitted: true, caseNo: n }, () => {
               try {
                 const card = (this._root || document).querySelector('[data-ref="caseConfirm"]');

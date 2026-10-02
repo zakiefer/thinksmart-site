@@ -126,7 +126,15 @@ class Component extends DCLogic {
     })
       .then((r) => r.ok)
       .catch(() => false);
-    return Promise.all([emailSend, dbStore]).then((results) => results[0] || results[1]);
+    // Same-origin PHP mailer: active on the business's own hosting, fails closed elsewhere.
+    const serverSend = fetch('send-lead.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ kind: 'chat', payload: { 'Stage': kind, 'Chat transcript': transcript, 'Sent from': location.href } })
+    })
+      .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
+      .catch(() => false);
+    return Promise.all([emailSend, dbStore, serverSend]).then((results) => results[0] || results[1] || results[2]);
   }
 
   _failText() {
