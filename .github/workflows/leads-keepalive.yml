@@ -1,0 +1,47 @@
+name: Leads keep-alive & health check
+
+on:
+  schedule:
+    # Twice a week — well inside Supabase's ~7-day free-tier pause window
+    - cron: "0 12 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping leads database (keeps project active, fails if down)
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            "https://ptvgxvvmvtzsgmqdixef.supabase.co/rest/v1/website_leads?select=id&limit=1" \
+            -H "apikey: sb_publishable_dL2UsKU4RtA0AGB73wS19w_91PBsbOe")
+          echo "Leads endpoint returned HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::Lead capture database is unreachable (HTTP $code). Restore it at https://supabase.com/dashboard/project/ptvgxvvmvtzsgmqdixef"
+            exit 1
+          fi
+
+  # GitHub disables scheduled workflows after 60 days without commits;
+  # a monthly heartbeat commit keeps the schedule (and the repo) alive.
+  heartbeat:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Monthly heartbeat commit
+        run: |
+          mkdir -p .github
+          last=$(git log -1 --format=%ct)
+          now=$(date +%s)
+          if [ $((now - last)) -gt 2592000 ]; then
+            date -u +"%Y-%m-%dT%H:%M:%SZ" > .github/heartbeat
+            git config user.name "leads-keepalive[bot]"
+            git config user.email "actions@github.com"
+            git add .github/heartbeat
+            git commit -m "chore: keep-alive heartbeat"
+            git push
+          else
+            echo "Last commit is recent; no heartbeat needed."
+          fi
