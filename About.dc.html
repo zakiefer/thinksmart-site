@@ -32,7 +32,7 @@
   ::selection { background: #F09A2E; color: #0B0E13; }
   @keyframes tsRise { from { opacity: 0; transform: translateY(110%); } to { opacity: 1; transform: translateY(0); } }
   @keyframes tsFade { from { opacity: 0; } to { opacity: 1; } }
-  [id] { scroll-margin-top: 96px; }
+  html { scroll-padding-top: 100px; }
   @media (max-width: 600px) {
     header[data-ref="nav"] { gap: 10px !important; padding-left: 14px !important; padding-right: 14px !important; }
     header[data-ref="nav"] > a:first-child { gap: 8px !important; }
@@ -92,7 +92,7 @@
   </div>
 </header>
 
-<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:98; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
+<div data-ref="mobileMenu" data-screen-label="Mobile Menu" role="dialog" aria-modal="true" aria-label="Site menu" style="position:fixed; inset:0; z-index:98; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.14; pointer-events:none;">
   <button data-mclose="1" aria-label="Close menu" style="position:absolute; top:20px; right:clamp(20px,4vw,56px); background:transparent; border:1px solid rgba(235,229,216,.3); color:#EBE5D8; width:44px; height:44px; border-radius:2px; font-size:20px; cursor:pointer;">×</button>
   <a href="Home.dc.html" data-mclose="1" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,9vw,64px); line-height:1.1; color:#EBE5D8; width:fit-content;">Home</a>
@@ -309,7 +309,7 @@ class Component extends DCLogic {
       if (navLinks) navLinks.style.display = m ? 'none' : 'flex';
       if (navPhone) navPhone.style.display = m ? 'none' : 'inline-block';
       if (burger) burger.style.display = m ? 'flex' : 'none';
-      if (!m && mMenu && mMenu.style.display === 'flex') { mMenu.style.display = 'none'; if (burger) burger.setAttribute('aria-expanded', 'false'); }
+      if (!m && mMenu && mMenu.style.display === 'flex') { const hadFocus = mMenu.contains(document.activeElement); mMenu.style.display = 'none'; if (burger) burger.setAttribute('aria-expanded', 'false'); if (hadFocus && this._nav) { const home = this._nav.querySelector('a'); if (home) home.focus(); } }
       const navCta = (this._nav || document).querySelector('a[href="Claim.dc.html"]');
       if (navCta) {
         navCta.style.padding = (window.innerWidth < 480) ? '10px 12px' : '12px 20px';
@@ -341,7 +341,7 @@ class Component extends DCLogic {
       burger.addEventListener('click', openM);
       this._cleanup.push(() => burger.removeEventListener('click', openM));
       Array.from(mMenu.querySelectorAll('[data-mclose]')).forEach((el) => {
-        el.addEventListener('click', closeM);
+        el.addEventListener('click', () => { closeM(); if (el.tagName === 'BUTTON') burger.focus(); });
       });
     }
 

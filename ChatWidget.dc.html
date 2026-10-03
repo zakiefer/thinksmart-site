@@ -83,9 +83,9 @@ class Component extends DCLogic {
     this._timers = [];
     this._onKey = (e) => {
       if (e.key !== 'Escape' || !this.state.open || e.defaultPrevented) return;
-      const menu = document.querySelector('[data-ref="mobileMenu"]');
-      if (menu && menu.style.display === 'flex') return;
-      this._setOpen(false);
+      const panel = document.querySelector('[data-ref="chatPanel"]');
+      const launcher = document.querySelector('[data-ref="chatLauncher"]');
+      if ((panel && panel.contains(e.target)) || e.target === launcher) this._setOpen(false);
     };
     document.addEventListener('keydown', this._onKey);
   }
