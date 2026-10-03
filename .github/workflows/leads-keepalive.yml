@@ -1,25 +1,56 @@
-name: Leads keep-alive & health check
+name: Site health & leads keep-alive
 
 on:
   schedule:
-    # Twice a week — well inside Supabase's ~7-day free-tier pause window
-    - cron: "0 12 * * 1,4"
+    - cron: "0 12 * * *"   # daily
   workflow_dispatch:
 
+env:
+  SITE: https://www.thinksmartpublicadjusting.com
+
 jobs:
-  ping:
+  # Once the domain serves the new site, the PHP lead mailer must answer its health probe.
+  # Until then (old Wix site still live) the check is skipped rather than failed.
+  site-health:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping leads database (keeps project active, fails if down)
+      - name: Check the live site and its lead mailer
         run: |
-          code=$(curl -s -o /dev/null -w '%{http_code}' \
-            "https://ptvgxvvmvtzsgmqdixef.supabase.co/rest/v1/website_leads?select=id&limit=1" \
-            -H "apikey: sb_publishable_dL2UsKU4RtA0AGB73wS19w_91PBsbOe")
-          echo "Leads endpoint returned HTTP $code"
-          if [ "$code" != "200" ]; then
-            echo "::error::Lead capture database is unreachable (HTTP $code). Restore it at https://supabase.com/dashboard/project/ptvgxvvmvtzsgmqdixef"
+          home=$(curl -sL --max-time 30 "$SITE/" || true)
+          code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 30 "$SITE/" || echo 000)
+          if ! echo "$home" | grep -q 'support.js'; then
+            echo "::notice::$SITE still serves the old Wix site (HTTP $code) — new site not deployed there yet; skipping mailer check."
+            exit 0
+          fi
+          echo "New site detected at $SITE (HTTP $code)."
+          health=$(curl -sL --max-time 30 "$SITE/send-lead.php?health=1" || true)
+          echo "Mailer health: $health"
+          if ! echo "$health" | grep -q '"success":true'; then
+            echo "::error::Lead mailer is not healthy at $SITE/send-lead.php — claim/contact/chat leads may not be delivering. Check the GoDaddy cPanel account."
             exit 1
           fi
+          for page in Claim.dc.html Contact.dc.html; do
+            pc=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 30 "$SITE/$page" || echo 000)
+            echo "$page -> HTTP $pc"
+            if [ "$pc" != "200" ]; then
+              echo "::error::$SITE/$page returned HTTP $pc"
+              exit 1
+            fi
+          done
+
+  # Optional redundancy channel: pinging keeps the free-tier database awake once restored.
+  # Informational only — a paused database is not a lead-capture failure on PHP hosting.
+  supabase-ping:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Ping leads database
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 \
+            "https://ptvgxvvmvtzsgmqdixef.supabase.co/rest/v1/website_leads?select=id&limit=1" \
+            -H "apikey: sb_publishable_dL2UsKU4RtA0AGB73wS19w_91PBsbOe" || echo 000)
+          echo "Supabase returned HTTP $code"
+          [ "$code" = "200" ] || { echo "::warning::Supabase project is paused/unreachable (HTTP $code). Optional channel — restore at https://supabase.com/dashboard/project/ptvgxvvmvtzsgmqdixef if wanted."; exit 1; }
 
   # GitHub disables scheduled workflows after 60 days without commits;
   # a monthly heartbeat commit keeps the schedule (and the repo) alive.
