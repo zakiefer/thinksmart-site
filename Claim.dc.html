@@ -17,8 +17,10 @@
 <link rel="canonical" href="https://www.thinksmartpublicadjusting.com/Claim.dc.html">
 <link rel="icon" type="image/png" href="media/favicon.png">
 <script src="./support.js"></script>
+<noscript><style>form button[type="submit"], form [role="alert"], [data-ref="caseConfirm"], [data-ref="msgConfirm"], form [role="status"] { display: none !important; }</style></noscript>
 </head>
 <body>
+<noscript><p style="margin:0; padding:16px 20px; background:#F09A2E; color:#0B0E13; font:600 16px/1.5 'Helvetica Neue',Arial,sans-serif; text-align:center;">Our online form needs JavaScript. Call <a href="tel:8127745049" style="color:#0B0E13;">812-774-5049</a> or email <a href="mailto:thinksmartpublicadjusting@gmail.com" style="color:#0B0E13;">thinksmartpublicadjusting@gmail.com</a> and we'll open your case.</p></noscript>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,6 +57,16 @@
   @media (max-height: 560px) {
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
+  }
+  @media print {
+    *, *::before, *::after { -webkit-print-color-adjust: economy !important; print-color-adjust: economy !important; box-shadow: none !important; text-shadow: none !important; animation: none !important; }
+    html, body, main, section, footer, form, article, div, details, summary { background: #fff !important; color: #000 !important; }
+    p, span, li, label, a, strong, h1, h2, h3, h4 { color: #000 !important; }
+    [data-rv] { opacity: 1 !important; transform: none !important; }
+    [style*="position:sticky"], [style*="position: sticky"] { position: static !important; height: auto !important; overflow: visible !important; }
+    section { min-height: 0 !important; height: auto !important; }
+    [data-ref="stripTrack"] { transform: none !important; width: auto !important; flex-wrap: wrap !important; }
+    header[data-ref="nav"], [data-ref="mobileMenu"], [data-ref="chatLauncher"], [data-ref="chatPanel"], a[href="#main"], video, canvas, div[style*="fractalNoise"] { display: none !important; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -499,6 +511,7 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
+    if (this._stayOnPage) window.removeEventListener('beforeunload', this._stayOnPage);
     if (this._raf) cancelAnimationFrame(this._raf);
     (this._cleanup || []).forEach((fn) => fn());
   }
@@ -532,7 +545,11 @@ class Component extends DCLogic {
 
   // Sends the photos to the site's own mailer as attachments. The case file itself has
   // already been delivered, so a failure here only changes the confirmation message.
-  _uploadPhotos(photos, caseNo, name) {
+  _uploadPhotos(photos, caseNo, name, email) {
+    const stay = (ev) => { ev.preventDefault(); ev.returnValue = ''; };
+    window.addEventListener('beforeunload', stay);
+    this._stayOnPage = stay;
+    const release = () => { window.removeEventListener('beforeunload', stay); if (this._stayOnPage === stay) this._stayOnPage = null; };
     Promise.all(photos.map((p) => this._shrink(p.file)))
       .then((blobs) => {
         // Shared hosting often caps one request at 8MB, so send the photos in batches under 7MB.
@@ -552,6 +569,7 @@ class Component extends DCLogic {
           const fd = new FormData();
           fd.append('case_no', caseNo);
           fd.append('name', name);
+          fd.append('email', email || '');
           fd.append('first', String(n + 1));
           fd.append('part', String(part + 1));
           fd.append('parts', String(batches.length));
@@ -563,10 +581,11 @@ class Component extends DCLogic {
         }), Promise.resolve()).then(() => ({ sent, total: blobs.length }));
       })
       .then(({ sent, total }) => {
+        release();
         if (this.state.caseNo !== caseNo) return;
         this.setState({ photoStatus: sent === 0 ? 'failed' : (sent < total ? 'partial' : 'sent'), photoCount: sent, photoTotal: total });
       })
-      .catch(() => { if (this.state.caseNo === caseNo) this.setState({ photoStatus: 'failed', photoCount: 0 }); });
+      .catch(() => { release(); if (this.state.caseNo === caseNo) this.setState({ photoStatus: 'failed', photoCount: 0 }); });
   }
 
 
@@ -588,7 +607,7 @@ class Component extends DCLogic {
       sendError: this.state.sendError,
       hasPhotoStatus: this.state.photoStatus !== '',
       photoStatusText: this.state.photoStatus === 'sending'
-        ? 'Uploading your photos…'
+        ? 'Uploading your photos — please keep this page open…'
         : this.state.photoStatus === 'sent'
           ? '✓ ' + this.state.photoCount + (this.state.photoCount === 1 ? ' photo' : ' photos') + ' received with your case file.'
           : this.state.photoStatus === 'partial'
@@ -673,7 +692,7 @@ class Component extends DCLogic {
             if (!delivered) throw new Error('all delivery channels failed');
             const photos = this.state.photos.slice();
             this.setState({ sending: false, submitted: true, caseNo: n, photoStatus: photos.length ? 'sending' : '', photoCount: 0 }, () => {
-              if (photos.length) this._uploadPhotos(photos, n, fields['Full name']);
+              if (photos.length) this._uploadPhotos(photos, n, fields['Full name'], fd.get('email') || '');
               try {
                 const card = (this._root || document).querySelector('[data-ref="caseConfirm"]');
                 if (card) {

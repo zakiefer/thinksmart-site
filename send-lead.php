@@ -266,7 +266,7 @@ function collect_photos(array $files, bool $requireUploaded = true, int $first =
 }
 
 // Builds a multipart/mixed email carrying the photos. Returns [subject, body, headers].
-function build_photo_mail(string $caseNo, string $name, string $ip, array $photos, string $partLabel = ''): array {
+function build_photo_mail(string $caseNo, string $name, string $ip, array $photos, string $partLabel = '', string $replyTo = ''): array {
     $boundary = 'ts-' . bin2hex(random_bytes(12));
     $subject  = 'Claim photos' . ($partLabel !== '' ? ' ' . $partLabel : '') . ' (' . count($photos) . ')' . ($name !== '' ? ' - ' . $name : '') . ($caseNo !== '' ? ' - ' . $caseNo : '');
 
@@ -282,10 +282,11 @@ function build_photo_mail(string $caseNo, string $name, string $ip, array $photo
           . "Content-Transfer-Encoding: 8bit\n\n"
           . $text . "\n";
     foreach ($photos as $p) {
+        $file  = ($caseNo !== '' ? $caseNo . '-' : '') . $p['file'];
         $body .= "--{$boundary}\n"
-               . "Content-Type: {$p['mime']}; name=\"{$p['file']}\"\n"
+               . "Content-Type: {$p['mime']}; name=\"{$file}\"\n"
                . "Content-Transfer-Encoding: base64\n"
-               . "Content-Disposition: attachment; filename=\"{$p['file']}\"\n\n"
+               . "Content-Disposition: attachment; filename=\"{$file}\"\n\n"
                . chunk_split(base64_encode($p['data']), 76, "\n");
     }
     $body .= "--{$boundary}--\n";
@@ -296,6 +297,9 @@ function build_photo_mail(string $caseNo, string $name, string $ip, array $photo
         'Content-Type' => "multipart/mixed; boundary=\"{$boundary}\"",
         'X-Mailer'     => 'ThinkSmart-Lead-Mailer',
     ];
+    if ($replyTo !== '') {
+        $headers['Reply-To'] = $replyTo;
+    }
     return [encode_subject($subject), $body, $headers];
 }
 
@@ -333,7 +337,9 @@ function main(): void {
         $nameIn = $_POST['name'] ?? '';
         $caseNo = substr((string)preg_replace('/[^A-Za-z0-9\- ]/', '', is_string($caseIn) ? $caseIn : ''), 0, 40);
         $name   = substr(header_safe(is_string($nameIn) ? $nameIn : ''), 0, 60);
-        [$subject, $body, $headers] = build_photo_mail($caseNo, $name, $ip, $photos, $parts > 1 ? "part {$part} of {$parts}" : '');
+        $emailIn = $_POST['email'] ?? '';
+        $replyTo = is_string($emailIn) ? (string)filter_var(header_safe($emailIn), FILTER_VALIDATE_EMAIL) : '';
+        [$subject, $body, $headers] = build_photo_mail($caseNo, $name, $ip, $photos, $parts > 1 ? "part {$part} of {$parts}" : '', $replyTo);
         $sent = send_mail($subject, $body, $headers);
         store_copy(['kind' => 'photos', 'case_no' => $caseNo, 'name' => $name, 'ip' => $ip, 'photos' => count($photos), 'emailed' => $sent]);
         out($sent, $sent ? 'ok' : 'mail() failed', 200, ['count' => $sent ? count($photos) : 0]);

@@ -63,6 +63,16 @@
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
   }
+  @media print {
+    *, *::before, *::after { -webkit-print-color-adjust: economy !important; print-color-adjust: economy !important; box-shadow: none !important; text-shadow: none !important; animation: none !important; }
+    html, body, main, section, footer, form, article, div, details, summary { background: #fff !important; color: #000 !important; }
+    p, span, li, label, a, strong, h1, h2, h3, h4 { color: #000 !important; }
+    [data-rv] { opacity: 1 !important; transform: none !important; }
+    [style*="position:sticky"], [style*="position: sticky"] { position: static !important; height: auto !important; overflow: visible !important; }
+    section { min-height: 0 !important; height: auto !important; }
+    [data-ref="stripTrack"] { transform: none !important; width: auto !important; flex-wrap: wrap !important; }
+    header[data-ref="nav"], [data-ref="mobileMenu"], [data-ref="chatLauncher"], [data-ref="chatPanel"], a[href="#main"], video, canvas, div[style*="fractalNoise"] { display: none !important; }
+  }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     html { scroll-behavior: auto; }

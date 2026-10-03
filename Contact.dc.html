@@ -17,8 +17,10 @@
 <link rel="canonical" href="https://www.thinksmartpublicadjusting.com/Contact.dc.html">
 <link rel="icon" type="image/png" href="media/favicon.png">
 <script src="./support.js"></script>
+<noscript><style>form button[type="submit"], form [role="alert"], [data-ref="caseConfirm"], [data-ref="msgConfirm"], form [role="status"] { display: none !important; }</style></noscript>
 </head>
 <body>
+<noscript><p style="margin:0; padding:16px 20px; background:#F09A2E; color:#0B0E13; font:600 16px/1.5 'Helvetica Neue',Arial,sans-serif; text-align:center;">Our online form needs JavaScript. Call <a href="tel:8127745049" style="color:#0B0E13;">812-774-5049</a> or email <a href="mailto:thinksmartpublicadjusting@gmail.com" style="color:#0B0E13;">thinksmartpublicadjusting@gmail.com</a> and we'll open your case.</p></noscript>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,6 +56,16 @@
   @media (max-height: 560px) {
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
+  }
+  @media print {
+    *, *::before, *::after { -webkit-print-color-adjust: economy !important; print-color-adjust: economy !important; box-shadow: none !important; text-shadow: none !important; animation: none !important; }
+    html, body, main, section, footer, form, article, div, details, summary { background: #fff !important; color: #000 !important; }
+    p, span, li, label, a, strong, h1, h2, h3, h4 { color: #000 !important; }
+    [data-rv] { opacity: 1 !important; transform: none !important; }
+    [style*="position:sticky"], [style*="position: sticky"] { position: static !important; height: auto !important; overflow: visible !important; }
+    section { min-height: 0 !important; height: auto !important; }
+    [data-ref="stripTrack"] { transform: none !important; width: auto !important; flex-wrap: wrap !important; }
+    header[data-ref="nav"], [data-ref="mobileMenu"], [data-ref="chatLauncher"], [data-ref="chatPanel"], a[href="#main"], video, canvas, div[style*="fractalNoise"] { display: none !important; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
