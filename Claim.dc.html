@@ -20,7 +20,7 @@
 <noscript><style>form button[type="submit"], form [role="alert"], [data-ref="caseConfirm"], [data-ref="msgConfirm"], form [role="status"] { display: none !important; }</style></noscript>
 </head>
 <body>
-<noscript><p style="margin:0; padding:16px 20px; background:#F09A2E; color:#0B0E13; font:600 16px/1.5 'Helvetica Neue',Arial,sans-serif; text-align:center;">Our online form needs JavaScript. Call <a href="tel:8127745049" style="color:#0B0E13;">812-774-5049</a> or email <a href="mailto:thinksmartpublicadjusting@gmail.com" style="color:#0B0E13;">thinksmartpublicadjusting@gmail.com</a> and we'll open your case.</p></noscript>
+<noscript><p style="position:relative; z-index:100; margin:0; padding:16px 20px; background:#F09A2E; color:#0B0E13; font:600 16px/1.5 'Helvetica Neue',Arial,sans-serif; text-align:center;">Our online form needs JavaScript. Call <a href="tel:8127745049" style="color:#0B0E13;">812-774-5049</a> or email <a href="mailto:thinksmartpublicadjusting@gmail.com" style="color:#0B0E13;">thinksmartpublicadjusting@gmail.com</a> and we'll open your case.</p></noscript>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +62,8 @@
     *, *::before, *::after { -webkit-print-color-adjust: economy !important; print-color-adjust: economy !important; box-shadow: none !important; text-shadow: none !important; animation: none !important; }
     html, body, main, section, footer, form, article, div, details, summary { background: #fff !important; color: #000 !important; }
     p, span, li, label, a, strong, h1, h2, h3, h4 { color: #000 !important; }
-    [data-rv] { opacity: 1 !important; transform: none !important; }
+    [data-rv], [data-ref="heroContent"] { opacity: 1 !important; transform: none !important; }
+    div[style*="inset: 0px"]:empty, div[style*="inset:0"]:empty { display: none !important; }
     [style*="position:sticky"], [style*="position: sticky"] { position: static !important; height: auto !important; overflow: visible !important; }
     section { min-height: 0 !important; height: auto !important; }
     [data-ref="stripTrack"] { transform: none !important; width: auto !important; flex-wrap: wrap !important; }
@@ -397,6 +398,9 @@ class Component extends DCLogic {
       setTimeout(jump, 700);
     }
     const $$ = (s) => Array.from(this._root.querySelectorAll(s));
+    const markExternal = (ev) => { if (ev.target && ev.target.closest && ev.target.closest('a[href^="tel:"], a[href^="mailto:"]')) this._extLinkAt = Date.now(); };
+    document.addEventListener('click', markExternal, true);
+    this._cleanup.push(() => document.removeEventListener('click', markExternal, true));
     this._nav = this._root.querySelector('[data-ref="nav"]');
 
     const calmMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -544,7 +548,7 @@ class Component extends DCLogic {
   // Sends the photos to the site's own mailer as attachments. The case file itself has
   // already been delivered, so a failure here only changes the confirmation message.
   _uploadPhotos(photos, caseNo, name, email) {
-    const stay = (ev) => { ev.preventDefault(); ev.returnValue = ''; };
+    const stay = (ev) => { if (this._extLinkAt && Date.now() - this._extLinkAt < 1500) return; ev.preventDefault(); ev.returnValue = ''; };
     window.addEventListener('beforeunload', stay);
     this._stayOnPage = stay;
     const release = () => { window.removeEventListener('beforeunload', stay); if (this._stayOnPage === stay) this._stayOnPage = null; };

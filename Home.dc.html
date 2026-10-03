@@ -67,7 +67,8 @@
     *, *::before, *::after { -webkit-print-color-adjust: economy !important; print-color-adjust: economy !important; box-shadow: none !important; text-shadow: none !important; animation: none !important; }
     html, body, main, section, footer, form, article, div, details, summary { background: #fff !important; color: #000 !important; }
     p, span, li, label, a, strong, h1, h2, h3, h4 { color: #000 !important; }
-    [data-rv] { opacity: 1 !important; transform: none !important; }
+    [data-rv], [data-ref="heroContent"] { opacity: 1 !important; transform: none !important; }
+    div[style*="inset: 0px"]:empty, div[style*="inset:0"]:empty { display: none !important; }
     [style*="position:sticky"], [style*="position: sticky"] { position: static !important; height: auto !important; overflow: visible !important; }
     section { min-height: 0 !important; height: auto !important; }
     [data-ref="stripTrack"] { transform: none !important; width: auto !important; flex-wrap: wrap !important; }
@@ -523,6 +524,12 @@ class Component extends DCLogic {
     }
     const $ = (s) => this._root.querySelector(s);
     const $$ = (s) => Array.from(this._root.querySelectorAll(s));
+    const printShut = [];
+    const printOpen = () => { $$('details').forEach((d) => { if (!d.open) { d.open = true; printShut.push(d); } }); };
+    const printRestore = () => { printShut.splice(0).forEach((d) => { d.open = false; }); };
+    window.addEventListener('beforeprint', printOpen);
+    window.addEventListener('afterprint', printRestore);
+    this._cleanup.push(() => { window.removeEventListener('beforeprint', printOpen); window.removeEventListener('afterprint', printRestore); });
     const byRef = (n) => $('[data-ref="' + n + '"]');
 
     this._nav = byRef('nav');
@@ -610,6 +617,9 @@ class Component extends DCLogic {
       });
     }, { threshold: 0.5 });
     counters.forEach((el) => { el.textContent = '0'; cio.observe(el); });
+    const printCounts = () => counters.forEach((el) => { el.textContent = el.getAttribute('data-count'); });
+    window.addEventListener('beforeprint', printCounts);
+    this._cleanup.push(() => window.removeEventListener('beforeprint', printCounts));
     this._cleanup.push(() => cio.disconnect());
 
     // Stamp slam

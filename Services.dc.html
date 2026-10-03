@@ -58,7 +58,8 @@
     *, *::before, *::after { -webkit-print-color-adjust: economy !important; print-color-adjust: economy !important; box-shadow: none !important; text-shadow: none !important; animation: none !important; }
     html, body, main, section, footer, form, article, div, details, summary { background: #fff !important; color: #000 !important; }
     p, span, li, label, a, strong, h1, h2, h3, h4 { color: #000 !important; }
-    [data-rv] { opacity: 1 !important; transform: none !important; }
+    [data-rv], [data-ref="heroContent"] { opacity: 1 !important; transform: none !important; }
+    div[style*="inset: 0px"]:empty, div[style*="inset:0"]:empty { display: none !important; }
     [style*="position:sticky"], [style*="position: sticky"] { position: static !important; height: auto !important; overflow: visible !important; }
     section { min-height: 0 !important; height: auto !important; }
     [data-ref="stripTrack"] { transform: none !important; width: auto !important; flex-wrap: wrap !important; }
