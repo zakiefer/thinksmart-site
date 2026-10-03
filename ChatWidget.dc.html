@@ -103,7 +103,8 @@ class Component extends DCLogic {
         if (fine && input) input.focus();
         else if (dialog) dialog.focus();
       } else if (focusInChat && launcher) {
-        launcher.focus();
+        const now = document.activeElement;
+        if (!now || now === document.body || now === launcher) launcher.focus();
       }
     });
   }
@@ -129,8 +130,15 @@ class Component extends DCLogic {
   // A phone-shaped or email-shaped token — not just "lots of digits", which would
   // also match dates, dollar amounts, ZIP codes and claim numbers.
   _looksLikeContact(text) {
-    const phone = /(?:^|\D)(?:\+?1[\s.\-]*)?\(?[2-9]\d{2}\)?\s*[\s.\-\/]?\s*[2-9]\d{2}\s*[\s.\-]?\s*\d{4}(?!\d)/.test(text);
-    const email = /[A-Za-z0-9._%+\-]+@[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/.test(text);
+    const ownPhones = ['8127745049', '8128501050'];
+    const phones = text.match(/(?:^|\D)(?:\+?1[\s.\-]*)?\(?[2-9]\d{2}\)?\s*[\s.\-\/]?\s*[2-9]\d{2}\s*[\s.\-]?\s*\d{4}(?!\d)/g) || [];
+    const phone = phones.some((p) => ownPhones.indexOf(p.replace(/\D/g, '').slice(-10)) === -1);
+    const emails = text.match(/[A-Za-z0-9._%+\-]+@[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/g) || [];
+    const host = location.hostname.replace(/^www\./, '').toLowerCase();
+    const email = emails.some((e) => {
+      const lower = e.toLowerCase();
+      return lower !== 'thinksmartpublicadjusting@gmail.com' && !(host && lower.slice(-(host.length + 1)) === '@' + host);
+    });
     return phone || email;
   }
 

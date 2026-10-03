@@ -697,7 +697,8 @@ class Component extends DCLogic {
       const tiltCards = Array.from(this._root.querySelectorAll('[data-tilt]'));
       tiltCards.forEach((c, i) => { if (i === 1 || i === 3) c.style.marginTop = m ? '0px' : '44px'; });
       // Mobile toolbars change innerHeight while scrolling; only re-size the strip for real changes.
-      const stripResize = !this._stripSized || this._stripSized.w !== window.innerWidth || Math.abs(this._stripSized.h - window.innerHeight) > 150;
+      const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+      const stripResize = !this._stripSized || this._stripSized.w !== window.innerWidth || Math.abs(this._stripSized.h - window.innerHeight) > (coarse ? 150 : 0);
       if (this._stripWrap && stripResize) {
         this._stripSized = { w: window.innerWidth, h: window.innerHeight };
         const sh = this._stripWrap.querySelector('h2');
@@ -723,6 +724,7 @@ class Component extends DCLogic {
           track.style.overflowX = native ? 'auto' : '';
           track.style.scrollSnapType = native ? 'x mandatory' : '';
           track.style.paddingBottom = native ? '20px' : '';
+          track.style.scrollPaddingInline = native ? getComputedStyle(track).paddingLeft : '';
           if (native) {
             track.style.transform = 'none';
             panel.style.justifyContent = 'flex-start';
@@ -766,11 +768,9 @@ class Component extends DCLogic {
         if (ev.key !== 'Tab' || mMenu.style.display !== 'flex') return;
         const items = Array.from(mMenu.querySelectorAll('a, button'));
         if (!items.length) return;
-        const first = items[0];
-        const last = items[items.length - 1];
-        if (!mMenu.contains(document.activeElement)) { ev.preventDefault(); first.focus(); }
-        else if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
-        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+        ev.preventDefault();
+        const i = items.indexOf(document.activeElement);
+        items[i === -1 ? 0 : (i + (ev.shiftKey ? -1 : 1) + items.length) % items.length].focus();
       };
       document.addEventListener('keydown', trapM);
       this._cleanup.push(() => document.removeEventListener('keydown', trapM));
