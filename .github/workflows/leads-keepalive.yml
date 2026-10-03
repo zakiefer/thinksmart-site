@@ -16,11 +16,16 @@ jobs:
     steps:
       - name: Check the live site and its lead mailer
         run: |
-          home=$(curl -sL --max-time 30 "$SITE/" || true)
-          code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 30 "$SITE/" || echo 000)
-          if ! echo "$home" | grep -q 'support.js'; then
-            echo "::notice::$SITE still serves the old Wix site (HTTP $code) — new site not deployed there yet; skipping mailer check."
+          hdrs=$(curl -sIL --max-time 30 "$SITE/" || true)
+          if echo "$hdrs" | grep -qi '^x-wix-request-id'; then
+            echo "::notice::$SITE still serves the old Wix site — new site not deployed there yet; skipping mailer check."
             exit 0
+          fi
+          home=$(curl -sL --max-time 30 "$SITE/Home.dc.html" || true)
+          code=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 30 "$SITE/" || true)
+          if [ "$code" != "200" ] || ! echo "$home" | grep -q 'support.js'; then
+            echo "::error::$SITE is not serving the new site (HTTP $code) — the site may be down, or SSL/DNS is broken."
+            exit 1
           fi
           echo "New site detected at $SITE (HTTP $code)."
           health=$(curl -sL --max-time 30 "$SITE/send-lead.php?health=1" || true)
@@ -30,7 +35,7 @@ jobs:
             exit 1
           fi
           for page in Claim.dc.html Contact.dc.html; do
-            pc=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 30 "$SITE/$page" || echo 000)
+            pc=$(curl -sL -o /dev/null -w '%{http_code}' --max-time 30 "$SITE/$page" || true)
             echo "$page -> HTTP $pc"
             if [ "$pc" != "200" ]; then
               echo "::error::$SITE/$page returned HTTP $pc"

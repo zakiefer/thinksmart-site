@@ -51,6 +51,7 @@
     header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
     header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
   }
+  @media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
   @media (max-height: 560px) {
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
@@ -93,7 +94,7 @@
   </div>
 </header>
 
-<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
+<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:98; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.14; pointer-events:none;">
   <button data-mclose="1" aria-label="Close menu" style="position:absolute; top:20px; right:clamp(20px,4vw,56px); background:transparent; border:1px solid rgba(235,229,216,.3); color:#EBE5D8; width:44px; height:44px; border-radius:2px; font-size:20px; cursor:pointer;">×</button>
   <a href="Home.dc.html" data-mclose="1" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,9vw,64px); line-height:1.1; color:#EBE5D8; width:fit-content;">Home</a>
@@ -108,9 +109,10 @@
   </div>
 </div>
 
-<section id="main" data-screen-label="Claim Intake" style="position:relative; padding:calc(96px + 7vh) clamp(20px,4vw,56px) clamp(70px,10vh,130px); overflow:hidden;">
+<main id="main">
+<section data-screen-label="Claim Intake" style="position:relative; padding:calc(96px + 7vh) clamp(20px,4vw,56px) clamp(70px,10vh,130px); overflow:hidden;">
   <div style="position:absolute; inset:0; opacity:.1; pointer-events:none;">
-    <video src="media/rain-macro-shingles.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+    <video poster="media/rain-macro-shingles-poster.webp" src="media/rain-macro-shingles.mp4" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(media/rain-macro-shingles-poster.webp) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,14,19,.7) 0%, #0B0E13 55%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:clamp(36px,5vw,90px); align-items:start;">
@@ -139,14 +141,14 @@
         </div>
         <div style="margin-top:28px; display:flex; flex-wrap:wrap; align-items:center; gap:10px; animation:tsFade 1s ease .65s both;">
           <span style="background:#EDE8DC; border-radius:3px; padding:10px; display:inline-flex; box-shadow:0 8px 22px rgba(0,0,0,.4); transform:rotate(-3deg);"><img src="media/seal.webp" alt="Paid or free — Think Smart guarantee" style="width:118px; height:118px; object-fit:contain; display:block;"></span>
-          <a href="#photos" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.16em; color:rgba(235,229,216,.7); border:1px solid rgba(235,229,216,.2); padding:10px 14px; border-radius:2px;" style-hover="color:#F09A2E; border-color:#F09A2E;">SUBMIT PHOTOS →</a>
+          <a href="{{ photosHref }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.16em; color:rgba(235,229,216,.7); border:1px solid rgba(235,229,216,.2); padding:10px 14px; border-radius:2px;" style-hover="color:#F09A2E; border-color:#F09A2E;">SUBMIT PHOTOS →</a>
         </div>
       </div>
     </div>
 
     <div>
       <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
-        <form onSubmit="{{ submit }}" noValidate="{{ true }}" style="position:relative; overflow:hidden; background:rgba(16,20,27,.85); border:1px solid rgba(235,229,216,.14); border-radius:4px; padding:clamp(24px,3vw,44px); display:flex; flex-direction:column; gap:26px; backdrop-filter:blur(8px);">
+        <form onSubmit="{{ submit }}" novalidate="novalidate" style="position:relative; overflow:hidden; background:rgba(16,20,27,.85); border:1px solid rgba(235,229,216,.14); border-radius:4px; padding:clamp(24px,3vw,44px); display:flex; flex-direction:column; gap:26px; backdrop-filter:blur(8px);">
           <img src="media/mark.webp" alt="" style="position:absolute; right:-70px; bottom:-70px; width:340px; height:340px; object-fit:contain; opacity:.05; pointer-events:none;">
           <input name="_hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">
           <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; border-bottom:1px dashed rgba(235,229,216,.2); padding-bottom:20px;">
@@ -157,28 +159,28 @@
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;">
             <label style="display:flex; flex-direction:column; gap:8px;">
               <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">FULL NAME *</span>
-              <input name="name" required="{{ true }}" type="text" placeholder="Jane Homeowner" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
+              <input name="name" required="{{ true }}" type="text" autocomplete="name" placeholder="Jane Homeowner" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
             </label>
             <label style="display:flex; flex-direction:column; gap:8px;">
               <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">PHONE *</span>
-              <input name="phone" required="{{ true }}" type="tel" placeholder="(812) 000-0000" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
+              <input name="phone" required="{{ true }}" type="tel" autocomplete="tel" placeholder="(812) 000-0000" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
             </label>
           </div>
 
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;">
             <label style="display:flex; flex-direction:column; gap:8px;">
               <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">EMAIL</span>
-              <input name="email" type="email" placeholder="you@email.com" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
+              <input name="email" type="email" autocomplete="email" placeholder="you@email.com" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
             </label>
             <label style="display:flex; flex-direction:column; gap:8px;">
               <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">PROPERTY ADDRESS *</span>
-              <input name="address" required="{{ true }}" type="text" placeholder="Street, City, State" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
+              <input name="address" required="{{ true }}" type="text" autocomplete="street-address" placeholder="Street, City, State" style="background:#0B0E13; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:15px 16px; border-radius:2px; font-size:15px; font-family:'Archivo',sans-serif; outline:none; transition:border-color .25s ease;" style-focus="border-color:#F09A2E;">
             </label>
           </div>
 
           <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">TYPE OF DAMAGE — SELECT ALL THAT APPLY</span>
-            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <span id="dmgLbl" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">TYPE OF DAMAGE — SELECT ALL THAT APPLY</span>
+            <div role="group" aria-labelledby="dmgLbl" style="display:flex; flex-wrap:wrap; gap:8px;">
               <button type="button" data-chip="Wind" style="background:transparent; border:1px solid rgba(235,229,216,.25); color:rgba(235,229,216,.75); font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; padding:11px 16px; border-radius:2px; cursor:pointer; transition:all .2s ease;">WIND</button>
               <button type="button" data-chip="Hail" style="background:transparent; border:1px solid rgba(235,229,216,.25); color:rgba(235,229,216,.75); font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; padding:11px 16px; border-radius:2px; cursor:pointer; transition:all .2s ease;">HAIL</button>
               <button type="button" data-chip="Water" style="background:transparent; border:1px solid rgba(235,229,216,.25); color:rgba(235,229,216,.75); font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; padding:11px 16px; border-radius:2px; cursor:pointer; transition:all .2s ease;">WATER</button>
@@ -201,8 +203,8 @@
           </div>
 
           <div style="display:flex; flex-direction:column; gap:10px;">
-            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">WHERE DOES YOUR CLAIM STAND? *</span>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px;">
+            <span id="statusLbl" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.65);">WHERE DOES YOUR CLAIM STAND? *</span>
+            <div role="radiogroup" aria-labelledby="statusLbl" aria-required="true" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:8px;">
               <label style="display:flex; align-items:center; gap:10px; border:1px solid rgba(235,229,216,.18); padding:13px 14px; border-radius:2px; cursor:pointer; font-size:14px; color:rgba(235,229,216,.8);"><input type="radio" name="status" value="Not filed yet" required="{{ true }}" style="accent-color:#F09A2E;">Not filed yet</label>
               <label style="display:flex; align-items:center; gap:10px; border:1px solid rgba(235,229,216,.18); padding:13px 14px; border-radius:2px; cursor:pointer; font-size:14px; color:rgba(235,229,216,.8);"><input type="radio" name="status" value="Filed — waiting" style="accent-color:#F09A2E;">Filed — waiting</label>
               <label style="display:flex; align-items:center; gap:10px; border:1px solid rgba(235,229,216,.18); padding:13px 14px; border-radius:2px; cursor:pointer; font-size:14px; color:rgba(235,229,216,.8);"><input type="radio" name="status" value="Underpaid" style="accent-color:#F09A2E;">Paid — too little</label>
@@ -324,7 +326,9 @@
   </div>
 </section>
 
-<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 36px; overflow:hidden;">
+</main>
+
+<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 96px; overflow:hidden;">
   <div style="max-width:1400px; margin:0 auto;">
     <div style="display:flex; align-items:center; gap:clamp(16px,3vw,40px); margin-bottom:56px;">
       <img src="media/mark.webp" alt="" style="width:clamp(56px,9vw,140px); height:clamp(56px,9vw,140px); object-fit:contain; flex:none; opacity:.92;">
@@ -342,7 +346,7 @@
       <div style="display:flex; flex-direction:column; gap:12px;">
         <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.26em; color:rgba(235,229,216,.65); margin-bottom:6px;">ACT NOW</span>
         <a href="Claim.dc.html" style="font-size:15px; color:#F09A2E; width:fit-content;">File a claim</a>
-        <a href="#photos" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Submit photos</a>
+        <a href="{{ photosHref }}" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Submit photos</a>
         <a href="tel:8127745049" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Call 812-774-5049</a>
         <a href="mailto:thinksmartpublicadjusting@gmail.com" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Email us</a>
       </div>
@@ -354,7 +358,7 @@
     </div>
     <div style="border-top:1px solid rgba(235,229,216,.1); padding-top:24px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px;">
       <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; line-height:1.7; color:rgba(235,229,216,.52); max-width:640px;">PA JONATHAN NELSON WORKS SOLELY AS AN INDEPENDENT PUBLIC ADJUSTER UNDER HIS OWN LICENSE WITH THE STATE OF INDIANA.</span>
-      <span style="display:flex; align-items:baseline; gap:28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65);" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
+      <span style="display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65); white-space:nowrap;" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
     </div>
   </div>
 </footer>
@@ -384,8 +388,30 @@ class Component extends DCLogic {
     this._nav = this._root.querySelector('[data-ref="nav"]');
 
     const calmMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    $$('video').forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); return; } const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const videos = $$('video');
+    videos.forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); } });
+    if (!calmMotion && videos.length) {
+      const playVideo = (v) => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+      if ('IntersectionObserver' in window) {
+        const vio = new IntersectionObserver((entries) => entries.forEach((en) => {
+          if (en.isIntersecting) playVideo(en.target); else en.target.pause();
+        }), { rootMargin: '200px 0px' });
+        videos.forEach((v) => vio.observe(v));
+        this._cleanup.push(() => vio.disconnect());
+      } else {
+        videos.forEach(playVideo);
+      }
+    }
     this._bindChips();
+    $$('a[href="Claim.dc.html"]').forEach((a) => a.addEventListener('click', (ev) => {
+      if (ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+      ev.preventDefault();
+      const target = this._root.querySelector('form') || this._root.querySelector('[data-ref="caseConfirm"]');
+      if (!target) return;
+      window.scrollTo({ top: Math.max(0, target.getBoundingClientRect().top + (window.scrollY || 0) - 110), behavior: calmMotion ? 'auto' : 'smooth' });
+      const first = target.querySelector('input:not([name="_hp"])') || target;
+      if (first.focus) first.focus({ preventScroll: true });
+    }));
 
     const navLinks = this._root.querySelector('[data-ref="navLinks"]');
     const navPhone = this._root.querySelector('[data-ref="navPhone"]');
@@ -396,7 +422,7 @@ class Component extends DCLogic {
       if (navLinks) navLinks.style.display = m ? 'none' : 'flex';
       if (navPhone) navPhone.style.display = m ? 'none' : 'inline-block';
       if (burger) burger.style.display = m ? 'flex' : 'none';
-      if (!m && mMenu) mMenu.style.display = 'none';
+      if (!m && mMenu && mMenu.style.display === 'flex') { mMenu.style.display = 'none'; if (burger) burger.setAttribute('aria-expanded', 'false'); }
       const navCta = (this._nav || document).querySelector('a[href="Claim.dc.html"]');
       if (navCta) {
         navCta.style.padding = (window.innerWidth < 480) ? '10px 12px' : '12px 20px';
@@ -408,11 +434,23 @@ class Component extends DCLogic {
     this._cleanup.push(() => window.removeEventListener('resize', applyNav));
     if (burger && mMenu) {
       const closeM = () => { mMenu.style.display = 'none'; burger.setAttribute('aria-expanded', 'false'); };
-      const openM = () => { mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
+      const openM = () => { const chat = document.querySelector('[data-ref="chatLauncher"]'); if (chat && chat.getAttribute('aria-expanded') === 'true') chat.click(); mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
       const escM = (ev) => { if (ev.key === 'Escape' && mMenu.style.display === 'flex') { closeM(); burger.focus(); } };
       burger.setAttribute('aria-expanded', 'false');
       document.addEventListener('keydown', escM);
       this._cleanup.push(() => document.removeEventListener('keydown', escM));
+      const trapM = (ev) => {
+        if (ev.key !== 'Tab' || mMenu.style.display !== 'flex') return;
+        const items = Array.from(mMenu.querySelectorAll('a, button'));
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (!mMenu.contains(document.activeElement)) { ev.preventDefault(); first.focus(); }
+        else if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+      };
+      document.addEventListener('keydown', trapM);
+      this._cleanup.push(() => document.removeEventListener('keydown', trapM));
       burger.addEventListener('click', openM);
       this._cleanup.push(() => burger.removeEventListener('click', openM));
       Array.from(mMenu.querySelectorAll('[data-mclose]')).forEach((el) => {
@@ -475,6 +513,7 @@ class Component extends DCLogic {
     return new Promise((resolve) => {
       const url = URL.createObjectURL(file);
       const img = new Image();
+      const standard = /^image\/(jpeg|png|gif|webp)$/.test(file.type);
       const done = (result) => { URL.revokeObjectURL(url); resolve(result); };
       img.onload = () => {
         try {
@@ -483,10 +522,10 @@ class Component extends DCLogic {
           c.width = Math.max(1, Math.round(img.naturalWidth * scale));
           c.height = Math.max(1, Math.round(img.naturalHeight * scale));
           c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-          c.toBlob((b) => done(b && b.size < file.size ? b : file), 'image/jpeg', 0.82);
-        } catch (err) { done(file); }
+          c.toBlob((b) => done(b && (b.size < file.size || !standard) ? b : (standard ? file : null)), 'image/jpeg', 0.82);
+        } catch (err) { done(standard ? file : null); }
       };
-      img.onerror = () => done(file);
+      img.onerror = () => done(standard ? file : null);
       img.src = url;
     });
   }
@@ -496,27 +535,40 @@ class Component extends DCLogic {
   _uploadPhotos(photos, caseNo, name) {
     Promise.all(photos.map((p) => this._shrink(p.file)))
       .then((blobs) => {
-        const fd = new FormData();
-        fd.append('case_no', caseNo);
-        fd.append('name', name);
-        let total = 0;
-        let count = 0;
+        // Shared hosting often caps one request at 8MB, so send the photos in batches under 7MB.
+        const batches = [];
+        let batch = [];
+        let size = 0;
         blobs.forEach((b) => {
-          if (total + b.size > 14 * 1024 * 1024) return;
-          total += b.size;
-          count += 1;
-          fd.append('photos[]', b, 'photo-' + count + '.jpg');
+          if (!b || b.size > 6 * 1024 * 1024) return; // undecodable, or too large for the mailer
+          if (batch.length && size + b.size > 7 * 1024 * 1024) { batches.push(batch); batch = []; size = 0; }
+          batch.push(b);
+          size += b.size;
         });
-        if (!count) return null;
-        return fetch('send-lead.php', { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
-          .then((r) => (r.ok ? r.json() : null));
+        if (batch.length) batches.push(batch);
+        let sent = 0;
+        let n = 0;
+        return batches.reduce((chain, group, part) => chain.then(() => {
+          const fd = new FormData();
+          fd.append('case_no', caseNo);
+          fd.append('name', name);
+          fd.append('first', String(n + 1));
+          fd.append('part', String(part + 1));
+          fd.append('parts', String(batches.length));
+          group.forEach((b) => { n += 1; fd.append('photos[]', b, 'photo-' + n + '.jpg'); });
+          return fetch('send-lead.php', { method: 'POST', headers: { 'Accept': 'application/json' }, body: fd })
+            .then((r) => (r.ok ? r.json() : null))
+            .then((d) => { if (d && d.success === true) sent += Number(d.count) || 0; })
+            .catch(() => {});
+        }), Promise.resolve()).then(() => ({ sent, total: blobs.length }));
       })
-      .then((d) => {
-        const ok = !!(d && d.success === true && d.count > 0);
-        this.setState({ photoStatus: ok ? 'sent' : 'failed', photoCount: ok ? d.count : 0 });
+      .then(({ sent, total }) => {
+        if (this.state.caseNo !== caseNo) return;
+        this.setState({ photoStatus: sent === 0 ? 'failed' : (sent < total ? 'partial' : 'sent'), photoCount: sent, photoTotal: total });
       })
-      .catch(() => this.setState({ photoStatus: 'failed', photoCount: 0 }));
+      .catch(() => { if (this.state.caseNo === caseNo) this.setState({ photoStatus: 'failed', photoCount: 0 }); });
   }
+
 
   renderVals() {
     this._fileRef = this._fileRef || React.createRef();
@@ -539,9 +591,12 @@ class Component extends DCLogic {
         ? 'Uploading your photos…'
         : this.state.photoStatus === 'sent'
           ? '✓ ' + this.state.photoCount + (this.state.photoCount === 1 ? ' photo' : ' photos') + ' received with your case file.'
-          : this.state.photoStatus === 'failed'
-            ? "Your photos didn't upload — please email them using the link below so they reach your adjuster."
-            : '',
+          : this.state.photoStatus === 'partial'
+            ? '✓ ' + this.state.photoCount + ' of ' + this.state.photoTotal + " photos received — please email the rest using the link below."
+            : this.state.photoStatus === 'failed'
+              ? "Your photos didn't upload — please email them using the link below so they reach your adjuster."
+              : '',
+      photosHref: this.state.submitted ? 'mailto:thinksmartpublicadjusting@gmail.com?subject=' + encodeURIComponent('Damage photos' + (this.state.caseNo ? ' - ' + this.state.caseNo : '')) : '#photos',
       photoMailto: 'mailto:thinksmartpublicadjusting@gmail.com?subject=' + encodeURIComponent('Damage photos' + (this.state.caseNo ? ' - ' + this.state.caseNo : '')),
       submitLabel: this.state.sending ? 'Sending your case file…' : 'Open my case file →',
       submitOpacity: this.state.sending ? '.6' : '1',
@@ -624,9 +679,10 @@ class Component extends DCLogic {
                 if (card) {
                   card.focus({ preventScroll: true });
                   const top = card.getBoundingClientRect().top + (window.scrollY || 0) - 110;
-                  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+                  const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                  window.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
                 } else {
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  window.scrollTo({ top: 0 });
                 }
               } catch (err) {}
             });
@@ -637,7 +693,7 @@ class Component extends DCLogic {
       },
       reset: () => {
         this._chips = new Set();
-        this.setState({ submitted: false, caseNo: '', photos: [], sending: false, sendError: false, photoStatus: '', photoCount: 0 });
+        this.setState({ submitted: false, caseNo: '', photos: [], sending: false, sendError: false, photoStatus: '', photoCount: 0, photoTotal: 0 });
       }
     };
   }

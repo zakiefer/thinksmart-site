@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Think Smart Public Adjusting | Public Adjuster for Indiana, Kentucky, Ohio &amp; Illinois Insurance Claims</title>
-<meta name="description" content="Licensed public adjusters who work only for policyholders in Indiana, Kentucky, Ohio and Illinois. Help with wind, hail, water, fire and flood insurance claims — if your claim isn't paid, our service is free.">
+<title>Think Smart Public Adjusting | Public Adjusters in IN, KY, OH, IL &amp; TN</title>
+<meta name="description" content="Licensed public adjusters who work only for policyholders in Indiana, Kentucky, Ohio, Illinois and Tennessee. Help with wind, hail, water, fire and flood insurance claims — if your claim isn't paid, our service is free.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Think Smart Public Adjusting">
-<meta property="og:title" content="Think Smart Public Adjusting | Public Adjuster for Indiana, Kentucky, Ohio &amp; Illinois Insurance Claims">
-<meta property="og:description" content="Licensed public adjusters who work only for policyholders in Indiana, Kentucky, Ohio and Illinois. Help with wind, hail, water, fire and flood insurance claims — if your claim isn't paid, our service is free.">
+<meta property="og:title" content="Think Smart Public Adjusting | Public Adjusters in IN, KY, OH, IL &amp; TN">
+<meta property="og:description" content="Licensed public adjusters who work only for policyholders in Indiana, Kentucky, Ohio, Illinois and Tennessee. Help with wind, hail, water, fire and flood insurance claims — if your claim isn't paid, our service is free.">
 <meta property="og:url" content="https://www.thinksmartpublicadjusting.com/">
 <meta property="og:image" content="https://www.thinksmartpublicadjusting.com/media/og-cover.jpg">
 <meta property="og:image:width" content="1200">
@@ -58,6 +58,7 @@
     header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
     header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
   }
+  @media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
   @media (max-height: 560px) {
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
@@ -100,7 +101,7 @@
   </div>
 </header>
 
-<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
+<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:98; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.14; pointer-events:none;">
   <button data-mclose="1" aria-label="Close menu" style="position:absolute; top:20px; right:clamp(20px,4vw,56px); background:transparent; border:1px solid rgba(235,229,216,.3); color:#EBE5D8; width:44px; height:44px; border-radius:2px; font-size:20px; cursor:pointer;">×</button>
   <a href="Home.dc.html" data-mclose="1" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,9vw,64px); line-height:1.1; color:#EBE5D8; width:fit-content;">Home</a>
@@ -115,9 +116,10 @@
   </div>
 </div>
 
-<section id="main" data-screen-label="Hero — The Storm" style="position:relative; height:100vh; min-height:640px; overflow:hidden; display:flex; align-items:flex-end;">
+<main id="main">
+<section data-screen-label="Hero — The Storm" style="position:relative; height:100vh; min-height:640px; overflow:hidden; display:flex; align-items:flex-end;">
   <div data-ref="heroVid" style="position:absolute; inset:-6% 0; z-index:0; transform:scale(1.08);">
-    <video src="media/hero-storm-aerial.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="auto" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+    <video poster="media/hero-storm-aerial-poster.webp" src="media/hero-storm-aerial.mp4" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(media/hero-storm-aerial-poster.webp) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
   </div>
   <canvas data-ref="rain" style="position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:.55; mix-blend-mode:screen;"></canvas>
   <div data-ref="flash" style="position:absolute; inset:0; z-index:1; background:#E8F0FF; opacity:0; pointer-events:none;"></div>
@@ -143,7 +145,7 @@
   <div style="position:absolute; left:50%; bottom:calc(12vh + 150px); transform:translateX(-50%); z-index:2; display:none;"></div>
 </section>
 
-<div data-screen-label="Ticker" style="position:relative; z-index:3; background:#070A0F; border-top:1px solid rgba(235,229,216,.1); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden; padding:16px 0;">
+<div data-screen-label="Ticker" aria-hidden="true" style="position:relative; z-index:3; background:#070A0F; border-top:1px solid rgba(235,229,216,.1); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden; padding:16px 0;">
   <div data-ref="ticker" style="display:flex; width:max-content; animation:tsTicker 36s linear infinite; will-change:transform;">
     <div style="display:flex; gap:0; align-items:center; white-space:nowrap;">
       <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.3em; color:rgba(235,229,216,.6); padding:0 18px;">WIND</span><span style="color:#F09A2E;">✦</span>
@@ -245,14 +247,16 @@
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(28px,4vw,64px); align-items:start;">
       <div style="display:flex; flex-direction:column; gap:56px;">
         <div data-rv="0" style="border-top:1px solid rgba(235,229,216,.15); padding-top:28px;">
-          <div style="display:flex; align-items:baseline; gap:6px;">
+          <span style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;">80%</span>
+          <div aria-hidden="true" style="display:flex; align-items:baseline; gap:6px;">
             <span data-count="80" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; font-size:clamp(96px,11vw,180px); line-height:.85; color:#EBE5D8;">80</span>
             <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; font-size:clamp(40px,4vw,64px); color:#F09A2E;">%</span>
           </div>
           <p style="margin:14px 0 0; font-size:16px; line-height:1.6; color:rgba(235,229,216,.65); max-width:420px;">of valid claims are underpaid or denied when the policyholder stands alone.*</p>
         </div>
         <div data-rv="120" style="border-top:1px solid rgba(235,229,216,.15); padding-top:28px;">
-          <div style="display:flex; align-items:baseline; gap:6px;">
+          <span style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;">+747%</span>
+          <div aria-hidden="true" style="display:flex; align-items:baseline; gap:6px;">
             <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; font-size:clamp(40px,4vw,64px); color:#F09A2E;">+</span>
             <span data-count="747" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; font-size:clamp(96px,11vw,180px); line-height:.85; color:#EBE5D8;">747</span>
             <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; font-size:clamp(40px,4vw,64px); color:#F09A2E;">%</span>
@@ -278,7 +282,7 @@
 
 <section id="fight" data-screen-label="Act 03 — The Fight" style="position:relative; background:#0B0E13; overflow:hidden; padding:clamp(80px,12vh,160px) clamp(20px,4vw,56px);">
   <div style="position:absolute; inset:0; opacity:.14; pointer-events:none;">
-    <video src="media/rain-macro-shingles.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+    <video poster="media/rain-macro-shingles-poster.webp" src="media/rain-macro-shingles.mp4" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(media/rain-macro-shingles-poster.webp) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg,#0B0E13 0%, rgba(11,14,19,.35) 30%, rgba(11,14,19,.35) 70%, #0B0E13 100%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(32px,5vw,80px);">
@@ -414,21 +418,21 @@
       <details style="border-top:1px solid rgba(235,229,216,.15); padding:6px 0;">
         <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 0;">
           <span style="font-size:clamp(17px,1.4vw,20px); font-weight:600; color:#EBE5D8;">What exactly is a public adjuster?</span>
-          <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:20px; color:#F09A2E; flex:none;">+</span>
+          <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:20px; color:#F09A2E; flex:none;">+</span>
         </summary>
         <p style="margin:0; padding:0 0 24px; max-width:560px; font-size:15px; line-height:1.7; color:rgba(235,229,216,.65);">A state-licensed claims professional who represents you — never the insurance company. Besides an attorney, a public adjuster is the only person legally allowed to handle your claim on your behalf.</p>
       </details>
       <details style="border-top:1px solid rgba(235,229,216,.15); padding:6px 0;">
         <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 0;">
           <span style="font-size:clamp(17px,1.4vw,20px); font-weight:600; color:#EBE5D8;">What does it cost me?</span>
-          <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:20px; color:#F09A2E; flex:none;">+</span>
+          <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:20px; color:#F09A2E; flex:none;">+</span>
         </summary>
         <p style="margin:0; padding:0 0 24px; max-width:560px; font-size:15px; line-height:1.7; color:rgba(235,229,216,.65);">Nothing up front, ever. We work on contingency — a small percentage of the settlement we win. If your claim isn't paid, our service is free. That's the guarantee.</p>
       </details>
       <details style="border-top:1px solid rgba(235,229,216,.15); border-bottom:1px solid rgba(235,229,216,.15); padding:6px 0;">
         <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 0;">
           <span style="font-size:clamp(17px,1.4vw,20px); font-weight:600; color:#EBE5D8;">My claim was already denied. Too late?</span>
-          <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:20px; color:#F09A2E; flex:none;">+</span>
+          <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:20px; color:#F09A2E; flex:none;">+</span>
         </summary>
         <p style="margin:0; padding:0 0 24px; max-width:560px; font-size:15px; line-height:1.7; color:rgba(235,229,216,.65);">Good — that's our specialty. A denial is the carrier's opening position, not the final word. We re-open, re-document and re-argue denied claims every week.</p>
       </details>
@@ -438,7 +442,7 @@
 
 <section data-screen-label="Final CTA" style="position:relative; min-height:88vh; display:flex; align-items:center; overflow:hidden;">
   <div style="position:absolute; inset:0;">
-    <video src="media/adjuster-dusk-walk.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+    <video poster="media/adjuster-dusk-walk-poster.webp" src="media/adjuster-dusk-walk.mp4" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(media/adjuster-dusk-walk-poster.webp) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, #0B0E13 0%, rgba(11,14,19,.45) 40%, rgba(11,14,19,.85) 100%);"></div>
   <div style="position:relative; width:100%; max-width:1400px; margin:0 auto; padding:100px clamp(20px,4vw,56px); text-align:center; display:flex; flex-direction:column; align-items:center; gap:28px;">
@@ -452,7 +456,9 @@
   </div>
 </section>
 
-<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 36px; overflow:hidden;">
+</main>
+
+<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 96px; overflow:hidden;">
   <div style="max-width:1400px; margin:0 auto;">
     <div style="display:flex; align-items:center; gap:clamp(16px,3vw,40px); margin-bottom:56px;">
       <img src="media/mark.webp" alt="" style="width:clamp(56px,9vw,140px); height:clamp(56px,9vw,140px); object-fit:contain; flex:none; opacity:.92;">
@@ -482,7 +488,7 @@
     </div>
     <div style="border-top:1px solid rgba(235,229,216,.1); padding-top:24px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px;">
       <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; line-height:1.7; color:rgba(235,229,216,.52); max-width:640px;">PA JONATHAN NELSON WORKS SOLELY AS AN INDEPENDENT PUBLIC ADJUSTER UNDER HIS OWN LICENSE WITH THE STATE OF INDIANA.</span>
-      <span style="display:flex; align-items:baseline; gap:28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65);" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
+      <span style="display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65); white-space:nowrap;" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
     </div>
   </div>
 </footer>
@@ -490,7 +496,7 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;cinematic&quot;, &quot;calm&quot;], &quot;default&quot;: &quot;cinematic&quot;, &quot;tsType&quot;: &quot;'cinematic' | 'calm'&quot;, &quot;section&quot;: &quot;Experience&quot;, &quot;description&quot;: &quot;cinematic = parallax, tilt, counters, stamp slam; calm = static, accessible&quot;}, &quot;grain&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Experience&quot;, &quot;description&quot;: &quot;Film grain overlay&quot;}, &quot;tickerSpeed&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 36, &quot;min&quot;: 14, &quot;max&quot;: 80, &quot;step&quot;: 1, &quot;unit&quot;: &quot;s&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Experience&quot;, &quot;description&quot;: &quot;Marquee loop duration (lower = faster)&quot;}}">
 class Component extends DCLogic {
   componentDidMount() {
-    document.title = 'Think Smart Public Adjusting | Public Adjuster for Indiana, Kentucky, Ohio & Illinois Insurance Claims';
+    document.title = 'Think Smart Public Adjusting | Public Adjusters in IN, KY, OH, IL & TN';
     this._raf = null;
     this._cleanup = [];
     this._root = document.querySelector('x-dc') || document.body;
@@ -517,7 +523,9 @@ class Component extends DCLogic {
     this._stripFill = byRef('stripFill');
     if (this._stripWrap && this._stripTrack) {
       // Keyboard focus on the strip's far-right link: move the page to the end of the strip.
-      this._stripTrack.addEventListener('focusin', () => {
+      this._stripTrack.addEventListener('focusin', (ev) => {
+        if (this._stripNative) return;
+        try { if (!ev.target.matches(':focus-visible')) return; } catch (err) {}
         const wrap = this._stripWrap;
         window.scrollTo({ top: wrap.getBoundingClientRect().top + (window.scrollY || 0) + wrap.offsetHeight - window.innerHeight, behavior: 'instant' });
       });
@@ -530,7 +538,20 @@ class Component extends DCLogic {
 
     // Ensure videos autoplay
     const calmMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    $$('video').forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); return; } const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const videos = $$('video');
+    videos.forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); } });
+    if (!calmMotion && videos.length) {
+      const playVideo = (v) => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+      if ('IntersectionObserver' in window) {
+        const vio = new IntersectionObserver((entries) => entries.forEach((en) => {
+          if (en.isIntersecting) playVideo(en.target); else en.target.pause();
+        }), { rootMargin: '200px 0px' });
+        videos.forEach((v) => vio.observe(v));
+        this._cleanup.push(() => vio.disconnect());
+      } else {
+        videos.forEach(playVideo);
+      }
+    }
 
     this._applyProps();
 
@@ -616,7 +637,7 @@ class Component extends DCLogic {
     if (this._fine) {
       $$('[data-tilt]').forEach((card) => {
         const move = (ev) => {
-          if (this._motion() === 'calm') return;
+          if (this._reduced || this._motion() === 'calm') return;
           const r = card.getBoundingClientRect();
           const x = (ev.clientX - r.left) / r.width - 0.5;
           const y = (ev.clientY - r.top) / r.height - 0.5;
@@ -634,7 +655,7 @@ class Component extends DCLogic {
       // Magnetic buttons
       $$('[data-mag]').forEach((btn) => {
         const move = (ev) => {
-          if (this._motion() === 'calm') return;
+          if (this._reduced || this._motion() === 'calm') return;
           const r = btn.getBoundingClientRect();
           const x = (ev.clientX - r.left) / r.width - 0.5;
           const y = (ev.clientY - r.top) / r.height - 0.5;
@@ -657,7 +678,7 @@ class Component extends DCLogic {
       if (navLinks) navLinks.style.display = m ? 'none' : 'flex';
       if (navPhone) navPhone.style.display = m ? 'none' : 'inline-block';
       if (burger) burger.style.display = m ? 'flex' : 'none';
-      if (!m && mMenu) mMenu.style.display = 'none';
+      if (!m && mMenu && mMenu.style.display === 'flex') { mMenu.style.display = 'none'; if (burger) burger.setAttribute('aria-expanded', 'false'); }
       const navCta = (this._nav || document).querySelector('a[href="Claim.dc.html"]');
       if (navCta) {
         navCta.style.padding = (window.innerWidth < 480) ? '10px 12px' : '12px 20px';
@@ -665,7 +686,10 @@ class Component extends DCLogic {
       }
       const tiltCards = Array.from(this._root.querySelectorAll('[data-tilt]'));
       tiltCards.forEach((c, i) => { if (i === 1 || i === 3) c.style.marginTop = m ? '0px' : '44px'; });
-      if (this._stripWrap) {
+      // Mobile toolbars change innerHeight while scrolling; only re-size the strip for real changes.
+      const stripResize = !this._stripSized || this._stripSized.w !== window.innerWidth || Math.abs(this._stripSized.h - window.innerHeight) > 150;
+      if (this._stripWrap && stripResize) {
+        this._stripSized = { w: window.innerWidth, h: window.innerHeight };
         const sh = this._stripWrap.querySelector('h2');
         if (sh) sh.style.fontSize = m ? 'clamp(30px,8vw,44px)' : 'clamp(44px,6.4vw,104px)';
         // The pinned panel is exactly one viewport tall, so on short screens (laptops,
@@ -676,18 +700,44 @@ class Component extends DCLogic {
           const head = panel.firstElementChild;
           const foot = panel.lastElementChild;
           const cards = Array.from(track.children);
-          const short = window.innerHeight < 880;
-          cards.forEach((c) => { c.style.zoom = ''; });
+          // Very short windows (landscape phones): no pinning or scaling; the cards become a swipeable row.
+          const native = window.innerHeight < 500;
+          this._stripNative = native;
+          cards.forEach((c) => { c.style.zoom = ''; c.style.scrollSnapAlign = native ? 'start' : ''; });
+          if (foot) foot.style.display = native ? 'none' : 'flex';
           panel.style.boxSizing = 'border-box';
-          panel.style.justifyContent = short ? 'flex-start' : 'center';
-          panel.style.paddingTop = short ? '92px' : '0px';
-          if (head) head.style.marginBottom = short ? '22px' : '40px';
-          if (sh && short && !m) sh.style.fontSize = 'clamp(30px,6vh,64px)';
-          if (short && head && foot && cards.length) {
-            const natural = Math.max.apply(null, cards.map((c) => c.offsetHeight + (parseFloat(c.style.marginTop) || 0)));
-            const room = window.innerHeight - 92 - head.offsetHeight - 22 - foot.offsetHeight - 10;
-            const k = Math.max(0.5, Math.min(1, room / Math.max(1, natural)));
-            cards.forEach((c) => { c.style.zoom = String(k); });
+          panel.style.position = native ? 'relative' : 'sticky';
+          panel.style.height = native ? 'auto' : '100vh';
+          panel.style.overflow = native ? 'visible' : 'clip';
+          track.style.width = native ? 'auto' : 'max-content';
+          track.style.overflowX = native ? 'auto' : '';
+          track.style.scrollSnapType = native ? 'x mandatory' : '';
+          track.style.paddingBottom = native ? '20px' : '';
+          if (native) {
+            track.style.transform = 'none';
+            panel.style.justifyContent = 'flex-start';
+            panel.style.paddingTop = '96px';
+            if (head) head.style.marginBottom = '22px';
+            this._stripWrap.style.height = 'auto';
+          } else {
+            // Centred if it clears the fixed nav; else top-aligned at full size; scale only if even that won't fit.
+            if (head) head.style.marginBottom = '40px';
+            const tallest = Math.max.apply(null, cards.map((c) => c.offsetHeight + (parseFloat(c.style.marginTop) || 0)));
+            const need = (head ? head.offsetHeight + 40 : 0) + tallest + (foot ? foot.offsetHeight : 0);
+            const centred = (window.innerHeight - need) / 2 >= 92;
+            const fitsTop = window.innerHeight - 92 - (need - 18) - 10 >= 0;
+            panel.style.justifyContent = centred ? 'center' : 'flex-start';
+            panel.style.paddingTop = centred ? '0px' : '92px';
+            if (head) head.style.marginBottom = centred ? '40px' : '22px';
+            if (!fitsTop) {
+              if (sh && !m) sh.style.fontSize = 'clamp(30px,6vh,64px)';
+              const natural = Math.max.apply(null, cards.map((c) => c.offsetHeight + (parseFloat(c.style.marginTop) || 0)));
+              const room = window.innerHeight - 92 - (head ? head.offsetHeight : 0) - 22 - (foot ? foot.offsetHeight : 0) - 10;
+              const k = Math.max(0.5, Math.min(1, room / Math.max(1, natural)));
+              cards.forEach((c) => { c.style.zoom = String(k); });
+            }
+            const travel = Math.max(0, track.scrollWidth - window.innerWidth + Math.min(112, window.innerWidth * 0.08));
+            this._stripWrap.style.height = Math.round(window.innerHeight + Math.max(travel * 1.3, window.innerHeight * 0.6)) + 'px';
           }
         }
       }
@@ -697,11 +747,23 @@ class Component extends DCLogic {
     this._cleanup.push(() => window.removeEventListener('resize', applyNav));
     if (burger && mMenu) {
       const closeM = () => { mMenu.style.display = 'none'; burger.setAttribute('aria-expanded', 'false'); };
-      const openM = () => { mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
+      const openM = () => { const chat = document.querySelector('[data-ref="chatLauncher"]'); if (chat && chat.getAttribute('aria-expanded') === 'true') chat.click(); mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
       const escM = (ev) => { if (ev.key === 'Escape' && mMenu.style.display === 'flex') { closeM(); burger.focus(); } };
       burger.setAttribute('aria-expanded', 'false');
       document.addEventListener('keydown', escM);
       this._cleanup.push(() => document.removeEventListener('keydown', escM));
+      const trapM = (ev) => {
+        if (ev.key !== 'Tab' || mMenu.style.display !== 'flex') return;
+        const items = Array.from(mMenu.querySelectorAll('a, button'));
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (!mMenu.contains(document.activeElement)) { ev.preventDefault(); first.focus(); }
+        else if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+      };
+      document.addEventListener('keydown', trapM);
+      this._cleanup.push(() => document.removeEventListener('keydown', trapM));
       burger.addEventListener('click', openM);
       this._cleanup.push(() => burger.removeEventListener('click', openM));
       Array.from(mMenu.querySelectorAll('[data-mclose]')).forEach((el) => {
@@ -789,12 +851,13 @@ class Component extends DCLogic {
       if (!calm && this._heroVid && y < vh * 1.3) {
         this._heroVid.style.transform = 'scale(1.08) translateY(' + (y * 0.18).toFixed(1) + 'px)';
         if (this._heroContent) {
-          this._heroContent.style.opacity = String(Math.max(0, 1 - (y / vh) * 1.25));
-          this._heroContent.style.transform = 'translateY(' + (y * 0.28).toFixed(1) + 'px)';
+          const fade = vh >= 640;
+          this._heroContent.style.opacity = fade ? String(Math.max(0, 1 - (y / vh) * 1.25)) : '1';
+          this._heroContent.style.transform = fade ? 'translateY(' + (y * 0.28).toFixed(1) + 'px)' : 'none';
         }
       }
 
-      if (this._stripWrap && this._stripTrack) {
+      if (this._stripWrap && this._stripTrack && !this._stripNative) {
         const r = this._stripWrap.getBoundingClientRect();
         const total = r.height - vh;
         const p = Math.min(1, Math.max(0, -r.top / total));

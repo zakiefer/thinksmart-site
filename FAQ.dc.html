@@ -51,6 +51,7 @@
     header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
     header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
   }
+  @media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
   @media (max-height: 560px) {
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
@@ -93,7 +94,7 @@
   </div>
 </header>
 
-<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
+<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:98; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.14; pointer-events:none;">
   <button data-mclose="1" aria-label="Close menu" style="position:absolute; top:20px; right:clamp(20px,4vw,56px); background:transparent; border:1px solid rgba(235,229,216,.3); color:#EBE5D8; width:44px; height:44px; border-radius:2px; font-size:20px; cursor:pointer;">×</button>
   <a href="Home.dc.html" data-mclose="1" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,9vw,64px); line-height:1.1; color:#EBE5D8; width:fit-content;">Home</a>
@@ -108,7 +109,8 @@
   </div>
 </div>
 
-<section id="main" data-screen-label="FAQ Hero" style="position:relative; overflow:hidden; padding:calc(96px + 9vh) clamp(20px,4vw,56px) clamp(50px,7vh,90px); border-bottom:1px solid rgba(235,229,216,.1);">
+<main id="main">
+<section data-screen-label="FAQ Hero" style="position:relative; overflow:hidden; padding:calc(96px + 9vh) clamp(20px,4vw,56px) clamp(50px,7vh,90px); border-bottom:1px solid rgba(235,229,216,.1);">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.32; pointer-events:none;">
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,14,19,.7) 0%, rgba(11,14,19,.3) 50%, #0B0E13 100%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto;">
@@ -126,7 +128,7 @@
     <details data-rv="0" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/01</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">What is a public adjuster?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">A state-licensed claims professional who advocates for you — the homeowner, business owner or association — through every step of an insurance claim. We document the loss, appraise the damage, navigate the policy's fine print and negotiate the settlement.</p>
@@ -136,7 +138,7 @@
     <details data-rv="40" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/02</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">Will I actually get a higher payment?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">The difference is dramatic. Industry studies show policyholders represented by a public adjuster receive on average <strong style="color:#F09A2E;">747% higher payouts</strong> than those who go it alone. Carriers price claims differently when a professional is checking the math.</p>
@@ -145,7 +147,7 @@
     <details data-rv="80" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/03</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">What does it cost me?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">Nothing up front — ever. We work on contingency: a small, state-regulated percentage of the settlement we recover for you. And we guarantee it: <strong style="color:#F09A2E;">if your claim isn't paid, our service is free.</strong> (Incurred third-party costs — satellite imagery reports, Xactimate estimates — aren't included.)</p>
@@ -154,7 +156,7 @@
     <details data-rv="120" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/04</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">My claim was denied. Is it over?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">No — it's just beginning. Overturning denied claims is a Think Smart specialty. We review the denial against your policy language, re-inspect and re-document the loss, and force the file back open with evidence the carrier has to answer.</p>
@@ -163,7 +165,7 @@
     <details data-rv="160" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/05</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">Why not just handle the claim myself?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">You can — but you'll be negotiating against trained professionals, on their process, using their numbers. Studies show roughly 80% of valid claims end up underpaid or denied without representation. And remember: the burden of proof for every dollar of damage sits on you, the policyholder. Preparing a claim properly is a full-time job; you already have one, plus a home to rebuild.</p>
@@ -172,7 +174,7 @@
     <details data-rv="200" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/06</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">I already got a check. Should I cash it?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">Talk to us first — for free. First offers routinely miss hidden damage, code upgrades and full repair costs. If the settlement is short, we can pursue a supplement for the difference, even after money has changed hands.</p>
@@ -181,7 +183,7 @@
     <details data-rv="240" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/07</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">How long does the process take?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">Every claim is different — size of loss, carrier response times and state deadlines all play in. What we promise: we move immediately, we meet every deadline, and we never let a file sit quiet. The carrier will not be allowed to run out the clock.</p>
@@ -190,7 +192,7 @@
     <details data-rv="280" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/08</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">Who exactly do you work for?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">You. Only you. Contractors and neighbors may refer us, but our license, our contract and our loyalty belong to the insured — never the insurance company, never anyone else with a stake in your settlement.</p>
@@ -199,7 +201,7 @@
     <details data-rv="320" style="border-top:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/09</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">Doesn't my insurance company already send an adjuster?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">They do — and that's the problem. An insurer's profit is premiums minus payouts, and its adjusters are trained to pay as little as possible. A <strong style="color:#EBE5D8;">company adjuster</strong> is carrier staff; their allegiance is to the insurer. An <strong style="color:#EBE5D8;">independent adjuster</strong> is a contractor the same carrier hires for overflow. Neither works for you.</p>
@@ -209,7 +211,7 @@
     <details data-rv="360" style="border-top:1px solid rgba(235,229,216,.15); border-bottom:1px solid rgba(235,229,216,.15); padding:8px 0;">
       <summary style="list-style:none; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:26px 0;">
         <span style="display:flex; gap:20px; align-items:baseline;"><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#F09A2E; flex:none;">Q/10</span><span style="font-size:clamp(18px,1.8vw,24px); font-weight:600; color:#EBE5D8;">When should I bring Think Smart in?</span></span>
-        <span data-faq-icon="1" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
+        <span data-faq-icon="1" aria-hidden="true" style="font-family:'IBM Plex Mono',monospace; font-size:22px; color:#F09A2E; flex:none;">+</span>
       </summary>
       <div style="padding:0 0 30px 58px; max-width:680px; display:flex; flex-direction:column; gap:12px;">
         <p style="margin:0; font-size:16px; line-height:1.75; color:rgba(235,229,216,.68);">Immediately. The most common — and costliest — mistake is waiting: too many homeowners call after they've already committed to a partial settlement or let the trail of evidence go cold. The first steps taken on a loss shape the entire outcome of the claim. Make the first call this one.</p>
@@ -228,7 +230,9 @@
   </div>
 </section>
 
-<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 36px; overflow:hidden;">
+</main>
+
+<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 96px; overflow:hidden;">
   <div style="max-width:1400px; margin:0 auto;">
     <div style="display:flex; align-items:center; gap:clamp(16px,3vw,40px); margin-bottom:56px;">
       <img src="media/mark.webp" alt="" style="width:clamp(56px,9vw,140px); height:clamp(56px,9vw,140px); object-fit:contain; flex:none; opacity:.92;">
@@ -258,7 +262,7 @@
     </div>
     <div style="border-top:1px solid rgba(235,229,216,.1); padding-top:24px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px;">
       <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; line-height:1.7; color:rgba(235,229,216,.52); max-width:640px;">PA JONATHAN NELSON WORKS SOLELY AS AN INDEPENDENT PUBLIC ADJUSTER UNDER HIS OWN LICENSE WITH THE STATE OF INDIANA.</span>
-      <span style="display:flex; align-items:baseline; gap:28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65);" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
+      <span style="display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65); white-space:nowrap;" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
     </div>
   </div>
 </footer>
@@ -326,7 +330,7 @@ class Component extends DCLogic {
       if (navLinks) navLinks.style.display = m ? 'none' : 'flex';
       if (navPhone) navPhone.style.display = m ? 'none' : 'inline-block';
       if (burger) burger.style.display = m ? 'flex' : 'none';
-      if (!m && mMenu) mMenu.style.display = 'none';
+      if (!m && mMenu && mMenu.style.display === 'flex') { mMenu.style.display = 'none'; if (burger) burger.setAttribute('aria-expanded', 'false'); }
       const navCta = (this._nav || document).querySelector('a[href="Claim.dc.html"]');
       if (navCta) {
         navCta.style.padding = (window.innerWidth < 480) ? '10px 12px' : '12px 20px';
@@ -338,11 +342,23 @@ class Component extends DCLogic {
     this._cleanup.push(() => window.removeEventListener('resize', applyNav));
     if (burger && mMenu) {
       const closeM = () => { mMenu.style.display = 'none'; burger.setAttribute('aria-expanded', 'false'); };
-      const openM = () => { mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
+      const openM = () => { const chat = document.querySelector('[data-ref="chatLauncher"]'); if (chat && chat.getAttribute('aria-expanded') === 'true') chat.click(); mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
       const escM = (ev) => { if (ev.key === 'Escape' && mMenu.style.display === 'flex') { closeM(); burger.focus(); } };
       burger.setAttribute('aria-expanded', 'false');
       document.addEventListener('keydown', escM);
       this._cleanup.push(() => document.removeEventListener('keydown', escM));
+      const trapM = (ev) => {
+        if (ev.key !== 'Tab' || mMenu.style.display !== 'flex') return;
+        const items = Array.from(mMenu.querySelectorAll('a, button'));
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (!mMenu.contains(document.activeElement)) { ev.preventDefault(); first.focus(); }
+        else if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+      };
+      document.addEventListener('keydown', trapM);
+      this._cleanup.push(() => document.removeEventListener('keydown', trapM));
       burger.addEventListener('click', openM);
       this._cleanup.push(() => burger.removeEventListener('click', openM));
       Array.from(mMenu.querySelectorAll('[data-mclose]')).forEach((el) => {

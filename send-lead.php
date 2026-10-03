@@ -73,7 +73,7 @@ function require_same_origin(): void {
         return;
     }
     $sourceHost = strtolower((string)parse_url($source, PHP_URL_HOST));
-    if ($sourceHost !== '' && $sourceHost !== $host) {
+    if ($sourceHost !== $host) {
         out(false, 'cross-site request refused', 403);
     }
 }
@@ -164,7 +164,37 @@ function build_lead_mail(string $kind, string $caseNo, array $payload, string $i
     }
 
     if ($kind === 'chat') {
-        $subject = 'Website chat lead';
+        // Only the visitor's own lines, minus the business's own phone numbers and addresses.
+        // No Reply-To for chat: an email in the story may belong to the insurer's adjuster.
+        $stage      = is_string($payload['Stage'] ?? null) ? $payload['Stage'] : '';
+        $transcript = is_string($payload['Chat transcript'] ?? null) ? $payload['Chat transcript'] : '';
+        $visitor    = implode("\n", preg_grep('/^Visitor: /', explode("\n", $transcript)) ?: []);
+        $ownPhones  = ['8127745049', '8128501050'];
+        $contact    = '';
+        if (preg_match_all('/(?:^|\D)((?:\+?1[\s.\-]*)?\(?[2-9]\d{2}\)?\s*[\s.\-\/]?\s*[2-9]\d{2}\s*[\s.\-]?\s*\d{4})(?!\d)/', $visitor, $m)) {
+            foreach ($m[1] as $candidate) {
+                $digits = substr((string)preg_replace('/\D/', '', $candidate), -10);
+                if (!in_array($digits, $ownPhones, true)) {
+                    $contact = trim($candidate);
+                    break;
+                }
+            }
+        }
+        if ($contact === '' && preg_match_all('/[A-Za-z0-9._%+\-]+@[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/', $visitor, $m)) {
+            foreach ($m[0] as $candidate) {
+                $lower = strtolower($candidate);
+                if ($lower === strtolower(LEAD_TO) || substr($lower, -strlen('@' . site_domain())) === '@' . site_domain()) {
+                    continue;
+                }
+                if (filter_var($candidate, FILTER_VALIDATE_EMAIL) !== false) {
+                    $contact = $candidate;
+                    break;
+                }
+            }
+        }
+        $replyTo = '';
+        $subject = (stripos($stage, 'follow') !== false ? 'Website chat follow-up' : 'Website chat lead')
+                 . ($contact !== '' ? ' - ' . substr(header_safe($contact), 0, 60) : '');
     } elseif ($kind === 'contact') {
         $subject = 'Website contact message' . ($name !== '' ? ' - ' . $name : '');
     } else {
@@ -195,7 +225,7 @@ function build_lead_mail(string $kind, string $caseNo, array $payload, string $i
 
 // Validates PHP's $_FILES['photos'] entry and returns only genuine images as
 // [['file' => safe attachment name, 'mime' => ..., 'data' => bytes], ...].
-function collect_photos(array $files, bool $requireUploaded = true): array {
+function collect_photos(array $files, bool $requireUploaded = true, int $first = 1): array {
     $names = (array)($files['name'] ?? []);
     $tmps  = (array)($files['tmp_name'] ?? []);
     $errs  = (array)($files['error'] ?? []);
@@ -226,7 +256,7 @@ function collect_photos(array $files, bool $requireUploaded = true): array {
         }
         $total   += $size;
         $photos[] = [
-            'file' => 'photo-' . (count($photos) + 1) . '.' . $ext[$info[2]],
+            'file' => 'photo-' . ($first + count($photos)) . '.' . $ext[$info[2]],
             'mime' => image_type_to_mime_type($info[2]),
             'data' => $data,
             'orig' => substr(header_safe((string)($names[$i] ?? '')), 0, 80),
@@ -236,9 +266,9 @@ function collect_photos(array $files, bool $requireUploaded = true): array {
 }
 
 // Builds a multipart/mixed email carrying the photos. Returns [subject, body, headers].
-function build_photo_mail(string $caseNo, string $name, string $ip, array $photos): array {
+function build_photo_mail(string $caseNo, string $name, string $ip, array $photos, string $partLabel = ''): array {
     $boundary = 'ts-' . bin2hex(random_bytes(12));
-    $subject  = 'Claim photos (' . count($photos) . ')' . ($name !== '' ? ' - ' . $name : '') . ($caseNo !== '' ? ' - ' . $caseNo : '');
+    $subject  = 'Claim photos' . ($partLabel !== '' ? ' ' . $partLabel : '') . ' (' . count($photos) . ')' . ($name !== '' ? ' - ' . $name : '') . ($caseNo !== '' ? ' - ' . $caseNo : '');
 
     $text = 'Damage photos submitted with a website claim' . "\n"
           . 'Received: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
@@ -292,7 +322,10 @@ function main(): void {
             out(true, 'ok'); // honeypot
         }
         rate_limit($ip);
-        $photos = collect_photos($_FILES['photos']);
+        $first  = max(1, min(1000, (int)($_POST['first'] ?? 1)));
+        $parts  = max(1, min(50, (int)($_POST['parts'] ?? 1)));
+        $part   = max(1, min($parts, (int)($_POST['part'] ?? 1)));
+        $photos = collect_photos($_FILES['photos'], true, $first);
         if ($photos === []) {
             out(false, 'no valid photos', 400);
         }
@@ -300,7 +333,7 @@ function main(): void {
         $nameIn = $_POST['name'] ?? '';
         $caseNo = substr((string)preg_replace('/[^A-Za-z0-9\- ]/', '', is_string($caseIn) ? $caseIn : ''), 0, 40);
         $name   = substr(header_safe(is_string($nameIn) ? $nameIn : ''), 0, 60);
-        [$subject, $body, $headers] = build_photo_mail($caseNo, $name, $ip, $photos);
+        [$subject, $body, $headers] = build_photo_mail($caseNo, $name, $ip, $photos, $parts > 1 ? "part {$part} of {$parts}" : '');
         $sent = send_mail($subject, $body, $headers);
         store_copy(['kind' => 'photos', 'case_no' => $caseNo, 'name' => $name, 'ip' => $ip, 'photos' => count($photos), 'emailed' => $sent]);
         out($sent, $sent ? 'ok' : 'mail() failed', 200, ['count' => $sent ? count($photos) : 0]);

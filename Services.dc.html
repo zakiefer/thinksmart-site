@@ -49,6 +49,7 @@
     header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
     header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
   }
+  @media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
   @media (max-height: 560px) {
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
@@ -91,7 +92,7 @@
   </div>
 </header>
 
-<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:85; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
+<div data-ref="mobileMenu" data-screen-label="Mobile Menu" style="position:fixed; inset:0; z-index:98; background:rgba(7,10,15,.97); display:none; flex-direction:column; justify-content:center; gap:8px; overflow-y:auto; padding:90px clamp(24px,8vw,64px) 60px;">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.14; pointer-events:none;">
   <button data-mclose="1" aria-label="Close menu" style="position:absolute; top:20px; right:clamp(20px,4vw,56px); background:transparent; border:1px solid rgba(235,229,216,.3); color:#EBE5D8; width:44px; height:44px; border-radius:2px; font-size:20px; cursor:pointer;">×</button>
   <a href="Home.dc.html" data-mclose="1" style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,9vw,64px); line-height:1.1; color:#EBE5D8; width:fit-content;">Home</a>
@@ -106,9 +107,10 @@
   </div>
 </div>
 
-<section id="main" data-screen-label="Services Hero" style="position:relative; padding:calc(96px + 10vh) clamp(20px,4vw,56px) clamp(60px,9vh,110px); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden;">
+<main id="main">
+<section data-screen-label="Services Hero" style="position:relative; padding:calc(96px + 10vh) clamp(20px,4vw,56px) clamp(60px,9vh,110px); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden;">
   <div style="position:absolute; inset:0; opacity:.12; pointer-events:none;">
-    <video src="media/rain-macro-shingles.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block;"></video>
+    <video poster="media/rain-macro-shingles-poster.webp" src="media/rain-macro-shingles.mp4" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(media/rain-macro-shingles-poster.webp) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,14,19,.6) 0%, rgba(11,14,19,.2) 50%, #0B0E13 100%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto;">
@@ -229,7 +231,7 @@
         </div>
       </div>
       <div data-rv="40" style="position:relative; background:#0B0E13; aspect-ratio:16/10; overflow:hidden;">
-        <video src="media/hero-storm-aerial.mp4" autoplay muted="{{ true }}" loop="{{ true }}" playsinline preload="metadata" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55;"></video>
+        <video poster="media/hero-storm-aerial-poster.webp" src="media/hero-storm-aerial.mp4" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(media/hero-storm-aerial-poster.webp) center/cover no-repeat; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55;"></video>
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 30%, rgba(7,10,15,.85) 100%);"></div>
         <div style="position:absolute; left:24px; bottom:20px; right:24px; display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
           <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; text-transform:uppercase; font-size:32px; color:#EBE5D8;">Hurricane</span>
@@ -301,7 +303,9 @@
   </div>
 </section>
 
-<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 36px; overflow:hidden;">
+</main>
+
+<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 96px; overflow:hidden;">
   <div style="max-width:1400px; margin:0 auto;">
     <div style="display:flex; align-items:center; gap:clamp(16px,3vw,40px); margin-bottom:56px;">
       <img src="media/mark.webp" alt="" style="width:clamp(56px,9vw,140px); height:clamp(56px,9vw,140px); object-fit:contain; flex:none; opacity:.92;">
@@ -331,7 +335,7 @@
     </div>
     <div style="border-top:1px solid rgba(235,229,216,.1); padding-top:24px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px;">
       <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; line-height:1.7; color:rgba(235,229,216,.52); max-width:640px;">PA JONATHAN NELSON WORKS SOLELY AS AN INDEPENDENT PUBLIC ADJUSTER UNDER HIS OWN LICENSE WITH THE STATE OF INDIANA.</span>
-      <span style="display:flex; align-items:baseline; gap:28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65);" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
+      <span style="display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 28px;"><a href="https://www.facebook.com/SmartAdjusting/" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65); white-space:nowrap;" style-hover="color:#F09A2E;">FACEBOOK ↗</a><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© 2026 THINK SMART PUBLIC ADJUSTING LLC</span></span>
     </div>
   </div>
 </footer>
@@ -360,7 +364,20 @@ class Component extends DCLogic {
     this._reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const calmMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    $$('video').forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); return; } const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+    const videos = $$('video');
+    videos.forEach((v) => { v.muted = true; if (calmMotion) { v.removeAttribute('autoplay'); v.pause(); } });
+    if (!calmMotion && videos.length) {
+      const playVideo = (v) => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+      if ('IntersectionObserver' in window) {
+        const vio = new IntersectionObserver((entries) => entries.forEach((en) => {
+          if (en.isIntersecting) playVideo(en.target); else en.target.pause();
+        }), { rootMargin: '200px 0px' });
+        videos.forEach((v) => vio.observe(v));
+        this._cleanup.push(() => vio.disconnect());
+      } else {
+        videos.forEach(playVideo);
+      }
+    }
 
     const revealEls = $$('[data-rv]');
     if (!this._reduced) {
@@ -394,7 +411,7 @@ class Component extends DCLogic {
       if (navLinks) navLinks.style.display = m ? 'none' : 'flex';
       if (navPhone) navPhone.style.display = m ? 'none' : 'inline-block';
       if (burger) burger.style.display = m ? 'flex' : 'none';
-      if (!m && mMenu) mMenu.style.display = 'none';
+      if (!m && mMenu && mMenu.style.display === 'flex') { mMenu.style.display = 'none'; if (burger) burger.setAttribute('aria-expanded', 'false'); }
       const navCta = (this._nav || document).querySelector('a[href="Claim.dc.html"]');
       if (navCta) {
         navCta.style.padding = (window.innerWidth < 480) ? '10px 12px' : '12px 20px';
@@ -406,11 +423,23 @@ class Component extends DCLogic {
     this._cleanup.push(() => window.removeEventListener('resize', applyNav));
     if (burger && mMenu) {
       const closeM = () => { mMenu.style.display = 'none'; burger.setAttribute('aria-expanded', 'false'); };
-      const openM = () => { mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
+      const openM = () => { const chat = document.querySelector('[data-ref="chatLauncher"]'); if (chat && chat.getAttribute('aria-expanded') === 'true') chat.click(); mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
       const escM = (ev) => { if (ev.key === 'Escape' && mMenu.style.display === 'flex') { closeM(); burger.focus(); } };
       burger.setAttribute('aria-expanded', 'false');
       document.addEventListener('keydown', escM);
       this._cleanup.push(() => document.removeEventListener('keydown', escM));
+      const trapM = (ev) => {
+        if (ev.key !== 'Tab' || mMenu.style.display !== 'flex') return;
+        const items = Array.from(mMenu.querySelectorAll('a, button'));
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (!mMenu.contains(document.activeElement)) { ev.preventDefault(); first.focus(); }
+        else if (ev.shiftKey && document.activeElement === first) { ev.preventDefault(); last.focus(); }
+        else if (!ev.shiftKey && document.activeElement === last) { ev.preventDefault(); first.focus(); }
+      };
+      document.addEventListener('keydown', trapM);
+      this._cleanup.push(() => document.removeEventListener('keydown', trapM));
       burger.addEventListener('click', openM);
       this._cleanup.push(() => burger.removeEventListener('click', openM));
       Array.from(mMenu.querySelectorAll('[data-mclose]')).forEach((el) => {

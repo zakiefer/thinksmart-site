@@ -5,6 +5,10 @@
 DirectoryIndex Home.dc.html index.html
 
 Options -Indexes
+
+<Files ".user.ini">
+  Require all denied
+</Files>
 ErrorDocument 404 /404.html
 
 AddType image/webp .webp
@@ -28,6 +32,8 @@ RewriteRule ^frequently-asked-questions/?$ /FAQ.dc.html [R=301,L]
 RewriteRule ^contact/?$ /Contact.dc.html [R=301,L]
 RewriteRule ^file-a-claim/?$ /Claim.dc.html [R=301,L]
 RewriteRule ^copy-of-file-a-claim(-1)?/?$ /Claim.dc.html [R=301,L]
+RewriteRule ^_files/ugd/274ef5_(9f0b81b399a04b61aa9017dead4975c3|0863a1590d7b4c4180bcee97eb5af741)\.pdf$ /docs/think-smart-agreement-indiana.pdf [R=301,L]
+RewriteRule ^_files/ugd/274ef5_(ef650220209045328e86b9d35054d796|19ebdb6af92b457783833f052ffac194)\.pdf$ /docs/think-smart-agreement-kentucky.pdf [R=301,L]
 </IfModule>
 
 <IfModule mod_headers.c>
