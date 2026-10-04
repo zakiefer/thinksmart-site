@@ -1074,6 +1074,10 @@
   var REACT_SRI = "sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z";
   var REACT_DOM_URL = "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js";
   var REACT_DOM_SRI = "sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1";
+  // The same React files, served by the site itself; the CDN is only a fallback.
+  var LOCAL_SCRIPT_BASE = document.currentScript && document.currentScript.src ? new URL(".", document.currentScript.src).href : "";
+  var LOCAL_REACT_URL = LOCAL_SCRIPT_BASE && LOCAL_SCRIPT_BASE + "vendor/react-18.3.1.production.min.js";
+  var LOCAL_REACT_DOM_URL = LOCAL_SCRIPT_BASE && LOCAL_SCRIPT_BASE + "vendor/react-dom-18.3.1.production.min.js";
   var BABEL_URL = "https://unpkg.com/@babel/standalone@7.29.0/babel.min.js";
   var BABEL_SRI = "sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y";
   function cdnScriptFor(url, sri) {
@@ -1704,10 +1708,13 @@
     if (w.React && w.ReactDOM) return Promise.resolve();
     const react = cdnScriptFor(REACT_URL, REACT_SRI);
     const reactDom = cdnScriptFor(REACT_DOM_URL, REACT_DOM_SRI);
-    return Promise.all([
-      loadScript(react.src, react.integrity),
-      loadScript(reactDom.src, reactDom.integrity)
-    ]).then(() => void 0);
+    const fromCdn = () => (w.React ? Promise.resolve() : loadScript(react.src, react.integrity))
+      .then(() => w.ReactDOM ? void 0 : loadScript(reactDom.src, reactDom.integrity));
+    if (!LOCAL_REACT_URL) return fromCdn();
+    return Promise.allSettled([
+      loadScript(LOCAL_REACT_URL, REACT_SRI),
+      loadScript(LOCAL_REACT_DOM_URL, REACT_DOM_SRI)
+    ]).then(() => w.React && w.ReactDOM ? void 0 : fromCdn());
   }
   function init() {
     const runtime = createRuntime(document);

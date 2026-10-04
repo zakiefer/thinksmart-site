@@ -44,6 +44,10 @@ Header set Cache-Control "no-cache"
 <FilesMatch "\.(webp|png|mp4|pdf)$">
 Header set Cache-Control "public, max-age=2592000"
 </FilesMatch>
+# vendor/ files carry their version in the name and never change.
+<FilesMatch "-\d+\.\d+\.\d+\.production\.min\.js$">
+Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
 Header set X-Content-Type-Options "nosniff"
 Header set Referrer-Policy "strict-origin-when-cross-origin"
 </IfModule>
