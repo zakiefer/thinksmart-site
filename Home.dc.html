@@ -24,7 +24,6 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   html { scroll-behavior: smooth; background: #0B0E13; }
   body { margin: 0; background: #0B0E13; color: #EBE5D8; font-family: 'Archivo', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
@@ -59,6 +58,7 @@
     header[data-ref="nav"] a[href="Claim.dc.html"] { font-size: 10px !important; padding: 9px 9px !important; }
   }
   @media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
+  [data-ref="chatLauncher"][data-strip-hide] { visibility: hidden !important; }
   @media (max-height: 560px) {
     [data-ref="mobileMenu"] { justify-content: flex-start !important; padding-top: 72px !important; padding-bottom: 28px !important; }
     [data-ref="mobileMenu"] > a { font-size: 30px !important; }
@@ -79,6 +79,7 @@
     html { scroll-behavior: auto; }
   }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </helmet>
 
 <div style="position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.05; mix-blend-mode:overlay; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E&quot;);" data-ref="grain"></div>
@@ -711,6 +712,9 @@ class Component extends DCLogic {
       const stripResize = !this._stripSized || this._stripSized.w !== window.innerWidth || Math.abs(this._stripSized.h - window.innerHeight) > (coarse ? 150 : 0);
       if (this._stripWrap && stripResize) {
         this._stripSized = { w: window.innerWidth, h: window.innerHeight };
+        this._stripClash = undefined;
+        const chatL = document.querySelector('[data-ref="chatLauncher"]');
+        if (chatL) chatL.removeAttribute('data-strip-hide');
         const sh = this._stripWrap.querySelector('h2');
         if (sh) sh.style.fontSize = m ? 'clamp(30px,8vw,44px)' : 'clamp(44px,6.4vw,104px)';
         // The pinned panel is exactly one viewport tall, so on short screens (laptops,
@@ -767,6 +771,11 @@ class Component extends DCLogic {
     applyNav();
     window.addEventListener('resize', applyNav);
     this._cleanup.push(() => window.removeEventListener('resize', applyNav));
+    let stripAlive = true;
+    const remeasure = () => { if (stripAlive && this._stripWrap && this._stripWrap.getBoundingClientRect().top > 0) { this._stripSized = null; applyNav(); } };
+    if (document.readyState !== 'complete') window.addEventListener('load', remeasure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+    this._cleanup.push(() => { stripAlive = false; window.removeEventListener('load', remeasure); });
     if (burger && mMenu) {
       const closeM = () => { mMenu.style.display = 'none'; burger.setAttribute('aria-expanded', 'false'); };
       const openM = () => { const chat = document.querySelector('[data-ref="chatLauncher"]'); if (chat && chat.getAttribute('aria-expanded') === 'true') chat.click(); mMenu.style.display = 'flex'; burger.setAttribute('aria-expanded', 'true'); const x = mMenu.querySelector('button[data-mclose]'); if (x) x.focus(); };
@@ -884,6 +893,19 @@ class Component extends DCLogic {
         const max = this._stripTrack.scrollWidth - window.innerWidth + Math.min(112, window.innerWidth * 0.08);
         this._stripTrack.style.transform = 'translate3d(' + (-p * Math.max(0, max)).toFixed(1) + 'px,0,0) skewX(' + (calm ? 0 : this._skew).toFixed(2) + 'deg)';
         if (this._stripFill) this._stripFill.style.width = (p * 100).toFixed(1) + '%';
+        const chat = document.querySelector('[data-ref="chatLauncher"]');
+        if (chat) {
+          const pinned = r.top <= 0 && r.bottom >= vh;
+          if (pinned && this._stripClash === undefined) {
+            const foot = this._stripTrack.parentElement.lastElementChild;
+            const a = foot.firstElementChild.getBoundingClientRect();
+            const b = foot.lastElementChild.getBoundingClientRect();
+            const c = chat.getBoundingClientRect();
+            this._stripClash = Math.min(a.left, b.left) < c.right && Math.max(a.right, b.right) > c.left && Math.min(a.top, b.top) < c.bottom && Math.max(a.bottom, b.bottom) > c.top;
+          }
+          const hide = pinned && this._stripClash === true && chat.getAttribute('aria-expanded') !== 'true' && document.activeElement !== chat;
+          if (hide !== chat.hasAttribute('data-strip-hide')) { if (hide) chat.setAttribute('data-strip-hide', ''); else chat.removeAttribute('data-strip-hide'); }
+        }
       }
 
       if (this._drawRain) this._drawRain(y, vh, calm);
@@ -929,6 +951,8 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this._raf) cancelAnimationFrame(this._raf);
     (this._cleanup || []).forEach((fn) => fn());
+    const chat = document.querySelector('[data-ref="chatLauncher"]');
+    if (chat) chat.removeAttribute('data-strip-hide');
   }
 
   renderVals() { return {}; }

@@ -25,7 +25,6 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   html { scroll-behavior: smooth; background: #0B0E13; }
   body { margin: 0; background: #0B0E13; color: #EBE5D8; font-family: 'Archivo', 'Helvetica Neue', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
@@ -74,6 +73,7 @@
     html { scroll-behavior: auto; }
   }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </helmet>
 
 <div style="position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.05; mix-blend-mode:overlay; background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise'%20baseFrequency='0.9'%20numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.9'/%3E%3C/svg%3E&quot;);"></div>
@@ -237,7 +237,7 @@
                 <sc-for list="{{ photos }}" as="ph" hint-placeholder-count="0">
                   <span style="position:relative; width:84px; height:84px; border:1px solid rgba(235,229,216,.25); border-radius:2px; overflow:hidden; display:block;">
                     <span role="img" aria-label="{{ ph.name }}" style="display:block; width:100%; height:100%; background-size:cover; background-position:center; background-image:url({{ ph.url }});"></span>
-                    <button onClick="{{ ph.remove }}" type="button" aria-label="Remove photo" style="position:absolute; top:3px; right:3px; background:rgba(7,10,15,.8); color:#EBE5D8; border:none; width:20px; height:20px; border-radius:2px; cursor:pointer; font-size:12px; line-height:1; padding:0;">×</button>
+                    <button onClick="{{ ph.remove }}" type="button" aria-label="Remove photo" style="position:absolute; top:0; right:0; width:40px; height:40px; background:none; border:none; padding:3px 3px 0 0; cursor:pointer; display:flex; align-items:flex-start; justify-content:flex-end;"><span aria-hidden="true" style="display:block; width:22px; height:22px; background:rgba(7,10,15,.8); color:#EBE5D8; border-radius:2px; font-size:13px; line-height:22px; text-align:center;">×</span></button>
                   </span>
                 </sc-for>
               </div>
@@ -512,6 +512,18 @@ class Component extends DCLogic {
     });
   }
 
+  _revealError() {
+    try {
+      const a = (this._root || document).querySelector('form [role="alert"]');
+      if (!a) return;
+      const r = a.getBoundingClientRect();
+      if (r.top >= 100 && r.bottom <= window.innerHeight - 90) return;
+      const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const top = r.top + (window.scrollY || 0) - Math.max(110, (window.innerHeight - r.height) / 2);
+      window.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
+    } catch (err) {}
+  }
+
   componentWillUnmount() {
     if (this._stayOnPage) window.removeEventListener('beforeunload', this._stayOnPage);
     if (this._raf) cancelAnimationFrame(this._raf);
@@ -709,7 +721,7 @@ class Component extends DCLogic {
             });
           })
           .catch(() => {
-            this.setState({ sending: false, sendError: true });
+            this.setState({ sending: false, sendError: true }, () => this._revealError());
           });
       },
       reset: () => {

@@ -169,6 +169,9 @@ function build_lead_mail(string $kind, string $caseNo, array $payload, string $i
         $stage      = is_string($payload['Stage'] ?? null) ? $payload['Stage'] : '';
         $transcript = is_string($payload['Chat transcript'] ?? null) ? $payload['Chat transcript'] : '';
         $visitor    = implode("\n", preg_grep('/^Visitor: /', explode("\n", $transcript)) ?: []);
+        $visitor    = preg_replace('/[\x{200E}\x{200F}\x{202A}-\x{202E}\x{2066}-\x{2069}]/u', '', $visitor) ?? $visitor;
+        $visitor    = preg_replace('/[\x{2010}-\x{2015}\x{2212}\x{FE63}\x{FF0D}]/u', '-', $visitor) ?? $visitor;
+        $visitor    = preg_replace('/[\x{00A0}\x{2007}\x{202F}]/u', ' ', $visitor) ?? $visitor;
         $ownPhones  = ['8127745049', '8128501050'];
         $contact    = '';
         if (preg_match_all('/(?:^|\D)((?:\+?1[\s.\-]*)?\(?[2-9]\d{2}\)?\s*[\s.\-\/]?\s*[2-9]\d{2}\s*[\s.\-]?\s*\d{4})(?!\d)/', $visitor, $m)) {
