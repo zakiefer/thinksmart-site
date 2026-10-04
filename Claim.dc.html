@@ -17,7 +17,7 @@
 <link rel="canonical" href="https://www.thinksmartpublicadjusting.com/Claim.dc.html">
 <link rel="icon" type="image/png" href="media/favicon.png">
 <script src="./support.js"></script>
-<noscript><style>form button[type="submit"], form [role="alert"], [data-ref="caseConfirm"], [data-ref="msgConfirm"], form [role="status"] { display: none !important; }</style></noscript>
+<noscript><style>header[data-ref="nav"] { position: sticky !important; overflow-x: clip; } form button[type="submit"], form [role="alert"], [data-ref="caseConfirm"], [data-ref="msgConfirm"], form [role="status"] { display: none !important; }</style></noscript>
 </head>
 <body>
 <noscript><p style="position:relative; z-index:100; margin:0; padding:16px 20px; background:#F09A2E; color:#0B0E13; font:600 16px/1.5 'Helvetica Neue',Arial,sans-serif; text-align:center;">Our online form needs JavaScript. Call <a href="tel:8127745049" style="color:#0B0E13;">812-774-5049</a> or email <a href="mailto:thinksmartpublicadjusting@gmail.com" style="color:#0B0E13;">thinksmartpublicadjusting@gmail.com</a> and we'll open your case.</p></noscript>
@@ -237,7 +237,7 @@
                 <sc-for list="{{ photos }}" as="ph" hint-placeholder-count="0">
                   <span style="position:relative; width:84px; height:84px; border:1px solid rgba(235,229,216,.25); border-radius:2px; overflow:hidden; display:block;">
                     <span role="img" aria-label="{{ ph.name }}" style="display:block; width:100%; height:100%; background-size:cover; background-position:center; background-image:url({{ ph.url }});"></span>
-                    <button onClick="{{ ph.remove }}" type="button" aria-label="Remove photo" style="position:absolute; top:0; right:0; width:40px; height:40px; background:none; border:none; padding:3px 3px 0 0; cursor:pointer; display:flex; align-items:flex-start; justify-content:flex-end;"><span aria-hidden="true" style="display:block; width:22px; height:22px; background:rgba(7,10,15,.8); color:#EBE5D8; border-radius:2px; font-size:13px; line-height:22px; text-align:center;">×</span></button>
+                    <button onClick="{{ ph.remove }}" type="button" aria-label="Remove photo" style="position:absolute; top:0; right:0; width:40px; height:40px; background:none; border:none; padding:3px 3px 0 0; outline-offset:-3px; cursor:pointer; display:flex; align-items:flex-start; justify-content:flex-end;"><span aria-hidden="true" style="display:block; width:22px; height:22px; background:rgba(7,10,15,.8); color:#EBE5D8; border-radius:2px; font-size:13px; line-height:22px; text-align:center;">×</span></button>
                   </span>
                 </sc-for>
               </div>

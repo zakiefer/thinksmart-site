@@ -710,9 +710,9 @@ class Component extends DCLogic {
       // Mobile toolbars change innerHeight while scrolling; only re-size the strip for real changes.
       const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
       const stripResize = !this._stripSized || this._stripSized.w !== window.innerWidth || Math.abs(this._stripSized.h - window.innerHeight) > (coarse ? 150 : 0);
+      this._stripClash = undefined;
       if (this._stripWrap && stripResize) {
         this._stripSized = { w: window.innerWidth, h: window.innerHeight };
-        this._stripClash = undefined;
         const chatL = document.querySelector('[data-ref="chatLauncher"]');
         if (chatL) chatL.removeAttribute('data-strip-hide');
         const sh = this._stripWrap.querySelector('h2');

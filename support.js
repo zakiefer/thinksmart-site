@@ -1708,13 +1708,15 @@
     if (w.React && w.ReactDOM) return Promise.resolve();
     const react = cdnScriptFor(REACT_URL, REACT_SRI);
     const reactDom = cdnScriptFor(REACT_DOM_URL, REACT_DOM_SRI);
+    // A react-dom that ran without React leaves an empty ReactDOM object behind.
+    const domReady = () => !!(w.ReactDOM && typeof w.ReactDOM.render === "function");
     const fromCdn = () => (w.React ? Promise.resolve() : loadScript(react.src, react.integrity))
-      .then(() => w.ReactDOM ? void 0 : loadScript(reactDom.src, reactDom.integrity));
+      .then(() => domReady() ? void 0 : loadScript(reactDom.src, reactDom.integrity));
     if (!LOCAL_REACT_URL) return fromCdn();
     return Promise.allSettled([
       loadScript(LOCAL_REACT_URL, REACT_SRI),
       loadScript(LOCAL_REACT_DOM_URL, REACT_DOM_SRI)
-    ]).then(() => w.React && w.ReactDOM ? void 0 : fromCdn());
+    ]).then(() => w.React && domReady() ? void 0 : fromCdn());
   }
   function init() {
     const runtime = createRuntime(document);
