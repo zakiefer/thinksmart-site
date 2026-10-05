@@ -877,12 +877,15 @@ class Component extends DCLogic {
         }
       }
 
-      if (!calm && this._heroVid && y < vh * 1.3) {
-        this._heroVid.style.transform = 'scale(1.08) translateY(' + (y * 0.18).toFixed(1) + 'px)';
+      // Re-apply after any viewport-height change too: turning a phone below the hero must not leave the portrait fade behind.
+      if (!calm && this._heroVid && (y < vh * 1.3 || this._heroVh !== vh)) {
+        this._heroVh = vh;
+        const hy = Math.min(y, vh * 1.3);
+        this._heroVid.style.transform = 'scale(1.08) translateY(' + (hy * 0.18).toFixed(1) + 'px)';
         if (this._heroContent) {
           const fade = vh >= 640;
-          this._heroContent.style.opacity = fade ? String(Math.max(0, 1 - (y / vh) * 1.25)) : '1';
-          this._heroContent.style.transform = fade ? 'translateY(' + (y * 0.28).toFixed(1) + 'px)' : 'none';
+          this._heroContent.style.opacity = fade ? String(Math.max(0, 1 - (hy / vh) * 1.25)) : '1';
+          this._heroContent.style.transform = fade ? 'translateY(' + (hy * 0.28).toFixed(1) + 'px)' : 'none';
         }
       }
 
