@@ -1,0 +1,24 @@
+    // Notice bar: keep it right under the header (whose height changes while scrolling and on
+    // phones), and let anchors and pinned sections clear both.
+    const fitNotice = () => {
+      const nav = this._root.querySelector('[data-ref="nav"]');
+      const bar = document.querySelector('[data-ref="notice"]');
+      const h = nav ? Math.round(nav.getBoundingClientRect().height) : 85;
+      const b = bar ? bar.offsetHeight : 0;
+      const de = document.documentElement;
+      de.style.setProperty('--ts-nav-h', h + 'px');
+      de.style.setProperty('--ts-bar-h', b + 'px');
+      de.style.scrollPaddingTop = (Math.max(92, h + b) + 8) + 'px';
+    };
+    fitNotice();
+    window.addEventListener('resize', fitNotice);
+    this._cleanup.push(() => window.removeEventListener('resize', fitNotice));
+    if ('ResizeObserver' in window) {
+      // next frame: changing the page inside the callback would report a ResizeObserver loop
+      const ro = new ResizeObserver(() => requestAnimationFrame(fitNotice));
+      const navEl = this._root.querySelector('[data-ref="nav"]');
+      const barEl = document.querySelector('[data-ref="notice"]');
+      if (navEl) ro.observe(navEl, { box: 'border-box' });
+      if (barEl) ro.observe(barEl, { box: 'border-box' });
+      this._cleanup.push(() => ro.disconnect());
+    }

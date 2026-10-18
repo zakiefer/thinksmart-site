@@ -1,0 +1,124 @@
+<title>Think Smart Gate 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* One column of review items, each a decision; evidence as before / after / what-changed trios.
+     The site's own type and colors: storm-dark ground, bone text, the orange accent. */
+  :root {
+    --bg: #0b0e13; --panel: #10141b; --line: rgba(235,229,216,.14); --fg: #ebe5d8; --muted: rgba(235,229,216,.66);
+    --accent: #f09a2e; --accent-ink: #0b0e13; --ok: #7fc48b; --back: #ff8a6b;
+    --display: 'Big Shoulders Display', Impact, 'Arial Narrow', sans-serif;
+    --body: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+    --bg: #ebe5d8; --panel: #f5f1e8; --line: rgba(11,14,19,.14); --fg: #12161d; --muted: rgba(18,22,29,.66);
+    --accent: #a85a06; --accent-ink: #f5f1e8; --ok: #1f7a34; --back: #b33a18; color-scheme: light; } }
+  :root[data-theme="light"] {
+    --bg: #ebe5d8; --panel: #f5f1e8; --line: rgba(11,14,19,.14); --fg: #12161d; --muted: rgba(18,22,29,.66);
+    --accent: #a85a06; --accent-ink: #f5f1e8; --ok: #1f7a34; --back: #b33a18; color-scheme: light; }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.6 var(--body); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-block: 40px 72px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; flex-direction: column; gap: 28px; }
+  .eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .26em; text-transform: uppercase; color: var(--accent); margin: 0; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; line-height: .95; margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(44px, 8vw, 88px); }
+  h2 { font-size: clamp(30px, 4.6vw, 48px); padding-top: 12px; }
+  h3 { font-size: clamp(24px, 3vw, 32px); }
+  p { margin: 0; max-width: 68ch; }
+  .lede { color: var(--muted); font-size: 17px; }
+  .facts { display: flex; flex-wrap: wrap; gap: 10px 26px; font: 13px/1.5 var(--mono); color: var(--muted); }
+  .facts b { color: var(--fg); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .item, .piece { border-top: 1px solid var(--line); padding-top: 22px; display: flex; flex-direction: column; gap: 14px; }
+  .item header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .id { font: 500 13px/1 var(--mono); color: var(--accent-ink); background: var(--accent); padding: 6px 8px; border-radius: 2px; }
+  .note { font: 13px/1.6 var(--mono); color: var(--muted); }
+  .ev { display: flex; flex-direction: column; gap: 8px; }
+  .evcap { font: 500 13px/1.5 var(--body); }
+  .evcap span { font-family: var(--mono); font-weight: 400; color: var(--muted); margin-left: 6px; }
+  .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 760px) { .trio { grid-template-columns: 1fr; } }
+  figure { margin: 0; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  figure img { display: block; width: 100%; max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 3px; background: #0b0e13; }
+  figcaption { font: 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .choice { border: 0; padding: 0; margin: 0; display: flex; gap: 10px; flex-wrap: wrap; }
+  .choice label { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 2px; padding: 9px 14px; cursor: pointer; font-weight: 500; }
+  .choice label:has(input[value="accept"]:checked) { border-color: var(--ok); color: var(--ok); }
+  .choice label:has(input[value="back"]:checked) { border-color: var(--back); color: var(--back); }
+  .choice input { accent-color: var(--accent); }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .answer { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .answer textarea { width: 100%; min-height: 76px; resize: vertical; font: 14px/1.5 var(--mono); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 2px; padding: 10px; box-sizing: border-box; }
+  .answer button { align-self: flex-start; font: 600 14px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); border: 0; border-radius: 2px; padding: 14px 20px; cursor: pointer; }
+  .answer button:focus-visible, .choice label:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  ul.later { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 68ch; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex; flex-direction:column; gap:14px;">
+    <p class="eyebrow">Think Smart site editor · Step 1 and 2</p>
+    <h1>Gate 2 review</h1>
+    <p class="lede">Today's site (commit c5efbf7) against the same site rebuilt from the new templates and content. Gate 1 already proved the conversion loses nothing: the converter's output rebuilds all 10 files byte for byte. Below is every deliberate change on top of that. Accept each one, or send it back.</p>
+    <div class="facts"><span>Chromium and WebKit</span><span>375 · 768 · 1024 · 1280 · 1366 · 1440 · 1920px</span><span><b>{{IDENT}}</b> of <b>{{TOTAL}}</b> full-page screenshots identical</span><span><b>{{CHANGED}}</b> changed, all explained below</span></div>
+  </header>
+
+  <h2>Changes in the default build</h2>
+  {{ITEMS}}
+
+  <h2>New pieces, switched on with test content</h2>
+  <p class="lede">These are off or invisible in the default build. Each one is shown against the default build; the test content (sample reviews, extra states) never ships.</p>
+  {{PIECES}}
+
+  <h2>Not in this round</h2>
+  <ul class="later">
+    <li>Photo darkening behind text: it belongs with the photo screen of the editor.</li>
+    <li>Fingerprinted photo names and versioned contract links: they come with uploads.</li>
+  </ul>
+
+  <section class="answer" aria-labelledby="ans-h">
+    <h3 id="ans-h">Your answer</h3>
+    <p class="lede">Pick Accept or Send back above; your answer collects here. Copy it and paste it into the chat.</p>
+    <label for="answer-text" class="vh">Your answer</label>
+    <textarea id="answer-text" readonly></textarea>
+    <button type="button" id="copy-answer">Copy answer</button>
+  </section>
+</div>
+
+<script>
+(function () {
+  var ids = Array.prototype.map.call(document.querySelectorAll('.item'), function (s) { return s.id; });
+  var box = document.getElementById('answer-text');
+  var KEY = 'ts-gate2-answers';
+  function load() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; } }
+  function save(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} }
+  function update() {
+    var acc = [], back = [], open = [], saved = {};
+    ids.forEach(function (id) {
+      var c = document.querySelector('input[name="' + id + '"]:checked');
+      if (!c) open.push(id); else if (c.value === 'accept') acc.push(id); else back.push(id);
+      if (c) saved[id] = c.value;
+    });
+    save(saved);
+    var parts = [];
+    if (acc.length) parts.push('accept ' + acc.join(', '));
+    if (back.length) parts.push('send back ' + back.join(', '));
+    if (open.length) parts.push('still open ' + open.join(', '));
+    box.value = 'Gate 2: ' + parts.join('; ') + '.';
+  }
+  var s = load();
+  ids.forEach(function (id) { if (s[id]) { var el = document.getElementById(id + (s[id] === 'accept' ? '-a' : '-b')); if (el) el.checked = true; } });
+  document.addEventListener('change', update);
+  update();
+  document.getElementById('copy-answer').addEventListener('click', function (ev) {
+    var b = ev.currentTarget;
+    function done(t) { b.textContent = t; setTimeout(function () { b.textContent = 'Copy answer'; }, 1800); }
+    function fallback() { box.focus(); box.select(); done('Selected: press Copy'); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(box.value).then(function () { done('Copied'); }, fallback);
+    else fallback();
+  });
+})();
+</script>

@@ -1,0 +1,2 @@
+# The editor (Step 3) adds its own entry point here. Until then nothing in edit/ is served.
+Require all denied

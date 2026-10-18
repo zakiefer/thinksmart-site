@@ -1,0 +1,34 @@
+<footer data-screen-label="Footer" style="background:#05070B; border-top:1px solid rgba(235,229,216,.1); padding:clamp(60px,9vh,110px) clamp(20px,4vw,56px) 96px; overflow:hidden;">
+  <div style="max-width:1400px; margin:0 auto;">
+    <div style="display:flex; align-items:center; gap:clamp(16px,3vw,40px); margin-bottom:56px;">
+      <img src="media/mark.webp" alt="" style="width:clamp(56px,9vw,140px); height:clamp(56px,9vw,140px); object-fit:contain; flex:none; opacity:.92;">
+      <div style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(48px,12.5vw,210px); line-height:.85; color:transparent; -webkit-text-stroke:1px rgba(235,229,216,.22); white-space:nowrap;">Think Smart</div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:40px; margin-bottom:64px;">
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.26em; color:rgba(235,229,216,.65); margin-bottom:6px;">NAVIGATE</span>
+        <a href="Home.dc.html" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Home</a>
+        <a href="About.dc.html" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">About</a>
+        <a href="Services.dc.html" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Services</a>
+        <a href="FAQ.dc.html" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">FAQ</a>
+        <a href="Contact.dc.html" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">Contact</a>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.26em; color:rgba(235,229,216,.65); margin-bottom:6px;">ACT NOW</span>
+        <a href="Claim.dc.html" style="font-size:15px; color:#F09A2E; width:fit-content;">⟦chrome.footer.claimLink⟧</a>
+        <a href="⟦#if page == 'Claim'⟧{{ photosHref }}⟦#else⟧Claim.dc.html#photos⟦/if⟧" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">⟦chrome.footer.photosLink⟧</a>
+        <a href="tel:⟦site.phone|tel⟧" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">⟦chrome.footer.callLink⟧</a>
+        <a href="mailto:⟦site.email⟧" style="font-size:15px; color:rgba(235,229,216,.75); width:fit-content;">⟦chrome.footer.emailLink⟧</a>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; max-width:360px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.26em; color:rgba(235,229,216,.65); margin-bottom:6px;">THE PROMISE</span>
+        <p style="margin:0; font-size:15px; line-height:1.7; color:rgba(235,229,216,.6);">⟦chrome.footer.promise⟧</p>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; line-height:1.8; color:rgba(235,229,216,.65);">⟦ref.addressFooter|upper⟧</span>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(235,229,216,.1); padding-top:24px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:16px;">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; line-height:1.7; color:rgba(235,229,216,.52); max-width:640px;">⟦#if chrome.footer.licenseAuto⟧⟦derived.licenseLine|upper⟧⟦#else⟧⟦chrome.footer.license|upper⟧⟦/if⟧</span>
+      <span style="display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 28px;">⟦#each site.social as s⟧<a href="⟦s.url⟧" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:rgba(235,229,216,.65); white-space:nowrap;" style-hover="color:#F09A2E;">⟦s.platform|upper⟧ ↗</a>⟦/each⟧<span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.06em; color:rgba(235,229,216,.52);">© {{ year }} ⟦site.businessName|upper⟧</span></span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,1393 @@
+{
+    "site": {
+        "phone": "812-774-5049",
+        "phone2": "812-850-1050",
+        "email": "thinksmartpublicadjusting@gmail.com",
+        "address": {
+            "street": "376 S Ornament W",
+            "city": "Santa Claus",
+            "region": "IN",
+            "zip": "47579"
+        },
+        "adjuster": {
+            "name": "Jonathan Nelson",
+            "title": "President & CEO"
+        },
+        "callback": "24h",
+        "price": 299,
+        "guarantee": {
+            "short": "if your claim isn't paid, our service is free.",
+            "long": "If your claim isn't paid, our service fee is $0. Incurred third-party costs (satellite imagery reports, Xactimate estimates) are not included."
+        },
+        "social": [
+            {
+                "platform": "Facebook",
+                "url": "https://www.facebook.com/SmartAdjusting/"
+            }
+        ],
+        "sharePicture": "media/og-cover.jpg",
+        "businessName": "Think Smart Public Adjusting LLC",
+        "seal": true,
+        "brightness": "standard"
+    },
+    "seo": {
+        "faq": {
+            "title": "FAQ — Think Smart Public Adjusting",
+            "description": "Straight answers about public adjusters: what they do, what it costs, and when to call one about your property insurance claim."
+        },
+        "services": {
+            "title": "Services — Think Smart Public Adjusting",
+            "description": "New claims, denied claims, estimate reviews and supplements. See how a licensed public adjuster documents your loss and negotiates your insurance settlement."
+        },
+        "home": {
+            "title": [
+                "Think Smart Public Adjusting | Public Adjusters in ",
+                {
+                    "ref": "stateCodes"
+                }
+            ],
+            "description": [
+                "Licensed public adjusters who work only for policyholders in ",
+                {
+                    "ref": "stateNames"
+                },
+                ". Help with wind, hail, water, fire and flood insurance claims — ",
+                {
+                    "ref": "guaranteeShort"
+                }
+            ]
+        },
+        "about": {
+            "title": "About — Think Smart Public Adjusting",
+            "description": "Think Smart Public Adjusting is a licensed public adjusting firm based in Santa Claus, Indiana that represents policyholders — never insurance companies."
+        },
+        "contact": {
+            "title": "Contact — Think Smart Public Adjusting",
+            "description": [
+                "Talk to a licensed public adjuster. Call ",
+                {
+                    "ref": "phone"
+                },
+                ", email us, or leave a message for a free claim review with no obligation."
+            ]
+        },
+        "claim": {
+            "title": "File a Claim — Think Smart Public Adjusting",
+            "description": [
+                "Open your case file in five minutes. A licensed public adjuster reviews your property damage claim at no cost and calls you ",
+                {
+                    "ref": "callback"
+                },
+                "."
+            ]
+        }
+    },
+    "faq": {
+        "top": {
+            "kicker": "FREQUENTLY ASKED QUESTIONS",
+            "title": [
+                "Straight answers,",
+                [
+                    {
+                        "hl": "no adjuster-speak."
+                    }
+                ]
+            ],
+            "text": [
+                "Everything homeowners ask us before the fight starts. If your question isn't here, ",
+                {
+                    "call": "call and ask it"
+                },
+                "."
+            ]
+        },
+        "items": [
+            {
+                "q": "What is a public adjuster?",
+                "a": [
+                    {
+                        "text": "A state-licensed claims professional who advocates for you — the homeowner, business owner or association — through every step of an insurance claim. We document the loss, appraise the damage, navigate the policy's fine print and negotiate the settlement."
+                    },
+                    {
+                        "text": "Aside from attorneys, public adjusters are the only people legally allowed to represent an insured during the claims process. Anyone else offering to \"handle your claim\" is breaking the law."
+                    }
+                ],
+                "home": true,
+                "homeQ": "What exactly is a public adjuster?",
+                "homeA": "A state-licensed claims professional who represents you — never the insurance company. Besides an attorney, a public adjuster is the only person legally allowed to handle your claim on your behalf."
+            },
+            {
+                "q": "Will I actually get a higher payment?",
+                "a": [
+                    {
+                        "text": [
+                            "The difference is dramatic. Industry studies show policyholders represented by a public adjuster receive on average ",
+                            {
+                                "hl": "747% higher payouts"
+                            },
+                            " than those who go it alone. Carriers price claims differently when a professional is checking the math."
+                        ]
+                    }
+                ]
+            },
+            {
+                "q": "What does it cost me?",
+                "a": [
+                    {
+                        "text": [
+                            "Nothing up front — ever. We work on contingency: a small, state-regulated percentage of the settlement we recover for you. And we guarantee it: ",
+                            {
+                                "ref": "guaranteeShort",
+                                "hl": true
+                            },
+                            " (Incurred third-party costs — satellite imagery reports, Xactimate estimates — aren't included.)"
+                        ]
+                    }
+                ],
+                "home": true,
+                "homeQ": "What does it cost me?",
+                "homeA": [
+                    "Nothing up front, ever. We work on contingency — a small percentage of the settlement we win. ",
+                    {
+                        "ref": "guaranteeShort",
+                        "cap": true
+                    },
+                    " That's the guarantee."
+                ]
+            },
+            {
+                "q": "My claim was denied. Is it over?",
+                "a": [
+                    {
+                        "text": "No — it's just beginning. Overturning denied claims is a Think Smart specialty. We review the denial against your policy language, re-inspect and re-document the loss, and force the file back open with evidence the carrier has to answer."
+                    }
+                ],
+                "home": true,
+                "homeQ": "My claim was already denied. Too late?",
+                "homeA": "Good — that's our specialty. A denial is the carrier's opening position, not the final word. We re-open, re-document and re-argue denied claims every week."
+            },
+            {
+                "q": "Why not just handle the claim myself?",
+                "a": [
+                    {
+                        "text": "You can — but you'll be negotiating against trained professionals, on their process, using their numbers. Studies show roughly 80% of valid claims end up underpaid or denied without representation. And remember: the burden of proof for every dollar of damage sits on you, the policyholder. Preparing a claim properly is a full-time job; you already have one, plus a home to rebuild."
+                    }
+                ]
+            },
+            {
+                "q": "I already got a check. Should I cash it?",
+                "a": [
+                    {
+                        "text": "Talk to us first — for free. First offers routinely miss hidden damage, code upgrades and full repair costs. If the settlement is short, we can pursue a supplement for the difference, even after money has changed hands."
+                    }
+                ]
+            },
+            {
+                "q": "How long does the process take?",
+                "a": [
+                    {
+                        "text": "Every claim is different — size of loss, carrier response times and state deadlines all play in. What we promise: we move immediately, we meet every deadline, and we never let a file sit quiet. The carrier will not be allowed to run out the clock."
+                    }
+                ]
+            },
+            {
+                "q": "Who exactly do you work for?",
+                "a": [
+                    {
+                        "text": "You. Only you. Contractors and neighbors may refer us, but our license, our contract and our loyalty belong to the insured — never the insurance company, never anyone else with a stake in your settlement."
+                    }
+                ]
+            },
+            {
+                "q": "Doesn't my insurance company already send an adjuster?",
+                "a": [
+                    {
+                        "text": [
+                            "They do — and that's the problem. An insurer's profit is premiums minus payouts, and its adjusters are trained to pay as little as possible. A ",
+                            {
+                                "b": "company adjuster"
+                            },
+                            " is carrier staff; their allegiance is to the insurer. An ",
+                            {
+                                "b": "independent adjuster"
+                            },
+                            " is a contractor the same carrier hires for overflow. Neither works for you."
+                        ]
+                    },
+                    {
+                        "text": "A public adjuster is the only adjuster on the claim whose license, fee and loyalty belong to the policyholder."
+                    }
+                ]
+            },
+            {
+                "q": "When should I bring Think Smart in?",
+                "a": [
+                    {
+                        "text": "Immediately. The most common — and costliest — mistake is waiting: too many homeowners call after they've already committed to a partial settlement or let the trail of evidence go cold. The first steps taken on a loss shape the entire outcome of the claim. Make the first call this one."
+                    }
+                ]
+            }
+        ],
+        "cta": {
+            "title": "Still have a question?",
+            "callButton": [
+                "Ask it — ",
+                {
+                    "ref": "phone"
+                }
+            ],
+            "claimButton": "File a claim"
+        }
+    },
+    "chrome": {
+        "footer": {
+            "claimLink": "File a claim",
+            "photosLink": "Submit photos",
+            "callLink": [
+                "Call ",
+                {
+                    "ref": "phone"
+                }
+            ],
+            "emailLink": "Email us",
+            "promise": "We guarantee your claim is paid, or our service is free. Licensed public adjusting, exclusively for policyholders.",
+            "license": [
+                "PA ",
+                {
+                    "ref": "adjuster"
+                },
+                " WORKS SOLELY AS AN INDEPENDENT PUBLIC ADJUSTER UNDER HIS OWN LICENSE WITH THE STATE OF INDIANA."
+            ],
+            "licenseAuto": false
+        }
+    },
+    "services": {
+        "items": [
+            {
+                "name": "New claims",
+                "bigNumber": false,
+                "buttonTo": "claim",
+                "id": "new",
+                "icon": "media/picto-new-claims.webp",
+                "headline": "Filed right the first time.",
+                "intro": "The single biggest mistake homeowners make is filing alone. What you say in the first call, what gets documented in the first week — that's the claim. We take over before the carrier frames the story.",
+                "points": [
+                    {
+                        "text": "Full-property inspection before the carrier's adjuster arrives"
+                    },
+                    {
+                        "text": "Every conversation with the insurer handled for you"
+                    },
+                    {
+                        "text": "Deadlines, notices and policy conditions — met to the letter"
+                    }
+                ],
+                "button": "OPEN A NEW CLAIM",
+                "photo": "media/adjuster-roof-gold.webp",
+                "photoAlt": "Adjuster documenting roof damage",
+                "highlight": false,
+                "summary": "Filed right the first time, documented past dispute."
+            },
+            {
+                "name": "Denied claims",
+                "bigNumber": true,
+                "buttonTo": "claim",
+                "id": "denied",
+                "photo": "media/denied-document.webp",
+                "photoAlt": "Denied insurance claim letter",
+                "icon": "media/picto-denied.webp",
+                "headline": [
+                    "\"No\" is where ",
+                    {
+                        "hl": "we start."
+                    }
+                ],
+                "intro": "Denials count on you giving up. We re-open the file, tear down the carrier's reasoning line by line, and rebuild the claim with evidence they can't wave away. Getting denied claims overturned is our specialty.",
+                "points": [
+                    {
+                        "text": "Forensic review of the denial letter and your policy language"
+                    },
+                    {
+                        "text": "New inspection, new documentation, new demand"
+                    },
+                    {
+                        "text": "Escalation until the answer changes"
+                    }
+                ],
+                "button": "FIGHT A DENIAL",
+                "highlight": true,
+                "summary": "Re-opened, re-argued, overturned. Our specialty."
+            },
+            {
+                "name": "Estimates",
+                "bigNumber": false,
+                "tags": [
+                    {
+                        "highlight": false,
+                        "text": "FREE WHILE WE REPRESENT YOU"
+                    },
+                    {
+                        "highlight": true,
+                        "text": [
+                            "STAND-ALONE — ",
+                            {
+                                "ref": "price"
+                            },
+                            " · SATELLITE REPORT + XACTIMATE ESTIMATE"
+                        ]
+                    }
+                ],
+                "buttonTo": "contact",
+                "id": "estimates",
+                "icon": "media/picto-estimates.webp",
+                "headline": "Numbers they can't shrink.",
+                "intro": "Carriers run your loss through pricing software tuned to their favor. We build independent, line-item estimates from the actual damage — measured, photographed and priced to real-world repair costs.",
+                "points": [
+                    {
+                        "text": "Room-by-room, trade-by-trade scope of loss"
+                    },
+                    {
+                        "text": "Code upgrades and hidden damage included — not \"overlooked\""
+                    },
+                    {
+                        "text": "Defensible in negotiation, appraisal or litigation"
+                    }
+                ],
+                "button": "REQUEST AN ESTIMATE",
+                "photo": "media/hail-roof-chalk.webp",
+                "photoAlt": "Chalk-marked hail damage on shingles",
+                "highlight": false,
+                "summary": "Forensic, line-item, defensible against any desk review."
+            },
+            {
+                "name": "Supplements",
+                "bigNumber": false,
+                "buttonTo": "claim",
+                "id": "supplements",
+                "photo": "media/wind-tarp-house.webp",
+                "photoAlt": "Storm-damaged home with tarped roof",
+                "icon": "media/picto-supplements.webp",
+                "headline": [
+                    "Paid… ",
+                    {
+                        "hl": "some of it?"
+                    }
+                ],
+                "intro": "A first check is rarely the full story. When repairs uncover more damage — or the settlement quietly skipped half the scope — we file the supplement and chase down the difference.",
+                "points": [
+                    {
+                        "text": "Settlement audit against the true scope of loss"
+                    },
+                    {
+                        "text": "Supplemental filings for uncovered and hidden damage"
+                    },
+                    {
+                        "text": "Works with your contractor's findings, not against them"
+                    }
+                ],
+                "button": "REVIEW MY SETTLEMENT",
+                "finePrint": [
+                    "PAID-OR-FREE GUARANTEE: ",
+                    {
+                        "ref": "guaranteeLong"
+                    }
+                ],
+                "highlight": false,
+                "summary": "For everything the first settlement conveniently missed."
+            }
+        ],
+        "coverage": {
+            "tiles": [
+                {
+                    "photo": "media/wind-tarp-house.webp",
+                    "photoAlt": "Wind damage",
+                    "name": "Wind / Hail"
+                },
+                {
+                    "poster": "media/hero-storm-aerial-poster.webp",
+                    "video": "media/hero-storm-aerial.mp4",
+                    "name": "Hurricane"
+                },
+                {
+                    "photo": "media/flood-living-room.webp",
+                    "photoAlt": "Flood damage",
+                    "name": "Flood"
+                },
+                {
+                    "photo": "media/water-ceiling.webp",
+                    "photoAlt": "Water damage",
+                    "name": "Water"
+                },
+                {
+                    "photo": "media/fire-kitchen.webp",
+                    "photoAlt": "Fire and smoke damage",
+                    "name": "Fire / Smoke"
+                }
+            ],
+            "kicker": "THE COVERAGE INDEX",
+            "kicker2": "IF IT'S IN YOUR POLICY, IT'S IN OUR FIGHT",
+            "title": "What we cover",
+            "commercial": {
+                "text": "Commercial property too — storefronts, rentals and associations get the same fight as family homes.",
+                "name": "Commercial"
+            },
+            "tagsTitle": "ALSO ON THE LIST",
+            "tags": [
+                {
+                    "text": "EARTHQUAKE"
+                },
+                {
+                    "text": "MOLD & ASBESTOS"
+                },
+                {
+                    "text": "VANDALISM"
+                },
+                {
+                    "text": "WINTER STORM"
+                },
+                {
+                    "text": "FROZEN PIPES"
+                },
+                {
+                    "text": "AVIATION & AIRCRAFT"
+                },
+                {
+                    "text": "MARITIME & COMMERCIAL SHIPS"
+                },
+                {
+                    "text": "CYBER ATTACK"
+                },
+                {
+                    "text": "INFORMATION SYSTEMS"
+                },
+                {
+                    "text": "EQUIPMENT BREAKDOWN"
+                },
+                {
+                    "text": "BUSINESS INTERRUPTION"
+                },
+                {
+                    "text": "CONTENTS"
+                },
+                {
+                    "text": "STOCK LOSS"
+                },
+                {
+                    "text": "TRANSPORTATION"
+                }
+            ]
+        },
+        "top": {
+            "video": {
+                "poster": "media/rain-macro-shingles-poster.webp",
+                "video": "media/rain-macro-shingles.mp4"
+            },
+            "kicker": "SERVICES · POLICYHOLDERS ONLY",
+            "title": [
+                [
+                    {
+                        "ref": "servicesCount"
+                    },
+                    " ways"
+                ],
+                [
+                    "we ",
+                    {
+                        "hl": "fight."
+                    }
+                ]
+            ],
+            "text": "Whatever stage your claim is at — not yet filed, stalled, shortchanged or flat-out denied — there's a way in. Pick yours."
+        },
+        "cta": {
+            "title": "Not sure which fight is yours?",
+            "callButton": [
+                "Call ",
+                {
+                    "ref": "phone"
+                }
+            ],
+            "note": "FREE CLAIM REVIEW — WE'LL TELL YOU STRAIGHT"
+        }
+    },
+    "numbers": {
+        "overturned": {
+            "value": 70,
+            "plus": false,
+            "percent": true,
+            "caption": "of the denied claims we take on are overturned and paid."
+        },
+        "underpaid": {
+            "value": 80,
+            "plus": false,
+            "percent": true,
+            "caption": "of valid claims are underpaid or denied when the policyholder stands alone.*"
+        },
+        "higher": {
+            "value": 747,
+            "plus": true,
+            "percent": true,
+            "caption": "higher settlements, on average, when a public adjuster fights the claim for you.*"
+        },
+        "source": "*INDUSTRY CLAIM STUDIES, INCL. THE OPPAGA REPORT ON REPRESENTED VS. UNREPRESENTED PROPERTY CLAIMS."
+    },
+    "home": {
+        "marquee": {
+            "phrases": [
+                {
+                    "on": true,
+                    "text": "WIND"
+                },
+                {
+                    "on": true,
+                    "text": "HAIL"
+                },
+                {
+                    "on": true,
+                    "text": "HURRICANE"
+                },
+                {
+                    "on": true,
+                    "text": "FLOOD"
+                },
+                {
+                    "on": true,
+                    "text": "WATER"
+                },
+                {
+                    "on": true,
+                    "text": "FIRE & SMOKE"
+                },
+                {
+                    "on": true,
+                    "text": "DENIED CLAIMS"
+                },
+                {
+                    "on": true,
+                    "text": "UNDERPAID CLAIMS"
+                },
+                {
+                    "on": true,
+                    "text": "SUPPLEMENTS"
+                },
+                {
+                    "text": "TORNADO",
+                    "on": false
+                },
+                {
+                    "text": "LIGHTNING",
+                    "on": false
+                },
+                {
+                    "text": "WINTER STORM",
+                    "on": false
+                },
+                {
+                    "text": "FROZEN PIPES",
+                    "on": false
+                },
+                {
+                    "text": "BURST PIPES",
+                    "on": false
+                },
+                {
+                    "text": "ICE DAMS",
+                    "on": false
+                },
+                {
+                    "text": "FALLEN TREES",
+                    "on": false
+                },
+                {
+                    "text": "MOLD",
+                    "on": false
+                },
+                {
+                    "text": "SMOKE DAMAGE",
+                    "on": false
+                },
+                {
+                    "text": "SEWER BACKUP",
+                    "on": false
+                },
+                {
+                    "text": "COLLAPSE",
+                    "on": false
+                },
+                {
+                    "text": "THEFT & VANDALISM",
+                    "on": false
+                },
+                {
+                    "text": "ROOF CLAIMS",
+                    "on": false
+                },
+                {
+                    "text": "COMMERCIAL CLAIMS",
+                    "on": false
+                }
+            ]
+        },
+        "statement": {
+            "lines": [
+                "A policy is a promise.",
+                [
+                    "We make them ",
+                    {
+                        "hl": "keep it."
+                    }
+                ]
+            ],
+            "kicker": "THE THINK SMART DOCTRINE",
+            "hint": "KEEP SCROLLING — WE DON'T BACK DOWN EITHER"
+        },
+        "top": {
+            "video": {
+                "poster": "media/hero-storm-aerial-poster.webp",
+                "video": "media/hero-storm-aerial.mp4"
+            },
+            "kicker": "Licensed Public Adjusters · Policyholder Side Only · Indiana",
+            "title": [
+                "The storm was",
+                [
+                    "the ",
+                    {
+                        "hl": "easy part."
+                    }
+                ]
+            ],
+            "text": [
+                "The hard part is getting your insurance company to pay what your policy promises. That is the fight we win — and if we don't, ",
+                {
+                    "b": "you owe us nothing."
+                }
+            ],
+            "claimButton": "File your claim",
+            "callButton": [
+                "Call ",
+                {
+                    "ref": "phone"
+                }
+            ],
+            "kickerAuto": false
+        },
+        "damage": {
+            "kicker": "THE DAMAGE",
+            "title": [
+                "Every shingle. Every stain. ",
+                {
+                    "hl": "Every dollar."
+                }
+            ],
+            "cards": [
+                {
+                    "photo": "media/wind-tarp-house.webp",
+                    "photoAlt": "Wind-damaged home with tarped roof",
+                    "tag": "WIND",
+                    "title": "Torn open",
+                    "text": "Missing shingles, lifted decking, tarped roofs. Wind damage hides under the ridge line — until we pull it into the claim."
+                },
+                {
+                    "photo": "media/hail-roof-chalk.webp",
+                    "photoAlt": "Hail impacts chalk-marked on a roof",
+                    "tag": "HAIL",
+                    "title": "Bruised deep",
+                    "text": "Chalk circles don't lie. Hail bruises kill a roof years before it leaks — carriers hope you never look."
+                },
+                {
+                    "photo": "media/water-ceiling.webp",
+                    "photoAlt": "Water-stained ceiling",
+                    "tag": "WATER",
+                    "title": "Seeping in",
+                    "text": "A stain on the ceiling is a battle already lost inside your walls. We claim what you can't see, too."
+                },
+                {
+                    "photo": "media/flood-living-room.webp",
+                    "photoAlt": "Flooded living room",
+                    "tag": "FLOOD",
+                    "title": "Rising fast",
+                    "text": "When the water leaves, the real count begins — floors, framing, everything it touched on the way out."
+                },
+                {
+                    "photo": "media/fire-kitchen.webp",
+                    "photoAlt": "Fire-damaged kitchen",
+                    "tag": "FIRE & SMOKE",
+                    "title": "What remains",
+                    "text": "Smoke travels further than flame. So should your claim — into every room, seam and duct it reached."
+                }
+            ],
+            "endTitle": [
+                "If it happened to your property, it belongs ",
+                {
+                    "hl": "in the claim."
+                }
+            ],
+            "endLink": "EVERYTHING WE COVER",
+            "hint": "SCROLL TO EXAMINE THE EVIDENCE"
+        },
+        "lowball": {
+            "kicker": "THE LOWBALL",
+            "title": [
+                "Their adjuster works ",
+                {
+                    "hl": "for them."
+                }
+            ],
+            "text": "The person your insurer sends is paid to protect their bottom line — not your home. Left alone, most claims die quietly: denied outright, or settled for a fraction of the real cost.",
+            "photo": "media/denied-document.webp",
+            "photoAlt": "Claim document stamped DENIED",
+            "stamp": "Overturned",
+            "photoTag": "THE LETTER",
+            "photoCaption": "A denial letter isn't a verdict. It's an opening offer."
+        },
+        "fight": {
+            "video": {
+                "poster": "media/rain-macro-shingles-poster.webp",
+                "video": "media/rain-macro-shingles.mp4"
+            },
+            "kicker": "THE FIGHT",
+            "title": [
+                "We take it ",
+                {
+                    "hl": "from here."
+                }
+            ],
+            "text": "You've got a life to rebuild. We've got a claim to win. From first inspection to final check, the burden moves off your shoulders and onto ours."
+        },
+        "steps": [
+            {
+                "title": "The inspection",
+                "text": "We walk your property like a scene investigation — roof to slab, every impact photographed, measured and logged."
+            },
+            {
+                "title": "The case file",
+                "text": "Your policy, read line by line. A forensic, line-item estimate their software can't quietly shrink."
+            },
+            {
+                "title": "The negotiation",
+                "text": "We sit across from their adjusters, speak their language, and refuse the first three answers."
+            },
+            {
+                "title": "The check",
+                "text": "You get paid what the policy promised — not what the carrier hoped you'd accept."
+            }
+        ],
+        "guarantee": {
+            "kicker": "THE GUARANTEE",
+            "title": [
+                "Paid.",
+                {
+                    "br": true
+                },
+                "Or free."
+            ],
+            "text": [
+                {
+                    "ref": "guaranteeShort",
+                    "cap": true
+                },
+                " No retainers, no hourly rates, no invoices for trying. ",
+                {
+                    "b": "We only win when you do."
+                }
+            ],
+            "button": "Start your claim",
+            "finePrint": "CONTINGENCY-BASED · NO RECOVERY, NO FEE · 3RD-PARTY COSTS (SATELLITE, XACTIMATE) EXCLUDED"
+        },
+        "closed": {
+            "photo": "media/sunrise-porch.webp",
+            "photoAlt": "Homeowners at sunrise in front of their restored roof",
+            "kicker": "FILE CLOSED — SETTLED IN FULL",
+            "title": "Case closed.",
+            "text": "New roof. Family home. Policy honored. That's the only outcome we accept — for every claim we take."
+        },
+        "services": {
+            "title": "What we take on",
+            "link": "ALL SERVICES"
+        },
+        "faq": {
+            "title": [
+                "Asked before ",
+                {
+                    "hl": "every fight."
+                }
+            ],
+            "link": "ALL QUESTIONS"
+        },
+        "final": {
+            "video": {
+                "poster": "media/adjuster-dusk-walk-poster.webp",
+                "video": "media/adjuster-dusk-walk.mp4"
+            },
+            "kicker": "FREE CLAIM REVIEW · NO OBLIGATION",
+            "title": "The fight starts with one call.",
+            "callButton": [
+                "Call ",
+                {
+                    "ref": "phone"
+                }
+            ],
+            "claimButton": "File a claim online",
+            "photosLink": "ALREADY HAVE DAMAGE PHOTOS? SUBMIT THEM"
+        },
+        "reviews": {
+            "kicker": "FROM PEOPLE WE REPRESENTED",
+            "title": [
+                "Paid in full. ",
+                {
+                    "hl": "In their words."
+                }
+            ],
+            "items": []
+        }
+    },
+    "about": {
+        "principles": {
+            "items": [
+                {
+                    "highlight": false,
+                    "title": "Never for the carrier.",
+                    "text": "We are licensed to represent policyholders — and only policyholders. Not once, not quietly, not ever the insurance company."
+                },
+                {
+                    "highlight": false,
+                    "title": "Everything documented.",
+                    "text": "Claims are won on evidence. We measure, photograph and price every dollar of damage until there's nothing left to argue about."
+                },
+                {
+                    "highlight": true,
+                    "title": "No win, no fee.",
+                    "text": "We're paid a percentage of what we recover for you — nothing up front, nothing if we lose. Our incentive is your settlement."
+                }
+            ],
+            "kicker": "WHAT WE STAND ON"
+        },
+        "top": {
+            "photo": "media/adjuster-roof-gold.webp",
+            "photoAlt": "Adjuster documenting roof damage at golden hour",
+            "kicker": "ABOUT THINK SMART",
+            "title": [
+                "Built to sit on",
+                [
+                    {
+                        "hl": "your side"
+                    },
+                    " of the table."
+                ]
+            ],
+            "text": "Insurance companies have adjusters, engineers and lawyers on payroll. Think Smart exists so a homeowner never walks into that room alone."
+        },
+        "adjuster": {
+            "photo": "media/jonathan.webp",
+            "photoAlt": [
+                {
+                    "ref": "adjuster"
+                },
+                ", ",
+                {
+                    "ref": "adjusterTitle"
+                },
+                " of Think Smart Public Adjusting"
+            ],
+            "kicker": "THE ADJUSTER IN YOUR CORNER",
+            "role": [
+                {
+                    "ref": "adjusterTitle"
+                },
+                " — FOUNDER"
+            ]
+        },
+        "bio": [
+            {
+                "text": "Jonathan founded Think Smart Public Adjusting and serves policyholders as a public adjuster all over the country. Years inside property and casualty claims — consulting, adjusting, negotiating — made him an expert in how carriers value damage… and how they undervalue it."
+            },
+            {
+                "text": "He learned the playbook from the inside, beginning his career as an independent adjuster for major insurance companies and working major storms including Hurricane Harvey and Hurricane Dorian. Add a background in construction, restoration and repair of residential and commercial properties, and you get an adjuster who knows exactly what your rebuild really costs — and won't let a carrier pretend otherwise."
+            },
+            {
+                "text": "The firm itself was born on the other side of the desk: after years inside a major carrier, overseeing its claims department, one conclusion became unavoidable — the insurance company's interest is its own profit. Think Smart was founded on that realization, and has helped property owners across the US maximize their claims ever since."
+            }
+        ],
+        "tags": [
+            {
+                "text": "CLAIMS NATIONWIDE"
+            },
+            {
+                "text": "HURRICANE HARVEY · DORIAN"
+            },
+            {
+                "text": "CONSTRUCTION & RESTORATION ROOTS"
+            }
+        ],
+        "referral": {
+            "kicker": "A NOTE ON REFERRALS",
+            "title": [
+                "Anyone can send a neighbor our way. But when we take the case, ",
+                {
+                    "hl": "we work for the insured — no one else."
+                }
+            ],
+            "text": "Contractors, roofers and friends often recommend Think Smart. We're glad they do — and it changes nothing about our allegiance. Our contract, our duty and our fee sit with the policyholder alone."
+        },
+        "cta": {
+            "title": "Get us in your corner.",
+            "claimButton": "File a claim"
+        }
+    },
+    "contact": {
+        "rows": [
+            {
+                "type": "text",
+                "label": "SERVICE AREA",
+                "text": "Nationwide — based in Indiana"
+            },
+            {
+                "type": "text",
+                "label": "LICENSE",
+                "text": [
+                    "PA ",
+                    {
+                        "ref": "adjuster"
+                    },
+                    " — State of Indiana"
+                ]
+            },
+            {
+                "type": "text",
+                "label": "FEES",
+                "text": [
+                    "Contingency on represented claims · ",
+                    {
+                        "ref": "price"
+                    },
+                    " stand-alone estimate"
+                ]
+            },
+            {
+                "type": "phone",
+                "which": "phone2",
+                "label": "FREE CLAIM REVIEW"
+            },
+            {
+                "type": "email",
+                "label": "EMAIL"
+            },
+            {
+                "type": "text",
+                "label": "OFFICE",
+                "text": [
+                    {
+                        "ref": "address"
+                    }
+                ]
+            }
+        ],
+        "top": {
+            "kicker": "CONTACT — DIRECT LINE, NO CALL CENTER",
+            "title": "Talk to your adjuster.",
+            "text": "Storm season doesn't keep office hours, and neither does damage. Call, file, or send photos — whichever is fastest for you."
+        },
+        "channels": {
+            "call": {
+                "kicker": "FASTEST",
+                "title": "Call now",
+                "text": "Speak directly with a licensed public adjuster about your damage — free, no obligation."
+            },
+            "claim": {
+                "kicker": "ONLINE — 5 MINUTES",
+                "title": "File a claim",
+                "text": [
+                    "Open a case file online and we'll call you back ",
+                    {
+                        "ref": "callback"
+                    },
+                    " with next steps."
+                ],
+                "action": "START THE FORM"
+            },
+            "photos": {
+                "kicker": "HAVE EVIDENCE?",
+                "title": "Submit photos",
+                "text": "Attach damage photos to your case file — we'll review them before we call.",
+                "action": "UPLOAD"
+            },
+            "email": {
+                "kicker": "IN WRITING",
+                "title": "Email us",
+                "text": "Send details, documents or questions any time — a licensed adjuster reads every message."
+            }
+        },
+        "form": {
+            "kicker": "OR LEAVE A MESSAGE",
+            "title": [
+                "We'll call ",
+                {
+                    "hl": "you."
+                }
+            ],
+            "text": "Prefer not to talk right now? Leave your details and a line about the damage. A licensed adjuster — not a sales rep — returns every message.",
+            "photo": "media/desk-flatlay.webp",
+            "photoAlt": "The adjuster's desk"
+        }
+    },
+    "forms": {
+        "noscript": [
+            "Our online form needs JavaScript. Call ",
+            {
+                "ref": "phone"
+            },
+            " or email ",
+            {
+                "ref": "email"
+            },
+            " and we'll open your case."
+        ],
+        "contact": {
+            "nameLabel": "NAME *",
+            "namePlaceholder": "Your name",
+            "phoneLabel": "PHONE *",
+            "phonePlaceholder": "(812) 000-0000",
+            "messageLabel": "WHAT'S GOING ON?",
+            "messagePlaceholder": "A hailstorm came through last week and my roof…",
+            "replies": [
+                "REPLIES ",
+                {
+                    "ref": "callbackShort"
+                }
+            ],
+            "error": [
+                "We couldn't send your message just now. Please try again in a moment — or call ",
+                {
+                    "ref": "phone"
+                },
+                " / email ",
+                {
+                    "ref": "email"
+                },
+                "."
+            ],
+            "doneTag": "MESSAGE RECEIVED",
+            "doneTitle": "We're on it.",
+            "doneText": [
+                "A licensed adjuster will call you back ",
+                {
+                    "ref": "callback"
+                },
+                ". If the damage is urgent, call ",
+                {
+                    "ref": "phone"
+                },
+                " now."
+            ],
+            "another": "SEND ANOTHER",
+            "sending": "Sending…",
+            "send": "Send message →"
+        },
+        "phoneInvalid": "Please enter a 10-digit phone number so we can call you.",
+        "required": "Please fill out this field.",
+        "claim": {
+            "fileTag": "CASE FILE — NEW",
+            "confidential": "CONFIDENTIAL",
+            "labels": {
+                "name": "FULL NAME *",
+                "phone": "PHONE *",
+                "email": "EMAIL",
+                "address": "PROPERTY ADDRESS *",
+                "damage": "TYPE OF DAMAGE — SELECT ALL THAT APPLY",
+                "date": "DATE OF LOSS",
+                "carrier": "INSURANCE COMPANY",
+                "status": "WHERE DOES YOUR CLAIM STAND? *",
+                "photos": "DAMAGE PHOTOS",
+                "story": "TELL US WHAT HAPPENED"
+            },
+            "placeholders": {
+                "name": "Jane Homeowner",
+                "phone": "(812) 000-0000",
+                "email": "you@email.com",
+                "address": "Street, City, State",
+                "carrier": "Your carrier",
+                "story": "Storm date, what you've noticed, anything the insurer has said…"
+            },
+            "status": {
+                "notFiled": "Not filed yet",
+                "waiting": "Filed — waiting",
+                "underpaid": "Paid — too little",
+                "denied": "Denied"
+            },
+            "dropTitle": "⇪ DROP PHOTOS HERE — OR CLICK TO BROWSE",
+            "dropText": "Roof, ceilings, siding, water lines — up to 10 photos, sent with your case file.",
+            "emailPhotosLead": "MORE THAN 10, OR PREFER EMAIL?",
+            "emailPhotosLink": "EMAIL YOUR PHOTOS",
+            "submitNote": [
+                "FREE REVIEW · NO OBLIGATION · WE CALL ",
+                {
+                    "ref": "callbackShort"
+                }
+            ],
+            "error": [
+                "We couldn't send your case file just now. Please try again in a moment — or call ",
+                {
+                    "ref": "phone"
+                },
+                " / email ",
+                {
+                    "ref": "email"
+                },
+                " and we'll open it for you."
+            ],
+            "doneTag": "CASE FILE OPENED",
+            "doneTitle": [
+                "Consider it ",
+                {
+                    "hl": "handled."
+                }
+            ],
+            "doneText": [
+                "Your case file is in. A licensed adjuster will call you ",
+                {
+                    "ref": "callback"
+                },
+                " to talk through the damage and the fastest path to payment."
+            ],
+            "whileYouWait": "WHILE YOU WAIT",
+            "donePhotosLink": "Email photos of the damage",
+            "doneUrgent": [
+                "Urgent? Call ",
+                {
+                    "ref": "phone"
+                },
+                " right now."
+            ],
+            "another": "FILE ANOTHER CLAIM",
+            "photosSending": "Uploading your photos — please keep this page open…",
+            "photosSent": " received with your case file.",
+            "photosPartial": " photos received — please email the rest using the link below.",
+            "photosFailed": "Your photos didn't upload — please email them using the link below so they reach your adjuster.",
+            "sending": "Sending your case file…",
+            "send": "Open my case file →"
+        }
+    },
+    "states": [
+        {
+            "code": "IN",
+            "licensed": true,
+            "pdf": "docs/think-smart-agreement-indiana.pdf",
+            "esign": "https://na2.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhACE0DpkifnaTOThmopHQktfsq4ofdh_PGjGLeoOEQDrf9EBFBZFQIFHjRh2LQC8J8*"
+        },
+        {
+            "code": "OH",
+            "licensed": true,
+            "esign": "https://na2.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhCWQHp4-dpPTyXV1tSn4YNr5C6zHUmShE-bvgn1EpDgSKhMrTEK-snhxfl1LaYZuZ0*"
+        },
+        {
+            "code": "KY",
+            "licensed": true,
+            "pdf": "docs/think-smart-agreement-kentucky.pdf",
+            "esign": "https://na2.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhBUcb8_ga9a_1tDIl35jMdK45rbSS7npf1_KrQ9N_o33JNwFt45HEaSEGjR6IomLBA*"
+        },
+        {
+            "code": "IL",
+            "licensed": true,
+            "esign": "https://na2.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhCnoux9c7RFAIkN4Z5qpeCsBAWShOtOD3UlbzRLfDk6Nlw6x03jypPBFWbde9yaU4w*"
+        },
+        {
+            "code": "TN",
+            "licensed": true,
+            "esign": "https://na2.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhCqT7N3vO2RJ7E9stBI0EmEMN6G0GfPimr85H9ctGCMJCGuilZUjYZ3xJwdsq_iTIY*"
+        }
+    ],
+    "claim": {
+        "byPhone": {
+            "otherStates": [
+                "TX",
+                "OK",
+                "MI",
+                "IA"
+            ],
+            "tag": "OTHER STATES",
+            "title": "By phone",
+            "text": [
+                {
+                    "ref": "otherStates"
+                },
+                " and beyond — call ",
+                {
+                    "ref": "phone2"
+                },
+                " and we'll handle the paperwork with you."
+            ]
+        },
+        "top": {
+            "video": {
+                "poster": "media/rain-macro-shingles-poster.webp",
+                "video": "media/rain-macro-shingles.mp4"
+            },
+            "kicker": "INTAKE — NEW CASE FILE",
+            "title": [
+                "Open",
+                [
+                    "your ",
+                    {
+                        "hl": "case."
+                    }
+                ]
+            ],
+            "text": "Five minutes now puts a licensed adjuster on your claim. No cost, no obligation — we review every submission and tell you straight whether there's a fight worth having.",
+            "photosLink": "SUBMIT PHOTOS"
+        },
+        "steps": [
+            {
+                "title": "You file this form",
+                "text": "Takes five minutes. Photos help, but aren't required yet."
+            },
+            {
+                "title": [
+                    "We call you ",
+                    {
+                        "ref": "callback"
+                    }
+                ],
+                "text": "A real adjuster — not a call center — reviews your situation."
+            },
+            {
+                "title": "The fight begins",
+                "text": "Inspection scheduled, carrier notified, case file opened."
+            }
+        ],
+        "damageChoices": [
+            {
+                "name": "Wind"
+            },
+            {
+                "name": "Hail"
+            },
+            {
+                "name": "Water"
+            },
+            {
+                "name": "Flood"
+            },
+            {
+                "name": "Fire / Smoke"
+            },
+            {
+                "name": "Hurricane"
+            }
+        ],
+        "sign": {
+            "kicker": "OFFICIAL PAPERWORK — E-SIGN",
+            "title": [
+                "Ready now? ",
+                {
+                    "hl": "Sign for your state."
+                }
+            ],
+            "text": "The fastest way to put us on the case: open the official Think Smart representation agreement for your state and sign it electronically. We're notified the moment you finish.",
+            "cardTag": "E-SIGN AGREEMENT",
+            "cardButton": "SIGN NOW",
+            "callTag": "CALL TO SIGN",
+            "callButton": [
+                "CALL ",
+                {
+                    "ref": "phone2"
+                }
+            ]
+        },
+        "hardCopy": {
+            "title": "NEED A HARD COPY?",
+            "text": [
+                "In the event you need a hard copy, print the PDF agreement, sign it, and email a scan or photo to ",
+                {
+                    "ref": "email"
+                },
+                " — or mail it to ",
+                {
+                    "ref": "address"
+                },
+                "."
+            ]
+        }
+    },
+    "chat": {
+        "title": "Think Smart — Direct Line",
+        "subtitle": "GOES STRAIGHT TO OUR ADJUSTERS",
+        "send": "Send",
+        "note": "FREE · NO OBLIGATION",
+        "urgent": [
+            "URGENT? ",
+            {
+                "ref": "phone"
+            }
+        ],
+        "intro": "Tell us what happened to your property and how to reach you. This isn't a live chat — your message goes straight to a licensed adjuster, who will call or write back.",
+        "fail": [
+            "We couldn't send that just now — please call ",
+            {
+                "ref": "phone"
+            },
+            " or email ",
+            {
+                "ref": "email"
+            },
+            " and a licensed adjuster will pick it up."
+        ],
+        "doneWithContact": [
+            "Done — your message is with our team. A licensed adjuster will call or write back shortly. Urgent? Call ",
+            {
+                "ref": "phone"
+            },
+            " and we'll pick up."
+        ],
+        "doneNoContact": [
+            "Done — your message is with our team. We don't see a callback number in it though — drop your number here, or call ",
+            {
+                "ref": "phone"
+            },
+            " so an adjuster can reach you."
+        ],
+        "followUp": "Passed along — anything else we should know?",
+        "askContact": "Got it. What's the best phone number (or email) for a licensed adjuster to reach you?",
+        "askAgain": "A callback number or email is all we need — we'll take it from there.",
+        "youLabel": "YOU",
+        "usLabel": "THINK SMART",
+        "close": "Close chat",
+        "open": "Let's chat",
+        "placeholder": "Type your message…"
+    },
+    "notfound": {
+        "tag": "ERROR 404 — FILE NOT FOUND",
+        "title": [
+            "This page is ",
+            {
+                "hl": "missing."
+            }
+        ],
+        "text": "The page you were looking for has moved or no longer exists. Your claim doesn't have to wait — start from the home page or call us directly.",
+        "homeButton": "Back to home",
+        "claimButton": "File a claim"
+    },
+    "notice": {
+        "on": false,
+        "kind": "storm",
+        "start": "",
+        "end": "",
+        "storm": {
+            "text": "Storm response: we're taking new claims now — free claim review, no obligation.",
+            "link": "call"
+        },
+        "closed": {
+            "text": "Our office is closed today. File your claim online and we'll call you back.",
+            "link": "claim"
+        },
+        "away": {
+            "text": [
+                "John is out until ",
+                {
+                    "ref": "noticeUntil"
+                },
+                ". File online or leave a message and we'll call you back."
+            ],
+            "link": "claim"
+        }
+    }
+}

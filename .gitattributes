@@ -1,0 +1,2 @@
+# Developer-only tools and checks stay out of the deploy zip (git archive).
+edit-dev export-ignore

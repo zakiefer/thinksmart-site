@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /send-lead.php
+
+Sitemap: https://www.thinksmartpublicadjusting.com/sitemap.xml
