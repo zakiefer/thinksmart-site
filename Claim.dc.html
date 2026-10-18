@@ -72,6 +72,10 @@
     * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     html { scroll-behavior: auto; }
   }
+  /* State cards: 6 cards (5 states + By phone) in rows that divide evenly, never a lone card beside an empty block. */
+  @media (min-width: 520px) { [data-grid="states"] { grid-template-columns: repeat(2, 1fr) !important; } }
+  @media (min-width: 760px) { [data-grid="states"] { grid-template-columns: repeat(3, 1fr) !important; } }
+  @media (min-width: 1372px) { [data-grid="states"] { grid-template-columns: repeat(6, 1fr) !important; } }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </helmet>
@@ -153,7 +157,7 @@
           </div>
         </div>
         <div style="margin-top:28px; display:flex; flex-wrap:wrap; align-items:center; gap:10px; animation:tsFade 1s ease .65s both;">
-          <span style="background:#EDE8DC; border-radius:3px; padding:10px; display:inline-flex; box-shadow:0 8px 22px rgba(0,0,0,.4); transform:rotate(-3deg);"><img src="media/seal.webp" alt="Paid or free — Think Smart guarantee" style="width:118px; height:118px; object-fit:contain; display:block;"></span>
+          <span style="display:inline-flex; transform:rotate(-8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,.45));"><img src="media/seal-orange.webp" alt="Paid or free — Think Smart guarantee" style="width:132px; height:132px; object-fit:contain; display:block;"></span>
           <a href="{{ photosHref }}" style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.16em; color:rgba(235,229,216,.7); border:1px solid rgba(235,229,216,.2); padding:10px 14px; border-radius:2px;" style-hover="color:#F09A2E; border-color:#F09A2E;">SUBMIT PHOTOS →</a>
         </div>
       </div>
@@ -264,7 +268,7 @@
 
       <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
         <div data-ref="caseConfirm" role="status" tabindex="-1" style="outline:none; position:relative; overflow:hidden; background:rgba(16,20,27,.85); border:1px solid rgba(240,154,46,.5); border-radius:4px; padding:clamp(32px,4vw,56px); display:flex; flex-direction:column; gap:22px; backdrop-filter:blur(8px);">
-          <span style="position:absolute; bottom:22px; right:22px; background:#EDE8DC; border-radius:3px; padding:8px; transform:rotate(8deg); box-shadow:0 8px 22px rgba(0,0,0,.4); pointer-events:none;"><img src="media/seal.webp" alt="Paid or free guarantee seal" style="width:92px; height:92px; object-fit:contain; display:block;"></span>
+          <span style="position:absolute; bottom:22px; right:22px; transform:rotate(8deg); filter:drop-shadow(0 8px 14px rgba(0,0,0,.45)); pointer-events:none;"><img src="media/seal-orange.webp" alt="Paid or free guarantee seal" style="width:104px; height:104px; object-fit:contain; display:block;"></span>
           <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.24em; color:#F09A2E;">CASE FILE OPENED — {{ caseNo }}</span>
           <h2 style="margin:0; font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(44px,5vw,80px); line-height:.9; color:#EBE5D8;">Consider it <span style="color:#F09A2E;">handled.</span></h2>
           <p style="margin:0; font-size:17px; line-height:1.7; color:rgba(235,229,216,.75); max-width:520px;">Your case file is in. A licensed adjuster will call you within 24 hours to talk through the damage and the fastest path to payment.</p>
@@ -288,7 +292,7 @@
     <span style="display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.3em; color:#F09A2E; margin-bottom:16px;">OFFICIAL PAPERWORK — E-SIGN</span>
     <h2 style="margin:0 0 18px; font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(40px,5.4vw,88px); line-height:.92; color:#EBE5D8;">Ready now? <span style="color:#F09A2E;">Sign for your state.</span></h2>
     <p style="margin:0 0 40px; max-width:600px; font-size:16px; line-height:1.7; color:rgba(235,229,216,.7); text-wrap:pretty;">The fastest way to put us on the case: open the official Think Smart representation agreement for your state and sign it electronically. We're notified the moment you finish.</p>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1px; background:rgba(235,229,216,.12); border:1px solid rgba(235,229,216,.12); margin-bottom:28px;">
+    <div data-grid="states" style="display:grid; grid-template-columns:1fr; gap:1px; background:rgba(235,229,216,.12); border:1px solid rgba(235,229,216,.12); margin-bottom:28px;">
       <a href="https://na2.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhACE0DpkifnaTOThmopHQktfsq4ofdh_PGjGLeoOEQDrf9EBFBZFQIFHjRh2LQC8J8*" target="_blank" rel="noopener" style="position:relative; overflow:hidden; background:#0B0E13; padding:28px 26px 34px; display:flex; flex-direction:column; gap:10px; transition:background .3s ease;" style-hover="background:#10141B;">
         <img src="media/state-in.webp" alt="" style="position:absolute; right:-16px; bottom:-20px; width:124px; height:124px; object-fit:contain; opacity:.22; pointer-events:none;">
         <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.22em; color:rgba(235,229,216,.58);">E-SIGN AGREEMENT</span>
