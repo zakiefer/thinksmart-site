@@ -4,7 +4,7 @@
 //   <private>/content.json            what the website shows now (list items carry "_id")
 //   <private>/history/index.json      one entry per change that went live, oldest first
 //   <private>/history/r<rev>.json.gz  the whole content after that change, plus its operations
-//   <private>/drafts/<person>.json    changes not live yet: {base, ops, saved}
+//   <private>/drafts/<person>.json    changes not live yet: {base, ops, saved, v}
 declare(strict_types=1);
 
 namespace ThinkSmart;
@@ -209,19 +209,29 @@ final class Drafts
         return $this->dir . '/' . preg_replace('/[^A-Za-z0-9]/', '', $person) . '.json';
     }
 
-    /** @return array{base:int, ops:array, saved:int} */
+    /** @return array{base:int, ops:array, saved:int, v:int} */
     public function get(string $person): array
     {
         $d = Json::read($this->file($person), null);
-        return is_array($d) ? $d + ['base' => 0, 'ops' => [], 'saved' => 0] : ['base' => 0, 'ops' => [], 'saved' => 0];
+        $empty = ['base' => 0, 'ops' => [], 'saved' => 0, 'v' => 0];
+        return is_array($d) ? $d + $empty : $empty;
     }
 
-    public function put(string $person, int $base, array $ops): array
+    /**
+     * Save the draft. "v" counts saves, so the editor open on a second phone (or tab) can't
+     * quietly overwrite newer changes: with $expect, a draft saved since is left alone and
+     * returned with "stale".
+     */
+    public function put(string $person, int $base, array $ops, ?int $expect = null): array
     {
-        $d = ['base' => $base, 'ops' => array_values($ops), 'saved' => Clock::now()];
-        if (!$ops) { @unlink($this->file($person)); return $d; }
-        Json::write($this->file($person), $d, false);
-        return $d;
+        return Lock::with($this->cfg->paths, 'drafts', function () use ($person, $base, $ops, $expect) {
+            $cur = $this->get($person);
+            if ($expect !== null && $cur['ops'] && (int)($cur['v'] ?? 0) !== $expect) return ['stale' => true] + $cur;
+            $d = ['base' => $base, 'ops' => array_values($ops), 'saved' => Clock::now(), 'v' => (int)($cur['v'] ?? 0) + 1];
+            if (!$ops) { @unlink($this->file($person)); return $d; }
+            Json::write($this->file($person), $d, false);
+            return $d;
+        });
     }
 
     /** After a change went live: drop the operations that went, keep the rest on the new base. */

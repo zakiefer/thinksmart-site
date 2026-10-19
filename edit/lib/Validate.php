@@ -57,7 +57,10 @@ final class Validate
     public function problems(array $c): array
     {
         $out = [];
-        foreach (Content::problems($c) as $m) $out[] = ['key' => '', 'path' => [], 'msg' => self::plainProblem($m)];
+        foreach (Content::problems($c) as $m) {
+            $path = self::problemPath($m, $c);
+            $out[] = ['key' => $path ? Changes::key($path) : '', 'path' => $path, 'msg' => self::plainProblem($m)];
+        }
         foreach ($this->schema['fields'] as $sp => $f) {
             $type = $f['type'] ?? 'text';
             $label = (string)($f['label'] ?? $sp);
@@ -65,7 +68,7 @@ final class Validate
                 if (in_array($type, ['list', 'checklist'], true)) {
                     $items = is_array($v) ? $v : [];
                     $shown = array_filter($items, fn($it) => is_array($it) && empty($it['hidden']) && ($type !== 'checklist' || !empty($it['on'])));
-                    if (isset($f['max']) && count($items) > $f['max']) $out[] = $this->p($path, "$label: this spot holds up to {$f['max']}. Hide or delete one first.");
+                    if (isset($f['max']) && count($items) > $f['max']) $out[] = $this->p($path, "$label: holds up to {$f['max']}, and hidden ones count too. Delete one first.");
                     if ($vis && isset($f['min']) && count($shown) < $f['min']) $out[] = $this->p($path, "$label: needs at least {$f['min']} showing.");
                     continue;
                 }
@@ -80,6 +83,8 @@ final class Validate
                     continue;
                 }
                 if ($sp === 'contact.rows[].text' && (Changes::get($c, array_merge(array_slice($path, 0, -1), ['type'])) ?? 'text') !== 'text') continue;
+                // reviews get one line each below
+                if (in_array($sp, ['home.reviews.items[].text', 'home.reviews.items[].name'], true)) continue;
                 if (in_array($type, ['text', 'para', 'rich', 'name'], true) && empty($f['optional']) && str_contains($sp, '[]') && ($v === '' || $v === null || $v === [])) {
                     $out[] = $this->p($path, $this->itemLabel($sp, $c, $path) . ': this box is empty.');
                     continue;
@@ -89,7 +94,7 @@ final class Validate
                     continue;
                 }
                 if (isset($f['hard']) && (is_string($v) || is_array($v)) && $v !== []) {
-                    $plain = $this->ex->show($v, $sp, $c);
+                    $plain = $this->ex->plainFull($v, $sp, $c);
                     if (Text::length($plain) > (int)$f['hard']) $out[] = $this->p($path, "$label: too long for its spot (up to {$f['hard']} letters).");
                 }
                 if ($type === 'datetime' && is_string($v) && $v !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $v)) $out[] = $this->p($path, "$label: pick a date and time.");
@@ -97,12 +102,14 @@ final class Validate
                 if ($type === 'slug' && !(is_string($v) && preg_match('/^[a-z0-9]+(-[a-z0-9]+)*$/', $v))) $out[] = $this->p($path, "$label is missing.");
             }
         }
-        // reviews: words, name and the tick
+        // reviews: words and name, one line per review (the tick is checked above)
         foreach (self::instances($c, 'home.reviews.items[]') as [$path, $r, $vis]) {
             if (!$vis || !is_array($r)) continue;
-            $who = trim((string)($r['name'] ?? '')) !== '' ? Derive::shortName((string)$r['name']) : 'a customer';
-            if (trim((string)($r['text'] ?? '')) === '') $out[] = $this->p(array_merge($path, ['text']), "The review from $who needs their words.");
-            if (trim((string)($r['name'] ?? '')) === '') $out[] = $this->p(array_merge($path, ['name']), 'A review needs the customer\'s name.');
+            $noWords = trim($this->ex->plainFull($r['text'] ?? '', 'home.reviews.items[].text', $c)) === '';
+            $noName = trim((string)($r['name'] ?? '')) === '';
+            if ($noWords && $noName) $out[] = $this->p(array_merge($path, ['text']), 'The new review needs the customer\'s words and name.');
+            elseif ($noWords) $out[] = $this->p(array_merge($path, ['text']), 'The review from ' . Derive::shortName((string)$r['name']) . ' needs their words.');
+            elseif ($noName) $out[] = $this->p(array_merge($path, ['name']), 'A review needs the customer\'s name.');
         }
         // FAQ: exactly 3 on Home
         $starred = array_filter($c['faq']['items'] ?? [], fn($it) => is_array($it) && empty($it['hidden']) && !empty($it['home']));
@@ -139,13 +146,31 @@ final class Validate
         $item = Changes::get($c, array_slice($path, 0, -1));
         if ($sp === 'states[].licensed') {
             $name = Site::STATES[$item['code'] ?? ''] ?? 'this state';
-            return 'Tick "' . ($c['site']['adjuster']['name'] ?? 'The adjuster') . " is licensed here\" for $name, or remove it.";
+            return 'Turn on "' . ($c['site']['adjuster']['name'] ?? 'The adjuster') . " is licensed here\" for $name, or remove the state.";
         }
         if ($sp === 'home.reviews.items[].real') {
             $who = trim((string)($item['name'] ?? '')) !== '' ? Derive::shortName((string)$item['name']) : 'this customer';
-            return "Tick \"Real customer, copied word for word\" for the review from $who.";
+            return "Turn on \"Real customer, copied word for word\" for the review from $who.";
         }
-        return ($this->schema['fields'][$sp]['label'] ?? $sp) . ' needs a tick.';
+        return ($this->schema['fields'][$sp]['label'] ?? $sp) . ' needs to be turned on.';
+    }
+
+    /** The box a content problem is about, so "Fix it" can open it. */
+    private static function problemPath(string $m, array $c): array
+    {
+        $map = [
+            'The phone setting needs a 10-digit number' => ['site', 'phone'],
+            'The phone2 setting needs a 10-digit number' => ['site', 'phone2'],
+            'The email setting is not an email address' => ['site', 'email'],
+        ];
+        if (isset($map[$m])) return $map[$m];
+        // "State #2: …" and "Social link #1 …" name the item by its place in the list
+        if (preg_match('/^(State|Social link) #(\d+)/', $m, $x)) {
+            $list = $x[1] === 'State' ? ['states'] : ['site', 'social'];
+            $id = (string)(Changes::get($c, $list)[(int)$x[2] - 1]['_id'] ?? '');
+            return $id !== '' ? array_merge($list, [['id' => $id]]) : $list;
+        }
+        return [];
     }
 
     private static function plainProblem(string $m): string
@@ -169,8 +194,18 @@ final class Validate
             $type = $f['type'] ?? '';
             $label = (string)($f['label'] ?? $sp);
             if ($op['op'] === 'set' && isset($f['fit'][1]) && in_array($type, ['text', 'para', 'rich', 'alt'], true)) {
-                $len = Text::length($this->ex->show($op['value'], $sp, $after));
+                $len = Text::length($this->ex->plainFull($op['value'], $sp, $after));
                 if ($len > $f['fit'][1]) $out[] = $this->p($op['path'], "$label is long, so it may not fit its spot. Check it in the preview.");
+            }
+            // a box emptied by mistake leaves a gap on the page
+            if ($op['op'] === 'set' && in_array($type, ['text', 'para', 'rich'], true) && !str_contains($sp, '[]') && empty($f['optional']) && empty($f['editorOnly'])
+                && trim($this->ex->plainFull($op['value'], $sp, $after)) === '') {
+                $out[] = $this->p($op['path'], "$label is empty, so visitors will see a blank there.");
+            }
+            // a price with a 0 too many (or too few)
+            if ($op['op'] === 'set' && $type === 'money' && is_int($op['old'] ?? null) && $op['old'] > 0 && (is_int($op['value']) || is_float($op['value']))
+                && ($op['value'] > 3 * $op['old'] || $op['value'] * 3 < $op['old'])) {
+                $out[] = $this->p($op['path'], "$label changed from \${$op['old']} to \${$op['value']}. Is that right?");
             }
             if ($type === 'photo' && $op['op'] === 'set') {
                 $alt = $op['path'];
@@ -188,7 +223,7 @@ final class Validate
             $txt = (!empty($n['plus']) ? '+' : '') . ($n['value'] ?? '') . (!empty($n['percent']) ? '%' : '');
             foreach ($after['faq']['items'] ?? [] as $it) {
                 foreach ($it['a'] ?? [] as $a) {
-                    $plain = $this->ex->show($a['text'] ?? '', 'faq.items[].a[].text', $after);
+                    $plain = $this->ex->plainFull($a['text'] ?? '', 'faq.items[].a[].text', $after);
                     if ($txt !== '' && str_contains($plain, $txt)) { $out[] = $this->p(['faq', 'items', ['id' => $it['_id'] ?? ''], 'q'], "The number $txt is hidden, but an answer still quotes it: “" . Explain::cut($this->ex->show($it['q'] ?? '', 'faq.items[].q', $after), 50) . '”.'); break 2; }
                 }
             }

@@ -90,11 +90,11 @@ final class Pages
             . '<label class="field"><span>Password</span><span class="pw"><input name="password" id="password" type="password" autocomplete="current-password" required enterkeyhint="go"><button type="button" class="show-pw" aria-label="Show password">Show</button></span></label>'
             . '<button class="btn primary big" type="submit">Sign in</button>'
             . '</form>'
-            . '<p class="small"><a href="/edit/?forgot">Forgot your password?</a></p>'
+            . '<a class="btn ghost" href="/edit/?forgot">Forgot your password?</a>'
         )));
     }
 
-    public function forgot(?string $msg = null): void
+    public function forgot(?string $msg = null, string $login = ''): void
     {
         $f = $this->formToken();
         $e = [Http::class, 'esc'];
@@ -103,7 +103,7 @@ final class Pages
             . '<p>Type your username or email. We\'ll email you a 6-digit code to type in here.</p>'
             . '<form method="post" action="/edit/" class="stack" data-once>'
             . '<input type="hidden" name="do" value="forgot"><input type="hidden" name="f" value="' . $e($f) . '">'
-            . '<label class="field"><span>Username or email</span><input name="login" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required></label>'
+            . '<label class="field"><span>Username or email</span><input name="login" value="' . $e($login) . '" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required></label>'
             . '<button class="btn primary big" type="submit">Email me a code</button></form>'
             . '<h2>Other ways back in</h2>'
             . '<ul class="ways"><li>Ask the other person who edits the website to reset your password from their phone (People, in More). They\'ll give you a 6-digit code. <a href="/edit/?code">I have a code</a></li>'
@@ -180,14 +180,19 @@ final class Pages
         $keys = $remembered ? [$throttle->key('dev', $device)]
             : [$throttle->key('ip', Http::ip()), $person ? $throttle->key('person', $person['id']) : $throttle->key('login', strtolower($login))];
         $until = $throttle->until($keys);
-        $retry = fn(int $t) => 'Too many tries. Try again at ' . Clock::time($t) . '.';
+        $retry = fn(int $t) => 'Too many tries. Wait until ' . Clock::time($t) . ', then try again.';
+        $mins = function (int $t): string {
+            $n = max(1, (int)ceil(($t - Clock::now()) / 60));
+            return $n . ' minute' . ($n === 1 ? '' : 's');
+        };
 
         if ($do === 'signin') {
             if ($until) { $this->signIn($retry($until), $login); return; }
             $pw = (string)($_POST['password'] ?? '');
             if (!$this->people->checkPassword($person, $pw)) {
                 $t = $throttle->fail($keys);
-                $this->signIn('That username and password don\'t match. Check them and try again.' . ($t ? ' ' . $retry($t) : ''), $login);
+                $this->signIn($t ? 'Too many wrong passwords. Wait until ' . Clock::time($t) . ' (about ' . $mins($t) . '), then try again. Or ask the other person who edits the website to reset your password (More → People).'
+                    : 'That username and password don\'t match. Check them and try again.', $login);
                 return;
             }
             $throttle->clear($keys);
@@ -195,8 +200,11 @@ final class Pages
             return;
         }
         if ($do === 'forgot') {
+            // slowed down: say so rather than "Check your email" with nothing sent (this tells
+            // nothing about the username, since the wait also counts per address)
+            if ($until) { $this->forgot('Too many tries just now, so no code was sent. Try again at ' . Clock::time($until) . ' (in about ' . $mins($until) . ').', $login); return; }
             // the same answer whether or not the username exists
-            if ($person && !$until) {
+            if ($person) {
                 $code = $codes->issue($person['id'], 'email');
                 if ($code !== null) {
                     $mail->send([$person['email']], 'Your code for the website editor: ' . $code, [

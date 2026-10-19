@@ -94,19 +94,42 @@ export function toast(msg, kind = 'ok', ms = 3200) {
 export function sheet(title, body, buttons) {
   return new Promise((resolve) => {
     const back = h('div.sheet-back');
-    const done = (v) => { back.classList.remove('in'); setTimeout(() => back.remove(), 200); document.removeEventListener('keydown', esc); resolve(v); };
+    const opened = Date.now();
+    let vv = null;
+    // above the iPhone keyboard: the sheet follows the part of the screen she can see
+    const fit = () => {
+      back.style.top = vv.offsetTop + 'px';
+      back.style.height = vv.height + 'px';
+      back.style.bottom = 'auto';
+      box.style.maxHeight = Math.max(160, vv.height - 12) + 'px';
+    };
+    const done = (v) => {
+      back.classList.remove('in');
+      setTimeout(() => back.remove(), 200);
+      document.removeEventListener('keydown', esc);
+      if (vv) { vv.removeEventListener('resize', fit); vv.removeEventListener('scroll', fit); }
+      resolve(v);
+    };
     const esc = (e) => { if (e.key === 'Escape') done(null); };
     const box = h('div.sheet', { role: 'dialog', 'aria-modal': 'true', 'aria-label': title },
       h('h2', { text: title }),
       typeof body === 'string' ? h('p', { text: body }) : body,
       h('div.sheet-buttons', buttons.map((b) => h('button.btn' + (b.kind ? '.' + b.kind : ''), { type: 'button', text: b.label, onclick: () => done(b.value) }))));
     back.appendChild(box);
-    back.addEventListener('click', (e) => { if (e.target === back) done(null); });
+    // a double tap on the button that opened it mustn't close it again at once
+    back.addEventListener('click', (e) => { if (e.target === back && Date.now() - opened > 450) done(null); });
     document.addEventListener('keydown', esc);
     document.body.appendChild(back);
+    if (window.visualViewport && box.querySelector('input, textarea')) {
+      vv = window.visualViewport;
+      vv.addEventListener('resize', fit);
+      vv.addEventListener('scroll', fit);
+      fit();
+    }
     requestAnimationFrame(() => back.classList.add('in'));
     const first = box.querySelector('button');
-    if (first) first.focus();
+    if (first) first.focus({ preventScroll: true });
+    box.scrollTop = 0; // a tall sheet opens at its question, not scrolled to its buttons
   });
 }
 
@@ -129,8 +152,19 @@ export async function api(name, data, opt = {}) {
   } else if (data) {
     url += '?' + new URLSearchParams(data).toString();
   }
-  const res = await fetch(url, init);
-  if (res.status === 401) { emit('signedout'); throw new ApiError("You're signed out.", 401); }
+  let res;
+  try {
+    res = await fetch(url, init);
+  } catch (e) {
+    if (e && e.name === 'AbortError') throw e;
+    // status 0: the request may or may not have reached the website (putting live checks)
+    throw new ApiError('No connection right now. Check your Wi-Fi or signal and try again. Nothing was lost.', 0);
+  }
+  if (res.status === 401) {
+    if (!S.signedOut) { S.signedOut = true; emit('signedout'); }
+    throw new ApiError("You're signed out.", 401);
+  }
+  if (res.status === 413) throw new ApiError('That file is too big for the website. Ask John for a smaller copy.', 413);
   let json = null;
   try { json = await res.json(); } catch (e) { json = null; }
   if (!json) throw new ApiError('The website didn\'t answer properly. Try again in a minute.', res.status);
@@ -435,12 +469,19 @@ const LOCAL = () => 'ts-draft-' + S.me.id;
 function readLocal() { try { return JSON.parse(localStorage.getItem(LOCAL()) || 'null'); } catch (e) { return null; } }
 function writeLocal(v) { try { localStorage.setItem(LOCAL(), JSON.stringify(v)); } catch (e) { /* private mode: the server copy still saves */ } }
 
+/** What an operation sets, to tell which of her changes the server already has. */
+const sig = (op) => keyOf(op.path) + '=' + JSON.stringify(op.op === 'list' ? op.order : (op.value ?? null));
+S.synced = new Set();
+S.draftV = undefined;    // the server's draft version (none from an older server: no check)
+
 /** Start from the server's live content and her saved draft (or this phone's newer copy). */
-export function loadDraft(live, draft) {
+export function loadDraft(live, draft, opt = {}) {
   S.live = live;
   S.base = draft.ops && draft.ops.length ? draft.base : live.rev;
+  S.draftV = draft.v;
   let ops = draft.ops || [];
-  const local = readLocal();
+  S.synced = new Set(ops.map(sig));
+  const local = opt.ignoreLocal ? null : readLocal();
   if (local && !local.synced && local.at / 1000 > (draft.saved || 0) && Array.isArray(local.ops)) {
     ops = local.ops;
     S.base = local.base || S.base;
@@ -458,6 +499,7 @@ let saveTimer = null;
 let saving = false;
 let again = false;
 let retry = 0;
+let merges = 0;          // merges in a row (a stuck server mustn't make it loop)
 
 /** Call after every change to S.draft. */
 export function changed() {
@@ -469,6 +511,26 @@ export function changed() {
   emit('change');
 }
 
+/**
+ * The editor is also open in another tab or on another device, and that one saved since: take
+ * the server's draft and put this window's unsaved changes on top, so nothing is wiped.
+ */
+async function mergeStale() {
+  const mine = currentOps().filter((op) => !S.synced.has(sig(op)));
+  const r = await api('live');
+  loadDraft(r.live, r.draft, { ignoreLocal: true });
+  if (mine.length) {
+    const resolve = {};
+    mine.forEach((op) => { resolve[keyOf(op.path)] = 'mine'; });
+    const [c] = applyOps(S.draft, mine, resolve);
+    S.draft = c;
+  }
+  changed();
+  toast('This editor is also open in another window. Your changes from both are kept.', 'ok', 7000);
+  // show the other window's changes too, unless she's typing (the keyboard would close)
+  if (!document.body.classList.contains('typing')) render();
+}
+
 export async function saveDraft(opt = {}) {
   clearTimeout(saveTimer);
   if (!S.me) return;
@@ -478,22 +540,43 @@ export async function saveDraft(opt = {}) {
   emit('save');
   const ops = currentOps();
   const ver = S.ver;
+  let stale = false;
   try {
-    await api('draft', { base: S.base, ops }, { keepalive: !!opt.keepalive });
+    const r = await api('draft', { base: S.base, ops, v: S.draftV }, { keepalive: !!opt.keepalive });
+    if (r.v !== undefined) S.draftV = r.v;
+    S.synced = new Set(ops.map(sig));
     S.offline = false;
     retry = 0;
+    merges = 0;
     S.savedAt = Date.now();
     if (S.ver === ver) { S.saveState = 'saved'; writeLocal({ base: S.base, ops, at: Date.now(), synced: true }); }
   } catch (e) {
     if (e.status === 401) { saving = false; return; }
-    S.offline = true;
-    S.saveState = 'offline';
-    retry = Math.min(retry + 1, 6);
-    saveTimer = setTimeout(() => saveDraft(), [3, 5, 10, 20, 30, 60][retry - 1] * 1000);
+    if (e.status === 409 && e.data && e.data.stale && merges < 3) {
+      stale = true;
+      merges++;
+    } else {
+      S.offline = true;
+      S.saveState = 'offline';
+      merges = 0;
+      retry = Math.min(retry + 1, 6);
+      saveTimer = setTimeout(() => saveDraft(), [3, 5, 10, 20, 30, 60][retry - 1] * 1000);
+    }
   } finally {
     saving = false;
+    if (stale) {
+      try {
+        await mergeStale();
+      } catch (e) {
+        stale = false;
+        S.offline = true;
+        S.saveState = 'offline';
+        saveTimer = setTimeout(() => saveDraft(), 5000);
+      }
+    }
     emit('save');
-    if (again) { again = false; saveDraft(); }
+    // after merging, send the result at once (a preview or check is waiting on it)
+    if (stale) { again = false; await saveDraft(opt); } else if (again) { again = false; saveDraft(); }
   }
 }
 
@@ -519,6 +602,8 @@ export function rebase(live, serverDraft) {
   const [c] = applyOps(live.content, ops, resolve);
   S.draft = c;
   S.conflicts = (serverDraft && serverDraft.conflicts) || S.conflicts;
+  if (serverDraft && serverDraft.v !== undefined) S.draftV = serverDraft.v;
+  if (serverDraft && Array.isArray(serverDraft.ops)) S.synced = new Set(serverDraft.ops.map(sig));
   S.ver++;
   emit('change');
 }
@@ -527,15 +612,32 @@ export function rebase(live, serverDraft) {
 
 const routes = [];
 const scrolls = {};
+const opened = {};       // hash -> the sections she had open there
 let current = null;
+// How many screens deep she is in this tab, kept with each history entry, so Back never leaves
+// the editor or bounces between two screens (also after a reload or a fresh deep link).
+const stamp = (d) => { try { history.replaceState({ d }, ''); } catch (e) { /* Safari's limit on rapid calls */ } };
+if (!history.state || typeof history.state.d !== 'number') stamp(0);
+let depth = history.state && typeof history.state.d === 'number' ? history.state.d : 0;
+let replacing = false;
+history.scrollRestoration = 'manual';
+
 export function route(re, fn) { routes.push([re, fn]); }
 export function go(hash) { if (location.hash === hash) render(); else location.hash = hash; }
-export function back(fallback = '#/') { if (history.length > 1 && S.navCount > 0) history.back(); else go(fallback); }
-S.navCount = 0;
+/** Go to `hash` in place of this screen (Back then skips this one). */
+export function replaceHash(hash) {
+  if (location.hash === hash) render();
+  else { replacing = true; location.replace(hash); }
+}
+export function back(fallback = '#/') { if (depth > 0) history.back(); else replaceHash(fallback); }
 
 export async function render() {
   const hash = location.hash || '#/';
-  if (current) { scrolls[current.hash] = window.scrollY; if (current.leave) try { current.leave(); } catch (e) { /* */ } }
+  if (current) {
+    scrolls[current.hash] = window.scrollY;
+    opened[current.hash] = [...document.querySelectorAll('main.screen details[open]')].map((d) => d.dataset.sec || ((d.querySelector('summary') || {}).textContent || ''));
+    if (current.leave) try { current.leave(); } catch (e) { /* */ }
+  }
   for (const [re, fn] of routes) {
     const m = re.exec(hash);
     if (!m) continue;
@@ -543,11 +645,31 @@ export async function render() {
     if (!screen) return;
     screen.hash = hash;
     current = screen;
+    const revealing = !!S.reveal; // a jump to one box scrolls by itself
     emit('screen', screen);
-    requestAnimationFrame(() => window.scrollTo(0, screen.scrollTo !== undefined ? screen.scrollTo : (scrolls[hash] || 0)));
+    if (!revealing) {
+      // the same place as before: the same sections open, the same scroll
+      const restore = () => {
+        const want = opened[hash] || [];
+        if (want.length) {
+          for (const d of document.querySelectorAll('main.screen details')) {
+            if (want.includes(d.dataset.sec || ((d.querySelector('summary') || {}).textContent || ''))) d.open = true;
+          }
+        }
+        requestAnimationFrame(() => window.scrollTo(0, screen.scrollTo ?? scrolls[hash] ?? 0));
+      };
+      restore();
+      // screens that fill in later (History, Leads…) are restored again once they have
+      if (screen.ready) Promise.resolve(screen.ready).then(() => { if (current === screen) restore(); }, () => {});
+    }
     return;
   }
-  go('#/');
+  replaceHash('#/');
 }
-window.addEventListener('hashchange', () => { S.navCount++; render(); });
+window.addEventListener('hashchange', () => {
+  if (replacing) { replacing = false; stamp(depth); }
+  else if (history.state && typeof history.state.d === 'number') depth = history.state.d;
+  else { depth += 1; stamp(depth); }
+  render();
+});
 export function currentScreen() { return current; }

@@ -35,7 +35,8 @@ fs.mkdirSync(tmp, { recursive: true });
   const pic = async (name, sel, opt = {}) => {
     const el = page.locator(sel).first();
     await el.scrollIntoViewIfNeeded();
-    await page.evaluate((s) => window.scrollBy(0, -140), sel);
+    // put the element `above` px below the top of the screen, so the picture has room above and below it
+    await el.evaluate((e, a) => window.scrollBy(0, e.getBoundingClientRect().top - a), opt.above ?? 120);
     await el.evaluate((e) => { e.style.outline = '4px solid #F09A2E'; e.style.outlineOffset = e.closest('.tiles') ? '-5px' : '3px'; });
     await page.waitForTimeout(250);
     const box = await el.boundingBox();
@@ -78,10 +79,12 @@ fs.mkdirSync(tmp, { recursive: true });
   await pic('business-1', '[data-key="site.social"] .btn.add', { above: 260, below: 80 });
 
   await go('#/tray');
+  await page.waitForSelector('.tray-status .callout, .tray-status p', { timeout: 20000 });
   await pic('tray', '.sticky-actions .btn.primary', { above: 300, below: 40 });
-  // put it live, so History has an entry to show
+  // put it live, so History has an entry to show (a checked, clean change goes in one tap)
   await page.click('.sticky-actions .btn.primary');
-  await page.locator('.sheet button', { hasText: 'Put it live' }).click({ timeout: 20000 });
+  const check = page.locator('.sheet button', { hasText: 'Put it live' }).first();
+  if (await check.waitFor({ timeout: 5000 }).then(() => true, () => false)) await check.click();
   await page.waitForSelector('.sheet h2:has-text("Done")', { timeout: 60000 });
   await page.locator('.sheet button', { hasText: 'OK' }).click();
 
@@ -108,7 +111,8 @@ fs.mkdirSync(tmp, { recursive: true });
   await pic('fix-1', '.preview-holder', { above: 120, below: 0 });
 
   await go('#/notice');
-  await pic('notice-1', '[data-key="notice.on"]', { above: 60, below: 380 });
+  // step 2 says to pick a notice (that turns it on), so outline the three choices
+  await pic('notice-1', '.notice-kinds', { above: 220, below: 40 });
 
   await go('#/history');
   await page.waitForSelector('.history-item');

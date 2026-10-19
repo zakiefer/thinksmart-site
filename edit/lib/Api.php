@@ -35,7 +35,7 @@ final class Api
             if (in_array($name, self::POST, true)) {
                 if (Http::method() !== 'POST') { Http::json(['error' => 'Use POST'], 405); return; }
                 if (!$_POST && !$_FILES && (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0 && str_starts_with((string)($_SERVER['CONTENT_TYPE'] ?? ''), 'multipart/')) {
-                    Http::json(['error' => 'That file is bigger than this hosting accepts (' . ini_get('post_max_size') . '). Ask John for a smaller copy.'], 413);
+                    Http::json(['error' => self::tooBig('file')], 413);
                     return;
                 }
                 $sent = (string)($_SERVER['HTTP_X_TS_CSRF'] ?? '');
@@ -129,6 +129,7 @@ final class Api
             'site' => $this->cfg->siteUrl(),
             'leadsLast' => ($l = Leads::last($this->cfg->paths)) ? ['at' => (int)$l['at'], 'when' => Clock::when((int)$l['at'])] : null,
             'leadTo' => $this->leadToOut(),
+            'uploadMax' => self::uploadMax(),
         ]);
     }
 
@@ -172,8 +173,15 @@ final class Api
             $sp = Changes::schemaPath($op['path']);
             $label = (string)($ex->field($sp)['label'] ?? $sp);
             if ($op['op'] === 'set') {
-                $rows[] = ['label' => $label, 'before' => $ex->show($op['old'] ?? null, $sp, $prev ?? $after), 'after' => $ex->show($op['value'], $sp, $after), 'type' => $ex->field($sp)['type'] ?? 'text',
-                    'beforeRaw' => in_array($ex->field($sp)['type'] ?? '', ['photo'], true) ? $op['old'] : null, 'afterRaw' => in_array($ex->field($sp)['type'] ?? '', ['photo'], true) ? $op['value'] : null];
+                $type = $ex->field($sp)['type'] ?? 'text';
+                $row = ['label' => $label, 'before' => $ex->show($op['old'] ?? null, $sp, $prev ?? $after), 'after' => $ex->show($op['value'], $sp, $after), 'type' => $type,
+                    'beforeRaw' => $type === 'photo' ? $op['old'] : null, 'afterRaw' => $type === 'photo' ? $op['value'] : null];
+                // the whole words too, for a word-by-word before and after
+                if (in_array($type, ['text', 'para', 'rich', 'alt', 'name'], true)) {
+                    $row['beforeFull'] = $ex->plainFull($op['old'] ?? null, $sp, $prev ?? $after);
+                    $row['afterFull'] = $ex->plainFull($op['value'], $sp, $after);
+                }
+                $rows[] = $row;
                 continue;
             }
             $gone = array_diff($op['old'] ?? [], $op['order']);
@@ -207,12 +215,16 @@ final class Api
         return $out;
     }
 
-    /** Drafts save every few seconds. */
+    /** Drafts save every few seconds; "v" stops an older copy of the editor overwriting a newer save. */
     private function doDraft(array $d): void
     {
         $ops = $this->ops($d);
-        $saved = $this->pub->drafts->put($this->me(), (int)($d['base'] ?? 0), $ops);
-        Http::json(['ok' => true, 'saved' => $saved['saved'], 'count' => count($ops)]);
+        $saved = $this->pub->drafts->put($this->me(), (int)($d['base'] ?? 0), $ops, isset($d['v']) ? (int)$d['v'] : null);
+        if (!empty($saved['stale'])) {
+            Http::json(['ok' => false, 'stale' => true, 'error' => 'This editor is open somewhere else too.', 'draft' => $this->draftOut()], 409);
+            return;
+        }
+        Http::json(['ok' => true, 'saved' => $saved['saved'], 'count' => count($ops), 'v' => $saved['v']]);
     }
 
     /** "Check your changes": problems, warnings, conflicts and what else will change. */
@@ -267,11 +279,32 @@ final class Api
 
     // ---------------------------------------------------------------- files
 
-    /** The hosting's upload limit, in words, when a file was too big for it. */
+    /** "8M", "512K", "1G" or plain bytes, as bytes (0 when it can't be read). */
+    private static function bytes(string $ini): int
+    {
+        if (!preg_match('/^\s*(\d+(?:\.\d+)?)\s*([KMG]?)/i', $ini, $m)) return 0;
+        return (int)round((float)$m[1] * ['' => 1, 'K' => 1024, 'M' => 1048576, 'G' => 1073741824][strtoupper($m[2])]);
+    }
+
+    /** The biggest file the server takes in one go, in bytes (the smaller of its two limits). */
+    private static function uploadMax(): int
+    {
+        $limits = array_filter([self::bytes((string)ini_get('post_max_size')), self::bytes((string)ini_get('upload_max_filesize'))]);
+        return $limits ? min($limits) : 0;
+    }
+
+    /** "That photo is too big to send (over 8 MB). Ask John for a smaller copy." */
+    private static function tooBig(string $what): string
+    {
+        $b = self::uploadMax();
+        $size = $b >= 1073741824 ? round($b / 1073741824, 1) . ' GB' : ($b >= 1048576 ? round($b / 1048576, 1) . ' MB' : max(1, (int)round($b / 1024)) . ' KB');
+        return "That $what is too big to send" . ($b > 0 ? " (over $size)" : '') . '. Ask John for a smaller copy.';
+    }
+
+    /** What to say when a file didn't arrive, or was too big for the server's limit. */
     private static function uploadProblem(?array $f, string $what): ?string
     {
-        $limit = (string)ini_get('upload_max_filesize');
-        $tooBig = "That $what is bigger than this hosting accepts ($limit). Ask John for a smaller copy.";
+        $tooBig = self::tooBig($what);
         if ($f === null) return (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0 ? $tooBig : "The $what didn't arrive. Try again.";
         $err = (int)($f['error'] ?? UPLOAD_ERR_NO_FILE);
         if ($err === UPLOAD_ERR_INI_SIZE || $err === UPLOAD_ERR_FORM_SIZE) return $tooBig;

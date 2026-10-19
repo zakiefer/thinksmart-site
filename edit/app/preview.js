@@ -8,6 +8,8 @@ import { itemTitle, cut } from './lists.js';
 
 export const PAGES = [['Home.dc.html', 'Home'], ['About.dc.html', 'About'], ['Services.dc.html', 'Services'], ['FAQ.dc.html', 'FAQ'], ['Contact.dc.html', 'Contact'], ['Claim.dc.html', 'File a Claim'], ['404.html', 'Page not found']];
 let mode = 'phone';
+// the orange dotted outline for words she can tap (and the one she's looking for)
+const FIX_STYLE = '[data-edit]{cursor:pointer}[data-edit]:hover,[data-edit].ts-hit{outline:2px dashed #F09A2E!important;outline-offset:3px}';
 
 function frame(file, onLoad) {
   const W = mode === 'phone' ? 390 : 1280;
@@ -20,8 +22,11 @@ function frame(file, onLoad) {
     if (!holder.isConnected) { window.removeEventListener('resize', fit); return; }
     const avail = holder.parentElement.clientWidth;
     const k = Math.min(1, avail / W);
+    // no taller than the screen, so she scrolls the page inside, not a page inside a page
+    const hh = Math.min(Math.round(H * k), Math.max(320, window.innerHeight - 220));
     ifr.style.transform = `scale(${k})`;
-    holder.style.height = Math.round(H * k) + 'px';
+    ifr.style.height = Math.round(hh / k) + 'px';
+    holder.style.height = hh + 'px';
     holder.style.width = Math.round(W * k) + 'px';
   };
   window.addEventListener('resize', fit);
@@ -40,15 +45,48 @@ function frame(file, onLoad) {
 }
 
 function controls(file, base, redraw) {
-  const sel = h('select.input', { 'aria-label': 'Page' }, PAGES.map(([f, n]) => h('option', { value: f, text: n })));
-  sel.value = file;
-  sel.addEventListener('change', () => go(base + sel.value));
+  const pages = h('div.seg', { role: 'radiogroup', 'aria-label': 'Page' },
+    PAGES.map(([f, n]) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(f === file), text: n, onclick: () => go(base + f) })));
   const seg = h('div.seg', { role: 'radiogroup', 'aria-label': 'Size' },
     [['phone', 'Phone'], ['computer', 'Computer']].map(([m, l]) => h('button', { type: 'button', role: 'radio', 'aria-checked': String(m === mode), text: l, onclick: () => { mode = m; redraw(); } })));
-  return h('div.preview-controls', sel, seg);
+  return h('div.preview-controls', pages, seg);
 }
 
-export function previewScreen(file) {
+/** A change's key ("faq.items[ab12].q") as the preview marks it ("faq.items.3.q"): list positions instead of ids. */
+function dottedOf(key) {
+  const path = parseKey(key);
+  if (!path) return null;
+  const out = [];
+  let cur = S.draft;
+  for (const seg of path) {
+    if (typeof seg === 'object') {
+      const i = Array.isArray(cur) ? cur.findIndex((it) => it && it._id === seg.id) : -1;
+      if (i < 0) return out.length ? out : null;
+      out.push(String(i));
+      cur = cur[i];
+    } else {
+      out.push(seg);
+      cur = cur && typeof cur === 'object' ? cur[seg] : undefined;
+    }
+  }
+  return out;
+}
+
+/** The marked element for a change in the preview: the spot itself, or the nearest part around it. */
+function findMarked(doc, parts) {
+  const q = (sel) => { try { return doc.querySelector(sel); } catch (e) { return null; } };
+  const esc = (t) => t.replace(/["\\]/g, '\\$&');
+  const full = parts.join('.');
+  // the spot, or its lines (a headline's "home.top.title.0")
+  let el = q(`[data-edit~="${esc(full)}"]`) || q(`[data-edit^="${esc(full)}."], [data-edit*=" ${esc(full)}."]`);
+  for (let n = parts.length - 1; !el && n >= 2; n--) el = q(`[data-edit~="${esc(parts.slice(0, n).join('.'))}"]`);
+  return el;
+}
+
+/** The real page with her changes. With `key`, the changed spot is outlined in orange. */
+export function previewScreen(file, key) {
+  // "#/preview/FAQ.dc.html/faq.items[ab12].q" works too
+  if (key === undefined && file.includes('/')) { const i = file.indexOf('/'); key = file.slice(i + 1) || undefined; file = file.slice(0, i); }
   const body = h('div.stack');
   const draw = async () => {
     clear(body).append(h('p.small', { text: 'Getting the preview ready…' }));
@@ -57,14 +95,57 @@ export function previewScreen(file) {
     body.append(controls(file, '#/preview/', draw));
     if (!ok) { body.append(h('p.callout.warn', { text: 'The preview needs a connection. Your changes are saved on this phone.' })); return; }
     body.append(h('p.help', { text: 'This is the real page with your changes. Visitors don\'t see them until you put them live.' }));
-    body.append(frame(file));
+    const found = h('p.help', { text: 'Your change is outlined in orange.', hidden: true });
+    body.append(found);
+    const parts = key ? dottedOf(key) : null;
+    let started = false;
+    body.append(frame(file, parts ? (ifr) => { if (!started) { started = true; outline(ifr, parts, found); } } : null));
   };
   draw();
   return { title: 'Preview', body, wide: true };
 }
 
+/** Wait for the page to draw the spot, scroll it to the middle and outline it for 3 seconds. */
+function outline(ifr, parts, found) {
+  const t0 = Date.now();
+  let el = null;
+  let at = 0;
+  const tick = () => {
+    if (!ifr.isConnected) return;
+    let doc = null;
+    try { doc = ifr.contentDocument; } catch (e) { return; }
+    if (doc && doc.head && !doc.__tsHitStyle) {
+      doc.__tsHitStyle = true;
+      const st = doc.createElement('style');
+      st.textContent = FIX_STYLE;
+      doc.head.appendChild(st);
+    }
+    // the page draws itself (twice), so the spot can be replaced: find it again until it settles
+    const now = doc && doc.head ? findMarked(doc, parts) : null;
+    if (now && now !== el) {
+      el = now;
+      at = at || Date.now();
+      el.classList.add('ts-hit');
+      const win = doc.defaultView;
+      const r = el.getBoundingClientRect();
+      win.scrollTo(0, Math.max(0, r.top + win.scrollY - (win.innerHeight - Math.min(r.height, win.innerHeight)) / 2));
+      found.hidden = false;
+    }
+    if (at && Date.now() - at > 3000) { if (el) el.classList.remove('ts-hit'); return; }
+    if (at || Date.now() - t0 < 12000) setTimeout(tick, 200);
+  };
+  tick();
+}
+
 /** "Fix a word I saw": the preview, but a tap opens the box for those words. */
-export function fixScreen(file = 'Home.dc.html') {
+export function fixScreen(file) {
+  // without a page in the address, the page she looked at last
+  if (file === undefined || /^#\/fix\/?$/.test(location.hash)) {
+    let saved = null;
+    try { saved = sessionStorage.getItem('ts-fix-page'); } catch (e) { /* */ }
+    file = PAGES.some(([f]) => f === saved) ? saved : 'Home.dc.html';
+  }
+  try { sessionStorage.setItem('ts-fix-page', file); } catch (e) { /* */ }
   const body = h('div.stack');
   const draw = async () => {
     clear(body).append(h('p.small', { text: 'Getting the page ready…' }));
@@ -72,7 +153,7 @@ export function fixScreen(file = 'Home.dc.html') {
     clear(body);
     body.append(controls(file, '#/fix/', draw));
     if (!ok) { body.append(h('p.callout.warn', { text: 'This needs a connection. You can also use "Find words" from the start screen.' })); return; }
-    body.append(h('p.callout.info', { text: 'Tap the words (or photo) you want to change.' }));
+    body.append(h('p.callout.info', { text: 'Tap the words or photo you want to change (they have an orange dotted line).' }));
     body.append(frame(file, (ifr) => attach(ifr)));
     body.append(h('button.btn.ghost', { type: 'button', onclick: () => go('#/search') }, icon('search'), 'Or search for the words'));
   };
@@ -82,8 +163,17 @@ export function fixScreen(file = 'Home.dc.html') {
     if (!doc || doc.__tsFix) return;
     doc.__tsFix = true;
     const st = doc.createElement('style');
-    st.textContent = '[data-edit]{cursor:pointer}[data-edit]:hover,[data-edit].ts-hit{outline:2px dashed #F09A2E!important;outline-offset:3px}';
+    // on a phone there's no hover, so the dotted line is always there (fainter)
+    st.textContent = FIX_STYLE + '@media (hover: none){[data-edit]{outline:1px dashed rgba(240,154,46,.5);outline-offset:2px}}';
     doc.head.appendChild(st);
+    // the page's floating buttons (chat, call) would cover words and can't be changed here
+    const hideFloating = () => {
+      try {
+        for (const b of doc.querySelectorAll('button')) if (doc.defaultView.getComputedStyle(b).position === 'fixed') b.style.setProperty('display', 'none', 'important');
+      } catch (e) { /* the page went away */ }
+    };
+    hideFloating();
+    setTimeout(hideFloating, 1000);
     const stop = (e) => { e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); };
     doc.addEventListener('submit', stop, true);
     doc.addEventListener('click', async (e) => {

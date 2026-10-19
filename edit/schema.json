@@ -601,8 +601,9 @@
             "order": 86
         },
         "chrome.footer.licenseAuto": {
-            "label": "License line: write it from your states",
+            "label": "Bottom of every page: fill in the license line from my states",
             "type": "switch",
+            "help": "On: it lists your states by itself, and the words in the license line box are not used.",
             "order": 99999
         },
         "chrome.footer.photosLink": {
@@ -624,8 +625,9 @@
             "order": 85
         },
         "claim.byPhone.otherStates": {
-            "label": "\"By phone\" card: other states it names (yours are left out automatically)",
+            "label": "The \"By phone\" card also says we take calls from",
             "type": "states",
+            "help": "Your own states are left out by themselves.",
             "order": 99999
         },
         "claim.byPhone.tag": {
@@ -887,7 +889,7 @@
             "order": 207
         },
         "claim.top.video.video": {
-            "label": "Top of File a Claim: background video: video",
+            "label": "Top of File a Claim: background video",
             "type": "video",
             "order": 208
         },
@@ -1246,7 +1248,7 @@
                 433
             ],
             "optional": true,
-            "order": 72
+            "order": 159
         },
         "faq.items[].homeQ": {
             "label": "Shorter question for Home (optional)",
@@ -1256,7 +1258,7 @@
                 69
             ],
             "optional": true,
-            "order": 70
+            "order": 158
         },
         "faq.items[].q": {
             "label": "FAQ: question",
@@ -1462,7 +1464,7 @@
             "order": 217
         },
         "forms.claim.labels.address": {
-            "label": "Claim form: label",
+            "label": "Claim form: \"Property address\" label",
             "type": "text",
             "caps": true,
             "fit": [
@@ -1472,7 +1474,7 @@
             "order": 225
         },
         "forms.claim.labels.carrier": {
-            "label": "Claim form: label",
+            "label": "Claim form: \"Insurance company\" label",
             "type": "text",
             "caps": true,
             "fit": [
@@ -1492,7 +1494,7 @@
             "order": 227
         },
         "forms.claim.labels.date": {
-            "label": "Claim form: label",
+            "label": "Claim form: \"Date of loss\" label",
             "type": "text",
             "caps": true,
             "fit": [
@@ -1502,7 +1504,7 @@
             "order": 230
         },
         "forms.claim.labels.email": {
-            "label": "Claim form: label",
+            "label": "Claim form: \"Email\" label",
             "type": "text",
             "caps": true,
             "fit": [
@@ -1512,7 +1514,7 @@
             "order": 223
         },
         "forms.claim.labels.name": {
-            "label": "Claim form: label",
+            "label": "Claim form: \"Full name\" label",
             "type": "text",
             "caps": true,
             "fit": [
@@ -1522,7 +1524,7 @@
             "order": 219
         },
         "forms.claim.labels.phone": {
-            "label": "Claim form: label",
+            "label": "Claim form: \"Phone\" label",
             "type": "text",
             "caps": true,
             "fit": [
@@ -1552,7 +1554,7 @@
             "order": 233
         },
         "forms.claim.labels.story": {
-            "label": "Claim form: label",
+            "label": "Claim form: \"Tell us what happened\" label",
             "type": "text",
             "caps": true,
             "fit": [
@@ -1598,7 +1600,7 @@
             "order": 269
         },
         "forms.claim.placeholders.address": {
-            "label": "Claim form: hint in a box",
+            "label": "Claim form: hint in the address box",
             "type": "text",
             "fit": [
                 28,
@@ -1607,7 +1609,7 @@
             "order": 226
         },
         "forms.claim.placeholders.carrier": {
-            "label": "Claim form: hint in a box",
+            "label": "Claim form: hint in the insurance company box",
             "type": "text",
             "fit": [
                 19,
@@ -1616,7 +1618,7 @@
             "order": 232
         },
         "forms.claim.placeholders.email": {
-            "label": "Claim form: hint in a box",
+            "label": "Claim form: hint in the email box",
             "type": "text",
             "fit": [
                 20,
@@ -1625,7 +1627,7 @@
             "order": 224
         },
         "forms.claim.placeholders.name": {
-            "label": "Claim form: hint in a box",
+            "label": "Claim form: hint in the name box",
             "type": "text",
             "fit": [
                 22,
@@ -1634,7 +1636,7 @@
             "order": 220
         },
         "forms.claim.placeholders.phone": {
-            "label": "Claim form: hint in a box",
+            "label": "Claim form: hint in the phone box",
             "type": "text",
             "fit": [
                 22,
@@ -1670,7 +1672,7 @@
             "order": 272
         },
         "forms.claim.status.denied": {
-            "label": "Claim form: claim status choice",
+            "label": "Claim form: \"Denied\" choice",
             "type": "text",
             "fit": [
                 12,
@@ -1679,7 +1681,7 @@
             "order": 237
         },
         "forms.claim.status.notFiled": {
-            "label": "Claim form: claim status choice",
+            "label": "Claim form: \"Not filed yet\" choice",
             "type": "text",
             "fit": [
                 20,
@@ -1688,7 +1690,7 @@
             "order": 234
         },
         "forms.claim.status.underpaid": {
-            "label": "Claim form: claim status choice",
+            "label": "Claim form: \"Paid — too little\" choice",
             "type": "text",
             "fit": [
                 25,
@@ -1697,7 +1699,7 @@
             "order": 236
         },
         "forms.claim.status.waiting": {
-            "label": "Claim form: claim status choice",
+            "label": "Claim form: \"Filed — waiting\" choice",
             "type": "text",
             "fit": [
                 23,
@@ -1876,7 +1878,7 @@
             "order": 201
         },
         "forms.noscript": {
-            "label": "Notice when a visitor's browser has JavaScript off",
+            "label": "Both forms: notice for browsers that can't show the forms",
             "type": "rich",
             "style": "noscript",
             "marks": [],
@@ -1891,7 +1893,7 @@
             "order": 163
         },
         "forms.phoneInvalid": {
-            "label": "Forms: message when the phone number is too short",
+            "label": "Both forms: message when the phone number is too short",
             "type": "text",
             "fit": [
                 74,
@@ -1900,7 +1902,7 @@
             "order": 203
         },
         "forms.required": {
-            "label": "Forms: message when a required box is empty",
+            "label": "Both forms: message when a required box is empty",
             "type": "text",
             "fit": [
                 38,
@@ -2153,7 +2155,7 @@
             "order": 39
         },
         "home.fight.video.video": {
-            "label": "How we work: background video: video",
+            "label": "How we work: background video",
             "type": "video",
             "order": 40
         },
@@ -2232,7 +2234,7 @@
             "order": 73
         },
         "home.final.video.video": {
-            "label": "Bottom of Home: background video: video",
+            "label": "Bottom of Home: background video",
             "type": "video",
             "order": 74
         },
@@ -2432,7 +2434,7 @@
             "label": "Real customer, copied word for word",
             "type": "tick",
             "required": true,
-            "order": 309
+            "order": 301.5
         },
         "home.reviews.items[].source": {
             "label": "Where it was posted",
@@ -2611,8 +2613,9 @@
             "order": 10
         },
         "home.top.kickerAuto": {
-            "label": "Top of Home small line: write it from your states",
+            "label": "Top of Home: fill in the small line from my states",
             "type": "switch",
+            "help": "On: it lists your states by itself, and the words in the small line box are not used.",
             "order": 99999
         },
         "home.top.text": {
@@ -2676,7 +2679,7 @@
             "order": 8
         },
         "home.top.video.video": {
-            "label": "Top of Home: storm video: video",
+            "label": "Top of Home: storm video",
             "type": "video",
             "order": 9
         },
@@ -2747,7 +2750,7 @@
                 "noticeUntil"
             ],
             "fit": [
-                70,
+                90,
                 110
             ],
             "order": 99999
@@ -2766,7 +2769,7 @@
             "label": "Office closed: words",
             "type": "text",
             "fit": [
-                70,
+                90,
                 110
             ],
             "order": 99999
@@ -2788,7 +2791,7 @@
             "order": 99999
         },
         "notice.on": {
-            "label": "Show a notice",
+            "label": "The storm / closed notice",
             "type": "switch",
             "order": 99999
         },
@@ -2812,7 +2815,7 @@
             "label": "Storm response: words",
             "type": "text",
             "fit": [
-                70,
+                90,
                 110
             ],
             "order": 99999
@@ -3074,7 +3077,7 @@
             "order": 139
         },
         "services.coverage.tiles[].video": {
-            "label": "What we cover: tile: video",
+            "label": "What we cover: tile video",
             "type": "video",
             "order": 140
         },
@@ -3367,13 +3370,14 @@
             "order": 115
         },
         "services.top.video.video": {
-            "label": "Top of Services: video",
+            "label": "Top of Services: background video",
             "type": "video",
             "order": 116
         },
         "site.address": {
             "label": "Office address",
             "type": "address",
+            "help": "Updates the office address everywhere it shows, including the bottom of every page.",
             "parts": {
                 "street": "Street",
                 "city": "Town",
@@ -3393,7 +3397,7 @@
             "order": 99999
         },
         "site.brightness": {
-            "label": "Easier to read: body text brightness",
+            "label": "Easier to read: paragraph text brightness",
             "type": "choice",
             "options": {
                 "standard": "Standard",
@@ -3415,6 +3419,7 @@
         "site.callback": {
             "label": "Callback promise",
             "type": "choice",
+            "help": "Updates every place the website promises when you'll call back.",
             "options": {
                 "24h": "within 24 hours",
                 "sameday": "the same business day",
@@ -3426,11 +3431,13 @@
         "site.email": {
             "label": "Email shown on the site",
             "type": "email",
+            "help": "Updates every email address and email link on the website, including the chat.",
             "order": 83
         },
         "site.guarantee": {
             "label": "Guarantee wording",
             "type": "guarantee",
+            "help": "Updates every place the guarantee is quoted on the website.",
             "parts": {
                 "short": "Short version (inside a sentence)",
                 "long": "Long version (with what isn't included)"
@@ -3453,6 +3460,7 @@
         "site.price": {
             "label": "Stand-alone estimate price ($)",
             "type": "money",
+            "help": "Updates the price everywhere the website shows it.",
             "order": 99999
         },
         "site.seal": {
@@ -3462,7 +3470,7 @@
             "order": 99999
         },
         "site.sharePicture": {
-            "label": "Share picture (shown when the site is shared by text or on Facebook)",
+            "label": "Sharing: picture shown when the site is shared by text or on Facebook",
             "type": "photo",
             "order": 3
         },
@@ -3490,7 +3498,7 @@
                 "Yelp",
                 "BBB"
             ],
-            "order": 7
+            "order": 4.5
         },
         "site.social[].url": {
             "label": "Link (or just @name)",
@@ -3508,7 +3516,7 @@
         "states[].code": {
             "label": "State",
             "type": "state",
-            "order": 259
+            "order": 256
         },
         "states[].esign": {
             "label": "E-sign link (Adobe web form)",
@@ -3521,7 +3529,7 @@
             "label": "Licensed here (required)",
             "type": "tick",
             "required": true,
-            "order": 99999
+            "order": 256.5
         },
         "states[].pdf": {
             "label": "Contract PDF (for \"Need a hard copy?\")",

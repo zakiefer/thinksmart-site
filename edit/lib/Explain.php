@@ -19,9 +19,23 @@ final class Explain
         $this->schema = $schema;
     }
 
+    /** Plain names for the parts of an address, a person, the guarantee and a number. */
+    private const PARTS = ['street' => 'street', 'city' => 'town', 'region' => 'state', 'zip' => 'ZIP code', 'name' => 'name', 'title' => 'title',
+        'short' => 'short version', 'long' => 'long version', 'value' => 'number', 'caption' => 'caption', 'plus' => '+ sign', 'percent' => '% sign', 'hidden' => 'hidden'];
+
     public function field(string $schemaPath): array
     {
-        return $this->schema['fields'][$schemaPath] ?? ['label' => $schemaPath, 'type' => 'text'];
+        if (isset($this->schema['fields'][$schemaPath])) return $this->schema['fields'][$schemaPath];
+        // one part of a whole field: "site.address.street" -> "Office address: street"
+        $cut = strrpos($schemaPath, '.');
+        if ($cut !== false) {
+            $parent = $this->schema['fields'][substr($schemaPath, 0, $cut)] ?? null;
+            $part = substr($schemaPath, $cut + 1);
+            if ($parent && in_array($parent['type'] ?? '', ['address', 'person', 'guarantee', 'number-quote'], true) && isset(self::PARTS[$part])) {
+                return ['label' => $parent['label'] . ': ' . self::PARTS[$part], 'type' => in_array($part, ['plus', 'percent', 'hidden'], true) ? 'tick' : 'text'];
+            }
+        }
+        return ['label' => $schemaPath, 'type' => 'text'];
     }
 
     public static function cut(string $s, int $n = 70): string
@@ -32,8 +46,19 @@ final class Explain
         return rtrim($m[0]) . '…';
     }
 
-    /** The words a value shows, for sentences and before/after views. */
+    /** The words a value shows, for sentences and before/after views (long words are cut). */
     public function show($v, string $sp, array $content): string
+    {
+        return $this->words($v, $sp, $content, true);
+    }
+
+    /** The same words, never cut: for "may not fit" and word-by-word before/after views. */
+    public function plainFull($v, string $sp, array $content): string
+    {
+        return $this->words($v, $sp, $content, false);
+    }
+
+    private function words($v, string $sp, array $content, bool $cut): string
     {
         $f = $this->field($sp);
         $type = $f['type'] ?? 'text';
@@ -57,8 +82,10 @@ final class Explain
             case 'list': case 'checklist': return count((array)$v) . ' items';
         }
         if (is_array($v) && !array_is_list($v)) return '';
+        if (is_int($v) || is_float($v)) return (string)$v;
         try {
-            return self::cut(Rich::plain($v, fn($n) => Site::ref($n, $content), ['root' => $content], $sp));
+            $plain = Rich::plain($v, fn($n) => Site::ref($n, $content), ['root' => $content], $sp);
+            return $cut ? self::cut($plain) : $plain;
         } catch (\Throwable $e) {
             return '';
         }
@@ -91,14 +118,28 @@ final class Explain
         return (bool)preg_match('/^(site\.(phone|phone2|email|address|businessName|social|seal|brightness|callback|price|guarantee|adjuster)|chrome\.)/', $sp);
     }
 
+    /** A label inside a sentence: "main phone number", but "FAQ: question" keeps its capitals. */
+    private static function lc(string $l): string
+    {
+        $l = str_replace(' (optional)', '', $l);
+        return preg_match('/^\p{Lu}{2}/u', $l) ? $l : lcfirst($l);
+    }
+
     /** One sentence per change, without who did it ("You" / "John" is added when shown). */
     public function lines(array $before, array $after, array $ops): array
     {
         $out = [];
+        $setKeys = [];
+        foreach ($ops as $op) if ($op['op'] === 'set') $setKeys[Changes::key($op['path'])] = true;
         foreach ($ops as $op) {
             $sp = Changes::schemaPath($op['path']);
             $f = $this->field($sp);
             $label = (string)($f['label'] ?? $sp);
+            // a new photo's important part is part of "changed the photo"
+            if ($op['op'] === 'set' && ($f['type'] ?? '') === 'focus' && is_string($leaf = end($op['path'])) && str_ends_with($leaf, 'Focus')) {
+                $photo = array_merge(array_slice($op['path'], 0, -1), [substr($leaf, 0, -5)]);
+                if (isset($setKeys[Changes::key($photo)])) continue;
+            }
             if ($op['op'] === 'list') {
                 $oldItems = [];
                 foreach ((array)(Changes::get($before, $op['path']) ?? []) as $it) if (is_array($it)) $oldItems[$it['_id'] ?? ''] = $it;
@@ -107,7 +148,7 @@ final class Explain
                 foreach ($gone as $id) if (isset($oldItems[$id])) $out[] = 'deleted ' . $this->kind($sp) . ' “' . $this->title($oldItems[$id], $sp, $before) . '”';
                 $kept = array_values(array_filter($op['order'], fn($id) => in_array($id, $op['old'] ?? [], true)));
                 $wasOrder = array_values(array_filter($op['old'] ?? [], fn($id) => in_array($id, $kept, true)));
-                if ($kept !== $wasOrder) $out[] = 'changed the order of ' . lcfirst($label);
+                if ($kept !== $wasOrder) $out[] = 'changed the order of ' . self::lc($label);
                 continue;
             }
             $leaf = end($op['path']);
@@ -120,19 +161,20 @@ final class Explain
                 }
             }
             $where = $item !== null ? ' (' . $this->title($item, (string)$listSp, $after) . ')' : '';
+            if ($leaf === 'hidden' && $listSp === null) { $out[] = ($op['value'] ? 'hid ' : 'showed again ') . self::lc((string)($this->field(Changes::schemaPath(array_slice($op['path'], 0, -1)))['label'] ?? $sp)); continue; }
             if ($leaf === 'hidden') { $out[] = ($op['value'] ? 'hid ' : 'showed again ') . $this->kind((string)$listSp) . ' “' . $this->title($item, (string)$listSp, $after) . '”'; continue; }
             if ($leaf === 'home' && $sp === 'faq.items[].home') { $out[] = ($op['value'] ? 'put “' : 'took “') . $this->title($item, 'faq.items', $after) . ($op['value'] ? '” on Home' : '” off Home'); continue; }
             $type = $f['type'] ?? 'text';
             $old = $this->show($op['old'] ?? null, $sp, $before);
             $new = $this->show($op['value'], $sp, $after);
             $all = self::allPages($sp) ? ' (all pages)' : '';
-            if (in_array($type, ['tick', 'switch', 'star'], true)) { $out[] = 'turned ' . ($op['value'] ? 'on ' : 'off ') . lcfirst($label) . $where . $all; continue; }
-            if (in_array($type, ['photo', 'video'], true)) { $out[] = 'changed ' . lcfirst($label) . $where . $all; continue; }
+            if (in_array($type, ['tick', 'switch', 'star'], true)) { $out[] = 'turned ' . ($op['value'] ? 'on ' : 'off ') . self::lc($label) . $where . $all; continue; }
+            if (in_array($type, ['photo', 'video'], true)) { $out[] = 'changed ' . self::lc($label) . $where . $all; continue; }
             if ($sp === 'states[].pdfV' || $type === 'pdf') { $out[] = 'put in a new contract' . $where; continue; }
-            if ($old === '' && $new !== '') $out[] = 'added ' . lcfirst($label) . $where . ': “' . $new . '”' . $all;
-            elseif ($new === '' && $old !== '') $out[] = 'cleared ' . lcfirst($label) . $where . $all;
-            elseif ($old === $new) $out[] = 'changed ' . lcfirst($label) . $where . $all;
-            else $out[] = 'changed ' . lcfirst($label) . $where . ' from “' . $old . '” to “' . $new . '”' . $all;
+            if ($old === '' && $new !== '') $out[] = 'added ' . self::lc($label) . $where . ': “' . $new . '”' . $all;
+            elseif ($new === '' && $old !== '') $out[] = 'cleared ' . self::lc($label) . $where . $all;
+            elseif ($old === $new) $out[] = 'changed ' . self::lc($label) . $where . $all;
+            else $out[] = 'changed ' . self::lc($label) . $where . ' from “' . $old . '” to “' . $new . '”' . $all;
         }
         return array_values(array_unique($out));
     }

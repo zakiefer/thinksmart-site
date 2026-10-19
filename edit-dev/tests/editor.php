@@ -12,7 +12,7 @@ putenv("TS_WEBROOT=$tmp/site");
 putenv("TS_PRIVATE_DIR=$tmp/private");
 require "$repo/edit/lib/load.php";
 
-use ThinkSmart\{Build, Changes, Clock, Codes, Config, Contracts, Files, Http, Journal, Json, People, Paths, Photos, Preview, Publisher, Schema, Throttle, Tokens, UserError, Validate};
+use ThinkSmart\{Build, Changes, Clock, Codes, Config, Contracts, Drafts, Explain, Files, Http, Journal, Json, People, Paths, Photos, Preview, Publisher, Schema, Throttle, Tokens, UserError, Validate};
 
 $pass = 0;
 $fail = 0;
@@ -121,6 +121,30 @@ ok((bool)array_filter($msgs, fn($m) => str_contains($m, 'Michael R.')), 'a revie
 $many = $c0;
 for ($i = 0; $i < 13; $i++) $many['states'][] = ['_id' => "s$i", 'code' => array_keys(\ThinkSmart\Site::STATES)[$i + 20], 'licensed' => true];
 ok((bool)array_filter(array_column($val->problems($many), 'msg'), fn($m) => str_contains($m, 'holds up to 12')), 'a list past its limit explains why');
+$probs = $val->problems($bad);
+ok((bool)array_filter($probs, fn($p) => $p['key'] === 'site.phone' && str_contains($p['msg'], '10 digits')), 'the phone problem names its box, so "Fix it" can open it');
+$rv = $c0;
+$rv['home']['reviews']['items'][] = ['_id' => 'rv2', 'text' => '', 'name' => '', 'real' => true];
+$rvMsgs = array_values(array_filter(array_column($val->problems($rv), 'msg'), fn($m) => str_contains($m, 'review')));
+ok($rvMsgs === ['The new review needs the customer\'s words and name.'], 'an empty new review gets one line: ' . implode(' | ', $rvMsgs));
+// warnings
+$faq0 = $c0['faq']['items'][0];
+$fit = $schema['fields']['faq.items[].a[].text']['fit'][1];
+$longOp = ['op' => 'set', 'path' => ['faq', 'items', ['id' => $faq0['_id']], 'a', ['id' => $faq0['a'][0]['_id']], 'text'], 'value' => str_repeat('Insurers pay less. ', (int)ceil(($fit + 20) / 19)), 'old' => $faq0['a'][0]['text']];
+ok((bool)array_filter(array_column($val->warnings($c0, $c0, [$longOp]), 'msg'), fn($m) => str_contains($m, 'may not fit')), "an FAQ answer past $fit letters may not fit (the whole answer is measured)");
+$wEmpty = array_column($val->warnings($c0, $c0, [['op' => 'set', 'path' => ['home', 'top', 'kicker'], 'value' => '', 'old' => 'x']]), 'msg');
+ok((bool)array_filter($wEmpty, fn($m) => str_contains($m, 'visitors will see a blank')), 'an emptied box is a warning');
+$wPrice = array_column($val->warnings($c0, $c0, [['op' => 'set', 'path' => ['site', 'price'], 'value' => 2990, 'old' => 299]]), 'msg');
+ok((bool)array_filter($wPrice, fn($m) => str_contains($m, 'from $299 to $2990. Is that right?')), 'a price 10 times bigger asks "Is that right?"');
+ok(!$val->warnings($c0, $c0, [['op' => 'set', 'path' => ['site', 'price'], 'value' => 349, 'old' => 299]]), 'a normal price change asks nothing');
+// plain words for parts of a field
+$ex = new Explain($schema);
+ok($ex->field('site.address.street')['label'] === 'Office address: street', 'part of a field has a plain label: ' . $ex->field('site.address.street')['label']);
+ok($ex->lines($c0, $c0, [['op' => 'set', 'path' => ['site', 'address', 'zip'], 'value' => '47580', 'old' => '47579']]) === ['changed office address: ZIP code from “47579” to “47580” (all pages)'], 'History names the part, not site.address.zip');
+$qLine = $ex->lines($c0, $c0, [['op' => 'set', 'path' => ['faq', 'items', ['id' => $faq0['_id']], 'q'], 'value' => 'New?', 'old' => $faq0['q']]])[0] ?? '';
+ok(str_starts_with($qLine, 'changed FAQ: question'), 'labels starting with two capitals keep them: ' . $qLine);
+ok($ex->lines($c0, $c0, [['op' => 'set', 'path' => ['home', 'closed', 'photo'], 'value' => 'media/u/a.jpg', 'old' => 'media/x.jpg'], ['op' => 'set', 'path' => ['home', 'closed', 'photoFocus'], 'value' => ['x' => 1, 'y' => 2], 'old' => null]]) === ['changed ' . lcfirst($schema['fields']['home.closed.photo']['label'])], 'a new photo and its important part are one line');
+ok(Explain::cut(str_repeat('a', 100)) !== $ex->plainFull(str_repeat('a', 100), 'faq.items[].q', $c0) && \ThinkSmart\Text::length($ex->plainFull(str_repeat('a', 100), 'faq.items[].q', $c0)) === 100, 'plainFull never cuts the words');
 ok(Validate::esignWarning('https://na2.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAAB*') === null, 'Adobe web form link passes');
 ok(str_contains((string)Validate::esignWarning('https://na2.documents.adobe.com/public/agreements/view/123'), 'one person'), 'a one-person agreement link is flagged');
 
@@ -178,6 +202,16 @@ foreach ($b->render(Json::read("$tmp/private/history/r1.json.gz")['content']) as
     if (file_get_contents("$tmp/site/$file") !== $text) { ok(false, "after restore $file matches launch day"); break; }
 }
 ok(true, 'every page matches launch day again');
+
+echo "Drafts from two copies of the editor\n";
+$dr = new Drafts($cfg);
+$d1 = $dr->put('drafttest', 3, [['op' => 'set', 'path' => ['site', 'price'], 'value' => 1, 'old' => 299]]);
+$d2 = $dr->put('drafttest', 3, [['op' => 'set', 'path' => ['site', 'price'], 'value' => 2, 'old' => 299]], $d1['v']);
+ok($d1['v'] === 1 && $d2['v'] === 2 && empty($d2['stale']), 'a save with the current version goes through and counts up (v ' . $d1['v'] . ' → ' . $d2['v'] . ')');
+$d3 = $dr->put('drafttest', 3, [['op' => 'set', 'path' => ['site', 'price'], 'value' => 3, 'old' => 299]], $d1['v']);
+ok(!empty($d3['stale']) && $d3['v'] === 2 && $dr->get('drafttest')['ops'][0]['value'] === 2, 'an older copy\'s save is refused ("stale") and changes nothing');
+$dr->put('drafttest', 3, []);
+ok($dr->get('drafttest')['v'] === 0 && $dr->get('drafttest')['ops'] === [], 'an emptied draft starts again at version 0');
 
 echo "An interrupted publish finishes on the next request\n";
 $live = $pub->live->load();

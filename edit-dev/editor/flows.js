@@ -78,11 +78,21 @@ async function sheetButton(page, label) {
   await b.waitFor({ timeout: 20000 });
   await b.click();
 }
+/** Tap "Put it live" in "Not live yet": a checked, clean change goes straight live; anything
+ *  to look at opens "Check your changes" first, where "Put it live" is tapped too. */
+async function tapPutLive(page) {
+  await page.waitForSelector('.tray-status .callout, .tray-status p', { timeout: 20000 });
+  await page.click('.sticky-actions .btn.primary');
+  await page.waitForSelector('.sheet h2', { timeout: 90000 });
+  if (await page.textContent('.sheet h2') === 'Check your changes') {
+    await page.waitForSelector('.sheet button:has-text("Put it live"):not([disabled])', { timeout: 20000 });
+    await sheetButton(page, 'Put it live');
+    await page.waitForFunction(() => { const t = document.querySelector('.sheet h2'); return t && t.textContent !== 'Check your changes'; }, null, { timeout: 90000 });
+  }
+}
 async function putLive(page) {
   await to(page, '#/tray');
-  await page.click('.sticky-actions .btn.primary');
-  await sheetButton(page, 'Put it live');
-  await page.waitForSelector('.sheet h2', { timeout: 60000 });
+  await tapPutLive(page);
   const title = await page.textContent('.sheet h2');
   await sheetButton(page, 'OK');
   return title;
@@ -129,15 +139,13 @@ const FLOWS = {
     ok((await page.textContent('body')).includes('Also change these yourself'), `${which}: "Also change these yourself" checklist appears`);
     await shot(page, which + '-business-changed');
     await to(page, '#/tray');
+    const checked = await page.waitForFunction(() => /nothing to fix/.test((document.querySelector('.tray-status') || {}).textContent || ''), null, { timeout: 20000 }).then(() => true, () => false);
+    ok(checked, `${which}: "Not live yet" checks it right there ("${((await page.textContent('.tray-status').catch(() => '')) || '').trim().slice(0, 60)}")`);
     await shot(page, which + '-tray');
     await page.click('.sticky-actions .btn.primary');
-    await page.waitForSelector('.sheet h2');
-    await page.waitForFunction(() => !document.querySelector('.sheet p.small') || !/Checking/.test(document.querySelector('.sheet').textContent), null, { timeout: 15000 });
-    await shot(page, which + '-check');
-    await sheetButton(page, 'Put it live');
     await page.waitForSelector('.sheet h2', { timeout: 60000 });
     const t = await page.textContent('.sheet h2');
-    ok(/Done/.test(t), `${which}: put live and the page check passed ("${t}")`);
+    ok(t !== 'Check your changes' && /Done/.test(t), `${which}: one tap puts it live and the page check passed ("${t}")`);
     await shot(page, which + '-done');
     await sheetButton(page, 'OK');
     ok(live('Contact.dc.html').includes('812-774-5050') && !live('Home.dc.html').includes('812-774-5049'), `${which}: the live pages have the new number`);
@@ -210,7 +218,7 @@ Object.assign(FLOWS, {
     await to(page, '#/s/business');
     await page.fill('[data-key="leadTo"] input', 'claims@example.test');
     await page.click('[data-key="leadTo"] button:has-text("Add")');
-    await page.waitForFunction(() => /Waiting for the link/.test(document.querySelector('[data-key="leadTo"]').textContent), null, { timeout: 10000 });
+    await page.waitForFunction(() => /Waiting: tap the link/.test(document.querySelector('[data-key="leadTo"]').textContent), null, { timeout: 10000 });
     ok(true, `${which}: a new lead address waits for its confirmation link`);
     const m = outbox().filter((x) => /please confirm/.test(x.subject)).pop();
     const link = /href="([^"]*\/edit\/confirm\?t=[^"]+)"/.exec(m.html)[1].replace(/&amp;/g, '&');
@@ -294,9 +302,7 @@ Object.assign(FLOWS, {
       await route.fulfill({ response: res, body });
     });
     await to(page, '#/tray');
-    await page.click('.sticky-actions .btn.primary');
-    await sheetButton(page, 'Put it live');
-    await page.waitForSelector('.sheet h2', { timeout: 90000 });
+    await tapPutLive(page);
     const t = await page.textContent('.sheet h2');
     ok(/Put back automatically/.test(t), `${which}: a page that doesn't draw after a change puts the website back ("${t}")`);
     await sheetButton(page, 'OK');
@@ -358,8 +364,12 @@ Object.assign(FLOWS, {
     await page.waitForTimeout(300);
     ok(await page.locator('.star-btn[aria-pressed="true"]').count() === 3, `${which}: starring a 4th swaps one out (still 3 on Home)`);
     // limits explain themselves
-    await rows.nth(0).locator('.icon-btn.danger').click();
+    await rows.nth(0).locator('.item-open').click();
+    await onScreen(page, '#/item/faq.items/');
+    await page.click('button:has-text("Delete this question")');
     await sheetButton(page, 'Delete');
+    await onScreen(page, '#/s/faq');
+    await page.waitForTimeout(300);
     ok(await rows.count() === 10, `${which}: deleted a question`);
     const t = await putLive(page);
     ok(/Done/.test(t), `${which}: FAQ changes went live ("${t}")`);
@@ -392,7 +402,10 @@ Object.assign(FLOWS, {
     ok(await name.getAttribute('autocorrect') === 'off' && await name.getAttribute('autocapitalize') === 'words', `${which}: name box: no autocorrect, capital first letters`);
     await name.fill('Michael Rodriguez');
     ok((await page.textContent('[data-key$=".name"]')).includes('Shows as: Michael R.'), `${which}: shows the name as "Michael R."`);
-    await page.locator('.stars button[data-n="5"]').click();
+    // the stars sit under "More about the review (optional)"
+    const star = page.locator('.stars button[data-n="5"]');
+    if (!(await star.isVisible())) await star.evaluate((b) => { const d = b.closest('details'); if (d) d.open = true; });
+    await star.click();
     await saved(page);
     await to(page, '#/tray');
     const why = await page.textContent('.tray-list');
@@ -415,7 +428,7 @@ Object.assign(FLOWS, {
     await signIn(page);
     await to(page, '#/photos');
     await page.locator('a.photo-cell', { hasText: 'Case closed' }).click();
-    await page.waitForSelector('.focus-pick img');
+    await page.waitForSelector('button:has-text("Choose a new photo")');
     const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.click('button:has-text("Choose a new photo")')]);
     ok((await chooser.element().getAttribute('accept')) === 'image/jpeg,image/png,image/webp', `${which}: the photo picker asks for JPEG, PNG or WebP (iPhone converts its photos)`);
     await chooser.setFiles(path.join(repo, 'media', 'og-cover.jpg'));
@@ -552,9 +565,13 @@ Object.assign(FLOWS, {
       };
     });
     await to(page, '#/tray');
+    await page.waitForSelector('.tray-status .callout, .tray-status p', { timeout: 20000 });
     await page.click('.sticky-actions .btn.primary');
-    await sheetButton(page, 'Put it live');
     await page.waitForSelector('.sheet h2', { timeout: 150000 }).catch(() => {});
+    if (await page.textContent('.sheet h2').catch(() => '') === 'Check your changes') {
+      await sheetButton(page, 'Put it live');
+      await page.waitForFunction(() => { const x = document.querySelector('.sheet h2'); return x && x.textContent !== 'Check your changes'; }, null, { timeout: 150000 }).catch(() => {});
+    }
     const said = await page.locator('.sheet h2').first().textContent().catch(() => '(no sheet)');
     const reached = await page.evaluate(() => window.__reached);
     ok(/Done/.test(said) && content().site.price === 275, `${which}: dropped connection mid-save: it still went live and she's told (server answered ${reached}; "${said}")`);
@@ -576,11 +593,12 @@ Object.assign(FLOWS, {
     await shot(page, which + '-notice');
     await btn.click();
     await page.waitForSelector('.sheet h2', { timeout: 60000 });
-    ok(/Done/.test(await page.textContent('.sheet h2')), `${which}: notice went live`);
+    const nt = await page.textContent('.sheet h2');
+    ok(nt.startsWith('Done.'), `${which}: notice went live ("${nt}")`);
     await sheetButton(page, 'OK');
     ok(live('Home.dc.html').includes('Our office is closed today'), `${which}: the notice is on the pages`);
     await to(page, '#/');
-    ok((await page.textContent('a.big[href="#/notice"]')).includes('On'), `${which}: the start screen shows the notice On`);
+    ok((await page.textContent('a.big[href="#/notice"]')).includes('On now'), `${which}: the start screen shows the notice "On now"`);
     await ctx.close();
   },
 
@@ -735,6 +753,41 @@ Object.assign(FLOWS, {
     ok(await a.page.locator('.sheet .code-big').count() === 2, `${which}: two new rescue codes, shown once`);
     await a.ctx.close();
     await b.ctx.close();
+  },
+
+  async back(browser, which) {
+    const { ctx, page } = await newPhone(browser, which);
+    await signIn(page);
+    const ky = content().states.find((s) => s.code === 'KY');
+    // a link straight to a state, opened fresh: Back goes up, never in a loop
+    const p2 = await ctx.newPage();
+    p2.errors = [];
+    p2.on('pageerror', (e) => p2.errors.push(e.message));
+    await p2.goto(base + '/edit/#/item/states/' + ky._id);
+    await onScreen(p2, '#/item/states/');
+    await p2.click('.bar .back');
+    const up = await p2.waitForFunction(() => location.hash === '#/s/states' && document.querySelector('main.screen').dataset.hash === '#/s/states', null, { timeout: 10000 }).then(() => true, () => false);
+    ok(up, `${which}: Back from a fresh link to Kentucky goes to States & contracts (${await p2.evaluate(() => location.hash)})`);
+    await p2.click('.bar .back');
+    const home = await p2.waitForFunction(() => location.hash === '#/' && document.querySelector('main.screen').dataset.hash === '#/', null, { timeout: 10000 }).then(() => true, () => false);
+    ok(home, `${which}: Back again goes to the start (${await p2.evaluate(() => location.hash)})`);
+    ok(p2.errors.length === 0, `${which}: no page errors (${p2.errors.join(' | ')})`);
+    await ctx.close();
+  },
+
+  async emptyitem(browser, which) {
+    const { ctx, page } = await newPhone(browser, which);
+    await signIn(page);
+    await to(page, '#/s/reviews');
+    await page.click('.list-box .btn.add');
+    await onScreen(page, '#/item/home.reviews.items/');
+    await page.click('.bar .back');
+    await onScreen(page, '#/s/reviews');
+    await page.waitForTimeout(600);
+    const n = await page.locator('.list-box .list-item').count();
+    ok(n === 0 && !(await page.isVisible('.traybar')), `${which}: Back from an empty new review leaves nothing behind (${n} items, bar ${await page.isVisible('.traybar') ? 'showing' : 'hidden'})`);
+    ok(page.errors.length === 0, `${which}: no page errors (${page.errors.join(' | ')})`);
+    await ctx.close();
   },
 
   async states(browser, which) {

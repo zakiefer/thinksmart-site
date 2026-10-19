@@ -1,8 +1,29 @@
 // Leads (kept 90 days, photos 14), "Where leads are emailed" (a new address takes over only
 // after someone clicks the link in a test lead), the health lines on the start screen, and
 // "Repair the editor". Lead text is shown as plain text only.
-import { S, h, icon, clear, api, toast, sheet, go, timeOf } from './core.js';
+import { S, h, icon, clear, api, toast, sheet, go, timeOf, render } from './core.js';
 import { kb } from './fields.js';
+
+/**
+ * While a button's request runs: greyed out, "One moment…", and a second tap does nothing.
+ * Put back afterwards unless the screen was redrawn meanwhile.
+ */
+async function busy(el, fn, say = el) {
+  const kids = [...say.childNodes];
+  el.disabled = true;
+  el.setAttribute('aria-busy', 'true');
+  say.textContent = 'One moment…';
+  try {
+    return await fn();
+  } finally {
+    if (el.isConnected) { el.disabled = false; el.removeAttribute('aria-busy'); say.replaceChildren(...kids); }
+  }
+}
+
+/** A screen couldn't load: say why, with a way to try again. */
+function loadFailed(body, e) {
+  clear(body).append(h('div.callout.warn', h('p', { text: e.message }), h('button.btn', { type: 'button', text: 'Try again', onclick: () => render() })));
+}
 
 const KIND_ICON = { claim: 'pdf', contact: 'chat', chat: 'chat', photos: 'photo' };
 const MAIL_WORDS = {
@@ -42,7 +63,7 @@ function whenText(sec) {
 
 export function leadsScreen() {
   const body = h('div.stack', h('p.small', { text: 'Loading…' }));
-  api('leads').then((r) => {
+  const ready = api('leads').then((r) => {
     clear(body);
     body.append(h('p.help', { text: `Every claim, message and chat from the website is kept here for ${r.keepDays} days (photos ${r.photoDays} days), even if an email doesn't arrive.` }));
     if (r.bounced) body.append(h('p.callout.bad', { text: `${r.bounced} lead${r.bounced === 1 ? '' : 's'} didn't reach your email. They're marked below.` }));
@@ -58,8 +79,8 @@ export function leadsScreen() {
           words ? h('span.pill.' + lvl, { text: words }) : null),
         icon('chev')));
     })));
-  }).catch((e) => { clear(body).append(h('p.callout.warn', { text: e.message })); });
-  return { title: 'Leads', body };
+  }).catch((e) => loadFailed(body, e));
+  return { title: 'Leads', body, ready };
 }
 
 export function leadScreen(id) {
@@ -81,15 +102,14 @@ export function leadScreen(id) {
       body.append(h('h3', { text: 'Photos' }), h('div.photo-grid', d.photoFiles.map((f) => h('a.photo-cell', { href: `/edit/api/lead-photo?id=${encodeURIComponent(d.id)}&file=${encodeURIComponent(f)}`, target: '_blank', rel: 'noopener' },
         h('img', { src: `/edit/api/lead-photo?id=${encodeURIComponent(d.id)}&file=${encodeURIComponent(f)}`, alt: 'Photo ' + f, loading: 'lazy' })))));
     }
-    body.append(h('button.btn', { type: 'button', text: 'Email it to me again', onclick: async (e) => {
-      e.target.disabled = true;
-      try { const r = await api('lead-resend', { id: d.id }); toast('Sent again.'); draw(r.lead); } catch (x) { toast(x.message, 'bad', 6000); e.target.disabled = false; }
-    } }));
+    body.append(h('button.btn', { type: 'button', text: 'Email it to me again', onclick: (e) => busy(e.currentTarget, async () => {
+      try { const r = await api('lead-resend', { id: d.id }); toast('Sent again.'); draw(r.lead); } catch (x) { toast(x.message, 'bad', 6000); }
+    }) }));
     body.append(h('p.small', { text: `Kept until ${new Date((d.at + 90 * 86400) * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}. Visitor's address: ${d.ip || 'unknown'}.` }));
     if (d.mail === 'bounced') api('lead-seen', { id: d.id }).catch(() => {});
   };
-  api('lead', { id }, { get: true }).then((r) => draw(r.lead)).catch((e) => { clear(body).append(h('p.callout.warn', { text: e.message })); });
-  return { title: 'Lead', back: '#/leads', body };
+  const ready = api('lead', { id }, { get: true }).then((r) => draw(r.lead)).catch((e) => loadFailed(body, e));
+  return { title: 'Lead', back: '#/leads', body, ready };
 }
 
 /** Business details: where leads are emailed (1–3 addresses, each confirmed by a test lead). */
@@ -98,37 +118,47 @@ export function leadAddresses() {
   const draw = (list) => {
     clear(box);
     box.append(h('div.field-head', h('span.field-label', { text: 'Where leads are emailed' })),
-      h('p.help', { text: 'Never shown on the website. A new address gets leads once someone taps the link in the test lead sent to it, so a typo can\'t lose leads.' }));
+      h('p.help', { text: 'Never shown on the website. A new address gets a test email first; leads start going there after someone taps the link in it.' }));
     const ul = h('ul.addresses');
     for (const a of list) {
-      ul.append(h('li', h('span', h('strong', { text: a.email }), h('span.small', { text: a.state === 'confirmed' ? ' · Confirmed' : ' · Waiting for the link in the test lead' })),
+      ul.append(h('li', h('span', h('strong', { text: a.email }), h('span.small', { text: a.state === 'confirmed' ? ' · Confirmed' : ' · Waiting: tap the link in the test email' })),
         h('div.row',
-          a.state !== 'confirmed' ? h('button.btn.small', { type: 'button', text: 'Send the test again', onclick: async () => { try { draw((await api('lead-address-resend', { email: a.email })).to); toast('Test lead sent to ' + a.email + '.'); } catch (e) { toast(e.message, 'bad', 5000); } } }) : null,
-          h('button.btn.small.ghost', { type: 'button', text: 'Remove', onclick: async () => {
+          a.state !== 'confirmed' ? h('button.btn.small', { type: 'button', text: 'Send the test again', onclick: (e) => busy(e.currentTarget, async () => {
+            try { draw((await api('lead-address-resend', { email: a.email })).to); toast('Test email sent to ' + a.email + '.'); } catch (x) { toast(x.message, 'bad', 5000); }
+          }) }) : null,
+          h('button.btn.small.ghost', { type: 'button', text: 'Remove', onclick: async (e) => {
+            const btn = e.currentTarget;
             const ok = await sheet('Stop sending leads to ' + a.email + '?', 'Leads stay in the editor either way.', [{ label: 'Remove', value: true, kind: 'danger' }, { label: 'Keep it', value: false, kind: 'ghost' }]);
             if (!ok) return;
-            try { draw((await api('lead-address-remove', { email: a.email })).to); } catch (e) { toast(e.message, 'bad', 6000); }
+            await busy(btn, async () => {
+              try { draw((await api('lead-address-remove', { email: a.email })).to); } catch (x) { toast(x.message, 'bad', 6000); }
+            });
           } }))));
     }
     if (!list.length) ul.append(h('li.small', { text: 'Leads go to thinksmartpublicadjusting@gmail.com until an address is added here.' }));
     box.append(ul);
     if (list.length < 3) {
       const inp = h('input.input', { ...kb('email'), placeholder: 'name@example.com', 'aria-label': 'Add an address for leads' });
-      box.append(h('div.row', inp, h('button.btn', { type: 'button', text: 'Add', onclick: async () => {
-        try { draw((await api('lead-address-add', { email: inp.value })).to); toast('Test lead sent. Tap the link in it to confirm.', 'ok', 6000); } catch (e) { toast(e.message, 'bad', 6000); }
-      } })));
+      box.append(h('div.row', inp, h('button.btn', { type: 'button', text: 'Add', onclick: (e) => busy(e.currentTarget, async () => {
+        try { draw((await api('lead-address-add', { email: inp.value })).to); toast('Test email sent. Tap the link in it to confirm.', 'ok', 6000); } catch (x) { toast(x.message, 'bad', 6000); }
+      }) })));
     }
   };
   draw(S.boot.leadTo || []);
   return box;
 }
 
-export async function repairEditor() {
-  const ok = await sheet('Repair the editor?', 'This copies the editor\'s own files back and rebuilds the pages from what you put live. Your words, photos, history and logins are not touched.', [{ label: 'Repair', value: true, kind: 'primary' }, { label: 'Cancel', value: false, kind: 'ghost' }]);
+/** More → the editor's own "fix it" button (the server puts its screens and the pages back). */
+export async function repairEditor(e) {
+  const btn = e && e.currentTarget;
+  const ok = await sheet('Fix the editor?', 'If a screen or a page looks wrong, this puts the editor and the website\'s pages back the way they should be. Your words, photos, history and logins aren\'t touched.', [{ label: 'Fix it', value: true, kind: 'primary' }, { label: 'Cancel', value: false, kind: 'ghost' }]);
   if (!ok) return;
-  try {
-    const r = await api('repair', {});
-    await sheet('Done', r.fixed ? `${r.fixed} file${r.fixed === 1 ? ' was' : 's were'} put back.` : 'Everything was already as it should be.', [{ label: 'OK', value: true, kind: 'primary' }]);
-    location.reload();
-  } catch (e) { toast(e.message, 'bad', 6000); }
+  const run = async () => {
+    try {
+      const r = await api('repair', {});
+      await sheet('Done', r.fixed ? 'Everything is back the way it should be.' : 'Everything was already fine.', [{ label: 'OK', value: true, kind: 'primary' }]);
+      location.reload();
+    } catch (x) { toast(x.message, 'bad', 6000); }
+  };
+  await (btn instanceof HTMLButtonElement ? busy(btn, run) : run());
 }

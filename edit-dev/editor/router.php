@@ -6,6 +6,7 @@ declare(strict_types=1);
 $uri = (string)parse_url((string)$_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $root = (string)getenv('TS_WEBROOT');
 $app = dirname(__DIR__, 2) . '/edit';
+if ($uri === '/dev-login') { require __DIR__ . '/dev-login.php'; return true; }
 if ($uri === '/edit') { header('Location: /edit/', true, 301); return true; }
 if (str_starts_with($uri, '/edit/')) {
     if (str_starts_with($uri, '/edit/app/')) {

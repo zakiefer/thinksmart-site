@@ -117,7 +117,7 @@ final class Health
         }
         if ($fixed) {
             $state['repaired'] = ['at' => Clock::now(), 'files' => $fixed];
-            self::record($cfg, $people, $fixed, 'were changed outside the editor and were put back');
+            self::record($cfg, $people, $fixed);
         }
         Json::write($p->private . '/health.json', $state, false);
         return $fixed;
@@ -148,16 +148,17 @@ final class Health
             foreach ($res['files'] as $file => $m) if (Files::sha($p->webroot . '/' . $file) !== $m['sha']) $fixed[] = $file;
             Journal::publish($p, $res);
         });
-        if ($fixed) self::record($cfg, $people, $fixed, 'were put back by "Repair the editor"', false);
+        if ($fixed) self::record($cfg, $people, $fixed, false);
         return $fixed;
     }
 
-    private static function record(Config $cfg, People $people, array $files, string $why, bool $mail = true): void
+    /** History gets one plain line (no file names); John's email lists the files. */
+    private static function record(Config $cfg, People $people, array $files, bool $mail = true): void
     {
         $pub = new Publisher($cfg, $people);
         $list = implode(', ', array_slice($files, 0, 8)) . (count($files) > 8 ? ' and ' . (count($files) - 8) . ' more' : '');
-        Lock::with($cfg->paths, 'publish', function () use ($pub, $list, $why) {
-            $pub->history->add(['at' => Clock::now(), 'by' => null, 'kind' => 'repair', 'lines' => ["the website's files $list $why"], 'keys' => []],
+        Lock::with($cfg->paths, 'publish', function () use ($pub) {
+            $pub->history->add(['at' => Clock::now(), 'by' => null, 'kind' => 'repair', 'lines' => ['Pages put back the way they should be (nothing you changed was affected)'], 'keys' => []],
                 $pub->live->load(), []);
         });
         if ($mail) {
