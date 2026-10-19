@@ -32,6 +32,11 @@ return [
     'by-phone' => [
         'ref:phone2' => '<a href="tel:{tel}" style="color:#F09A2E; text-decoration:underline;">{}</a>',
     ],
+    // The same, kept on one line (a phone number never breaks at a hyphen). The converter keeps
+    // reading today's markup with 'by-phone'.
+    'by-phone-nowrap' => [
+        'ref:phone2' => '<a href="tel:{tel}" style="color:#F09A2E; text-decoration:underline; white-space:nowrap;">{}</a>',
+    ],
     // Messages after a form: phone and email as orange links.
     'links-orange' => [
         'ref:phone' => '<a href="tel:{tel}" style="color:#F09A2E;">{}</a>',

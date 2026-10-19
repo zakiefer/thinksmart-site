@@ -598,7 +598,8 @@ class Component extends DCLogic {
         const chatL = document.querySelector('[data-ref="chatLauncher"]');
         if (chatL) chatL.removeAttribute('data-strip-hide');
         const sh = this._stripWrap.querySelector('h2');
-        if (sh) sh.style.fontSize = m ? 'clamp(30px,8vw,44px)' : 'clamp(44px,6.4vw,104px)';
+        // no transition, so the size measured right after is the new one (Reduce Motion keeps a tiny one)
+        if (sh) { sh.style.transition = 'none'; sh.style.fontSize = m ? 'clamp(30px,8vw,44px)' : 'clamp(44px,6.4vw,104px)'; }
         // The pinned panel is exactly one viewport tall, so on short screens (laptops,
         // phones) sit it below the fixed nav and scale the cards to the room that is left.
         const track = this._stripTrack;

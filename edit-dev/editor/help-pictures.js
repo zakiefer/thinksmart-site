@@ -48,7 +48,23 @@ fs.mkdirSync(tmp, { recursive: true });
     console.log('  ' + name);
   };
 
+  // a lead from a visitor first, so the Leads pictures have something to show
+  const vctx = await browser.newContext({ ...pw.devices['iPhone 13'] });
+  const v = await vctx.newPage();
+  await v.goto(base + '/Contact.dc.html');
+  const form = v.locator('form').filter({ has: v.locator('textarea') }).first();
+  await form.locator('input[name="name"]').waitFor({ timeout: 20000 });
+  await form.locator('input[name="name"]').fill('Dana Visitor');
+  await form.locator('input[type="tel"]').fill('812-555-0142');
+  await form.locator('textarea').fill('Hail damage on the north side of the roof. Please call after 5.');
+  await Promise.all([v.waitForResponse((r) => r.url().endsWith('/send-lead.php')), form.locator('button[type="submit"]').click()]);
+  await vctx.close();
+
   await go('#/');
+  await page.reload();
+  await page.waitForSelector('.lead-line');
+  await page.waitForTimeout(800);
+  await pic('start-lead', '.lead-line', { above: 140, below: 120 });
   await pic('start-fix', 'a.big[href="#/fix"]', { above: 200, below: 200 });
   await pic('start-notice', 'a.big[href="#/notice"]', { above: 160, below: 240 });
   await pic('start-undo', 'a.big[href="#/history"]', { above: 300, below: 120 });
@@ -75,6 +91,10 @@ fs.mkdirSync(tmp, { recursive: true });
   const ky = JSON.parse(fs.readFileSync(path.join(devDir, 'private/content.json'), 'utf8')).states.find((s) => s.code === 'KY');
   await go('#/item/states/' + ky._id);
   await pic('contract-1', '[data-key$=".pdf"] button', { above: 140, below: 160 });
+
+  await go('#/leads');
+  await page.waitForSelector('.lead-item');
+  await pic('leads-1', '.lead-item', { above: 160, below: 120 });
 
   await go('#/s/reviews');
   await pic('reviews-1', '.list-box .btn.add', { above: 200, below: 200 });

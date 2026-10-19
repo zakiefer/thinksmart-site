@@ -177,6 +177,58 @@ async function typeRich(page, sel, text) {
 }
 
 Object.assign(FLOWS, {
+  async leads(browser, which) {
+    // a visitor sends the message form on the real Contact page (mail goes to the test outbox)
+    const v = await newPhone(browser, which);
+    await v.page.goto(base + '/Contact.dc.html');
+    const form = v.page.locator('form').filter({ has: v.page.locator('textarea') }).first();
+    await form.locator('input[name="name"]').waitFor({ timeout: 20000 });
+    await form.locator('input[name="name"]').fill('Dana Visitor');
+    await form.locator('input[type="tel"]').fill('812-555-0142');
+    await form.locator('textarea').fill('Hail damage on the north side of the roof. Please call after 5.');
+    const sent = v.page.waitForResponse((r) => r.url().endsWith('/send-lead.php'), { timeout: 20000 });
+    await form.locator('button[type="submit"]').click();
+    const res = await (await sent).json().catch(() => ({}));
+    ok(res.success === true, `${which}: the visitor's message is saved by the website's own mailer`);
+    await v.ctx.close();
+    const { ctx, page } = await newPhone(browser, which);
+    await signIn(page);
+    await page.waitForSelector('.lead-line');
+    await page.waitForFunction(() => /Last lead received Today/.test(document.querySelector('.lead-line').textContent), null, { timeout: 15000 })
+      .then(() => ok(true, `${which}: the start screen says "Last lead received Today …"`), () => ok(false, `${which}: the start screen says "Last lead received Today …"`));
+    await shot(page, which + '-start-lead');
+    await page.click('.lead-line');
+    await page.waitForSelector('.lead-item');
+    ok((await page.textContent('.lead-item')).includes('Dana Visitor') && (await page.textContent('.lead-item')).includes('Emailed'), `${which}: the Leads screen lists it, marked "Emailed"`);
+    await shot(page, which + '-leads');
+    await page.click('.lead-item');
+    await page.waitForSelector('.lead-fields');
+    const txt = await page.textContent('.lead-fields');
+    ok(txt.includes('Hail damage on the north side') && await page.locator('a.btn[href^="tel:"]').count() === 1, `${which}: a lead opens with its words and a Call button`);
+    await shot(page, which + '-lead');
+    // a new address for leads, confirmed from the test lead's link
+    await to(page, '#/s/business');
+    await page.fill('[data-key="leadTo"] input', 'claims@example.test');
+    await page.click('[data-key="leadTo"] button:has-text("Add")');
+    await page.waitForFunction(() => /Waiting for the link/.test(document.querySelector('[data-key="leadTo"]').textContent), null, { timeout: 10000 });
+    ok(true, `${which}: a new lead address waits for its confirmation link`);
+    const m = outbox().filter((x) => /please confirm/.test(x.subject)).pop();
+    const link = /href="([^"]*\/edit\/confirm\?t=[^"]+)"/.exec(m.html)[1].replace(/&amp;/g, '&');
+    const other = await browser.newContext();
+    const p2 = await other.newPage();
+    await p2.goto(link);
+    await Promise.all([p2.waitForLoadState('load'), p2.click('button[type=submit]')]);
+    await p2.waitForSelector('h1');
+    ok((await p2.textContent('h1')).includes('Confirmed'), `${which}: the link in the test lead confirms it`);
+    await other.close();
+    await page.reload();
+    await to(page, '#/s/business');
+    await page.waitForSelector('[data-key="leadTo"]');
+    ok((await page.textContent('[data-key="leadTo"]')).includes('Confirmed'), `${which}: the address now shows "Confirmed"`);
+    ok(page.errors.length === 0, `${which}: no page errors (${page.errors.join(' | ')})`);
+    await ctx.close();
+  },
+
   async rich(browser, which) {
     const { ctx, page } = await newPhone(browser, which);
     await signIn(page);

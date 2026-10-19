@@ -11,5 +11,5 @@ Require all denied
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteRule ^(p|api)/ index.php [L,QSA]
-RewriteRule ^undo$ index.php [L,QSA]
+RewriteRule ^(undo|confirm|install)(/.*)?$ index.php [L,QSA]
 </IfModule>

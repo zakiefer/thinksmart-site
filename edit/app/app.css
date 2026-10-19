@@ -233,7 +233,7 @@ select.input { appearance: none; -webkit-appearance: none; background-image: lin
 .rich mark { background: none; color: var(--accent-deep); font-weight: 700; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
 .rich strong, .rich b { font-weight: 800; }
 .rich .call { text-decoration: underline dotted; }
-.chip { display: inline-block; padding: 0 7px; margin: 0 1px; border-radius: 7px; background: var(--chip); color: var(--chip-ink); font-size: .9em; font-weight: 600; white-space: nowrap; cursor: default; user-select: all; -webkit-user-select: all; }
+.chip { display: inline; padding: 1px 7px; margin: 0 1px; border-radius: 7px; background: var(--chip); color: var(--chip-ink); font-size: .9em; font-weight: 600; white-space: normal; overflow-wrap: anywhere; -webkit-box-decoration-break: clone; box-decoration-break: clone; cursor: default; user-select: all; -webkit-user-select: all; }
 
 .media-thumb { display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px; border-radius: 12px; border: 1px solid var(--line); background: var(--card-2); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
 .media-thumb img, .media-thumb .noimg { width: 88px; height: 60px; object-fit: cover; border-radius: 8px; flex: none; background: var(--line); }
@@ -436,3 +436,33 @@ select.input { appearance: none; -webkit-appearance: none; background-image: lin
   .bigs { grid-template-columns: repeat(4, 1fr); }
   .screen { padding-top: 26px; }
 }
+
+/* ---------------------------------------------------------------- leads and health */
+.status-card.health { flex-direction: column; align-items: stretch; gap: 8px; }
+.health-top { display: flex; align-items: center; gap: 10px; }
+.dot.bad { background: var(--bad); }
+.lead-line { display: flex; align-items: center; gap: 8px; min-height: 40px; color: var(--ink); text-decoration: none; font-weight: 600; border-top: 1px solid var(--line); padding-top: 8px; }
+.lead-line .ic:first-child { color: var(--accent-deep); }
+.lead-line .ic:last-child { margin-left: auto; width: 18px; color: var(--muted); }
+.health-line { display: block; padding: 8px 10px; border-radius: 10px; font-size: 15px; text-decoration: none; }
+.health-line.bad { background: var(--bad-bg); color: var(--bad); }
+.health-line.warn { background: var(--warn-bg); color: var(--warn); }
+.leads { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lead-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; border-radius: 12px; background: var(--card); box-shadow: var(--shadow); color: var(--ink); text-decoration: none; }
+.lead-item > .ic:first-child { color: var(--accent-deep); margin-top: 2px; }
+.lead-item > .ic:last-child { margin-left: auto; color: var(--muted); width: 18px; align-self: center; }
+.lead-text { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.lead-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.lead-top strong { overflow-wrap: anywhere; }
+.lead-snippet { font-size: 14.5px; color: var(--muted); overflow-wrap: anywhere; }
+.lead-text .pill { align-self: flex-start; }
+.pill.ok { background: var(--good-bg); color: var(--good); border-color: transparent; }
+.pill.bad { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
+.pill.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.lead-fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px 12px; margin: 0; padding: 14px; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); }
+.lead-fields dt { font-size: 13.5px; color: var(--muted); font-weight: 600; margin-top: 8px; }
+.lead-fields dt:first-child { margin-top: 0; }
+.lead-fields dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.addresses { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.addresses li { display: flex; flex-direction: column; gap: 6px; padding: 10px; border-radius: 10px; background: var(--card-2); overflow-wrap: anywhere; }
+.field-box .row .input { flex: 1; min-width: 0; }

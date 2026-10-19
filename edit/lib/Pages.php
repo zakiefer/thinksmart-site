@@ -212,7 +212,8 @@ final class Pages
         if ($do === 'code') {
             if ($until) { $this->code($login, $retry($until)); return; }
             $pw = (string)($_POST['password'] ?? '');
-            if ($person && ($bad = People::passwordProblem($pw, $person['username'])) !== null) { $this->code($login, $bad); return; }
+            // checked the same way whether or not the username exists (no hint either way)
+            if (($bad = People::passwordProblem($pw, $login)) !== null) { $this->code($login, $bad); return; }
             $r = $person ? $codes->check($person['id'], (string)($_POST['code'] ?? '')) : 'none';
             if ($r !== 'ok') {
                 $t = $throttle->fail($keys);
@@ -220,7 +221,7 @@ final class Pages
                 $this->code($login, $m . ($t ? ' ' . $retry($t) : ''));
                 return;
             }
-            $this->people->setPassword($person['id'], $pw);
+            $this->people->setPassword($person['id'], $pw, false);
             $this->people->save();
             $throttle->clear($keys);
             $this->sessions->endAllFor($person['id']);
@@ -231,13 +232,13 @@ final class Pages
         if ($do === 'rescue') {
             if ($until) { $this->rescue($retry($until), $login); return; }
             $pw = (string)($_POST['password'] ?? '');
-            if ($person && ($bad = People::passwordProblem($pw, $person['username'])) !== null) { $this->rescue($bad . ' Your rescue code still works.', $login); return; }
+            if (($bad = People::passwordProblem($pw, $login)) !== null) { $this->rescue($bad . ' Your rescue code still works.', $login); return; }
             if (!$person || !$this->people->useRescueCode($person['id'], (string)($_POST['rescue'] ?? ''))) {
                 $t = $throttle->fail($keys);
                 $this->rescue('That rescue code doesn\'t match (each one works once).' . ($t ? ' ' . $retry($t) : ''), $login);
                 return;
             }
-            $this->people->setPassword($person['id'], $pw);
+            $this->people->setPassword($person['id'], $pw, false);
             $this->people->save();
             $throttle->clear($keys);
             $this->sessions->endAllFor($person['id']);

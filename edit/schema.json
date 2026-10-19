@@ -641,7 +641,7 @@
         "claim.byPhone.text": {
             "label": "\"By phone\" card: words",
             "type": "rich",
-            "style": "by-phone",
+            "style": "by-phone-nowrap",
             "marks": [],
             "chips": [
                 "otherStates",

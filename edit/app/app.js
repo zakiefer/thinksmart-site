@@ -8,6 +8,7 @@ import { photosScreen, photoScreen, contractScreen, contractsCheckScreen } from 
 import { trayScreen, historyScreen, historyEntryScreen, verify, checkScreen } from './live.js';
 import { previewScreen, fixScreen, searchScreen } from './preview.js';
 import { peopleScreen, wordsScreen, helpScreen, helpCard } from './extras.js';
+import { leadsScreen, leadScreen } from './leads.js';
 
 const app = document.getElementById('app');
 const bar = h('header.bar');
@@ -204,6 +205,8 @@ route(/^#\/search$/, () => searchScreen());
 route(/^#\/help$/, () => helpScreen());
 route(/^#\/help\/([a-z]+)$/, (id) => helpCard(id));
 route(/^#\/people$/, () => peopleScreen());
+route(/^#\/leads$/, () => leadsScreen());
+route(/^#\/lead\/(\d{8}-\d{6}-[a-f0-9]{6})$/, (id) => leadScreen(id));
 route(/^#\/words$/, () => wordsScreen());
 
 // ------------------------------------------------------------------ start

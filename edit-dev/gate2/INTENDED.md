@@ -5,8 +5,10 @@ built by `php edit/render.php`. Gate 1 proved the conversion itself loses nothin
 converter checkpoint rebuilds all 10 files byte for byte (`edit-dev/gate1/REPORT.txt`).
 Everything below is a deliberate change on top of that, for you to accept or send back.
 
-Status: **D1–D10 all accepted by Zack on 2026-10-18.** The accepted build's file fingerprints are in
-`edit-dev/gate2/ACCEPTED.sha256` (check with `php edit-dev/check-accepted.php`).
+Status: **D1–D10 all accepted by Zack on 2026-10-18.** D11 follows the approved plan's Step 4
+("remove developer-owned channels") and D12 fixes two layout bugs found in Step 6; both were recorded
+with that work (review them with the rest). The accepted build's file fingerprints
+are in `edit-dev/gate2/ACCEPTED.sha256` (check with `php edit-dev/check-accepted.php`).
 
 ## Changes visitors can see in the default build
 
@@ -64,6 +66,23 @@ name ("New claims" for "New Claims"); a redundant `order:0` on the Denied photo 
 
 **D9. Chat box hint is editable.** Its phone font-size rule targets the box (`data-ref="chatInput"`)
 instead of matching the hint text.
+
+**D11. Leads go only to the website's own mailer** (plan Step 4). The claim form, the message form
+and the chat no longer also send each lead to FormSubmit and to the Supabase database (both on the
+developer's accounts; the Supabase key sat in the public repo). `send-lead.php` now saves every lead
+in the private folder first and then emails it, so a visitor's "sent" means the lead is safe; the
+editor's Leads screen shows them. Nothing changes on screen. Pages: Claim, Contact, ChatWidget.
+
+**D12. Two small layout fixes found by the Step 6 page matrix** (today's site has both).
+- Home: with "Reduce Motion" on, the pinned photo strip measured its heading before the new size
+  applied, so on 800–910px-tall laptop windows the heading sat under the header or the cards were cut
+  off. The heading's size now applies at once (`transition: none` before it changes).
+- File a Claim, "By phone" card: the second phone number never breaks at its hyphen ("812-850-" /
+  "1050" at 1440px); it stays on one line.
+Not visible by default but fixed at the same time: the notice bar's height joins the top padding of
+Services, FAQ, Contact and Claim (a 3-line notice no longer covers the small line above the headline on
+phones), the Claim confirmation keeps its 150px room for the seal only when the seal shows, and a
+"Call to sign" card's arrow stays with its words.
 
 ## New pieces (off or invisible by default; screenshots switch each one on with test content)
 

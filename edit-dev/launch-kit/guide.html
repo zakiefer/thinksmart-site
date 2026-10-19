@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Think Smart website: install guide</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- The one-page install guide in the launch kit (edit-dev/launch-kit). The pictures in
+     pictures/ are real screens of the installer at iPhone size, made by try-installer.js
+     --pictures. make-pdfs.js prints this page to guide.pdf (one Letter page) for Google Drive. -->
+<style>
+  :root { --ink: #15191f; --muted: #545b67; --line: #ddd5c6; --accent: #f09a2e; --deep: #8a4f00; --soft: #fff4e2; --navy: #0b0e13; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f4f1ea; color: var(--ink); font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 48px; }
+  .paper { background: #fff; border-radius: 10px; padding: 26px 26px 20px; box-shadow: 0 2px 14px rgba(0,0,0,.08); counter-reset: step; }
+  header { display: flex; flex-wrap: wrap; gap: 6px 24px; align-items: flex-end; justify-content: space-between; padding-bottom: 10px; border-bottom: 3px solid var(--ink); }
+  .kicker { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--deep); }
+  h1 { margin: 2px 0 0; font-size: 26px; line-height: 1.15; }
+  .who { margin: 0; max-width: 470px; color: var(--muted); font-size: 14px; }
+  .steps { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .step { position: relative; padding: 11px 14px 11px 48px; border: 1px solid var(--line); border-radius: 10px; counter-increment: step; break-inside: avoid; page-break-inside: avoid; }
+  .step::before { content: counter(step); position: absolute; left: 12px; top: 11px; width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: var(--accent); font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .step h2 { margin: 1px 0 4px; font-size: 16px; }
+  .step p { margin: 0; }
+  .step ul, .step ol { margin: 4px 0 0; padding-left: 18px; }
+  .step li { margin: 2px 0; }
+  .when { font-weight: 600; color: var(--deep); font-size: 13px; }
+  .step svg { float: right; width: 150px; height: auto; margin: 2px 0 6px 12px; }
+  .together { margin-top: 12px; border: 2px solid var(--accent); background: #fffaf2; }
+  .strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 8px 0 6px; }
+  .strip figure { margin: 0; }
+  .strip img { width: 100%; height: auto; aspect-ratio: 390 / 560; object-fit: cover; object-position: top; border-radius: 8px; border: 1px solid #cfc7b7; display: block; background: var(--navy); }
+  .strip figcaption { font-size: 11.5px; line-height: 1.25; color: var(--muted); margin-top: 3px; }
+  code, .addr { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; overflow-wrap: anywhere; }
+  .again { margin-top: 12px; padding: 11px 14px; border: 2px solid var(--ink); border-radius: 10px; break-inside: avoid; }
+  .again h2 { margin: 0 0 3px; font-size: 16px; }
+  .again p { margin: 0; }
+  .foot { margin-top: 5px !important; font-size: 12px; color: var(--muted); }
+  @media (min-width: 860px) {
+    .steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .strip { grid-template-columns: repeat(4, 1fr); }
+    .step svg { float: none; display: block; width: 180px; margin: 6px 0; }
+    .paper { padding: 18px 14px; }
+  }
+  @media print {
+    @page { size: letter; margin: 8mm 9mm; }
+    body { background: #fff; font-size: 7.9pt; line-height: 1.24; }
+    main { max-width: none; padding: 0; }
+    .paper { box-shadow: none; padding: 0; border-radius: 0; }
+    header { padding-bottom: 4pt; border-bottom-width: 2pt; }
+    h1 { font-size: 14pt; }
+    .kicker { font-size: 6.8pt; }
+    .who { font-size: 7.8pt; max-width: 290pt; }
+    .steps { display: block; columns: 3; column-gap: 6pt; margin-top: 5pt; }
+    .steps.after { columns: 2; }
+    .step { display: block; padding: 4pt 6pt 4pt 22pt; margin: 0 0 5pt; border-radius: 6pt; }
+    .steps .step:last-child { margin-bottom: 0; }
+    .step::before { left: 5pt; top: 4pt; width: 13pt; height: 13pt; font-size: 7.5pt; }
+    .step h2, .again h2 { font-size: 9pt; margin-bottom: 1pt; }
+    .step ul, .step ol { padding-left: 10pt; margin-top: 1pt; }
+    .step li { margin: 1pt 0; }
+    .when { font-size: 7.2pt; }
+    .step svg { width: 54pt; margin: 1pt 0 2pt 4pt; }
+    .together { margin-top: 0; margin-bottom: 5pt; }
+    .strip { gap: 4pt; margin: 3pt 0 2pt; }
+    .strip img { aspect-ratio: 390 / 400; border-radius: 3pt; }
+    .strip figcaption { font-size: 6.6pt; margin-top: 1pt; }
+    code, .addr { font-size: 7.3pt; }
+    .again { margin-top: 5pt; padding: 4pt 7pt; border-width: 1.5pt; }
+    .foot { margin-top: 2pt !important; font-size: 6.8pt; }
+  }
+</style>
+</head>
+<body>
+<main>
+<div class="paper">
+<header>
+  <div>
+    <p class="kicker">Think Smart Public Adjusting · launch kit</p>
+    <h1>Putting the website and its editor on GoDaddy</h1>
+  </div>
+  <p class="who">For whoever sets it up, in this order. Step 6 is done together on a screen-share, with John and Muneerah clicking. You need the setup zip, the setup code (on the launch-kit checklist), the GoDaddy login, and John and Muneerah with their iPhones: about an hour, plus waiting for DNS.</p>
+</header>
+
+<ol class="steps">
+  <li class="step">
+    <h2>Before anything else <span class="when">(can take days)</span></h2>
+    <ul>
+      <li>The domain is at Wix and runs out on <b>Dec 8, 2026</b>: unlock it, transfer it into the GoDaddy account with the hosting, turn on auto-renew, pay years ahead. If that can't finish in time, renew at Wix first.</li>
+      <li>A hosting plan with the security certificate (SSL) included for the whole term; pay the longest term.</li>
+      <li>John owns the GoDaddy account and its 2-step phone, the domain, the lead Gmail's recovery settings and Adobe Sign.</li>
+    </ul>
+  </li>
+  <li class="step">
+    <h2>Upload the website</h2>
+    <svg viewBox="0 0 300 172" role="img" aria-label="cPanel File Manager with the setup zip selected and the Extract button">
+      <rect x="1" y="1" width="298" height="170" rx="8" fill="#fff" stroke="#9aa3ad"/>
+      <rect x="1" y="1" width="298" height="28" rx="8" fill="#e9edf1"/><rect x="1" y="20" width="298" height="9" fill="#e9edf1"/>
+      <text x="12" y="19" font-size="12" font-weight="700" fill="#33404d">File Manager · /public_html</text>
+      <rect x="12" y="38" width="62" height="22" rx="4" fill="#fff" stroke="#9aa3ad"/><text x="22" y="53" font-size="11" fill="#33404d">Upload</text>
+      <rect x="82" y="38" width="62" height="22" rx="4" fill="#f09a2e"/><text x="93" y="53" font-size="11" font-weight="700" fill="#0b0e13">Extract</text>
+      <rect x="12" y="70" width="276" height="20" fill="#f4f6f8"/><text x="18" y="84" font-size="10.5" fill="#55606b">edit/   media/   docs/   vendor/</text>
+      <rect x="12" y="92" width="276" height="22" fill="#fff1dc" stroke="#f09a2e"/><text x="18" y="107" font-size="10.5" font-weight="700" fill="#0b0e13">think-smart-launch-kit-….zip</text>
+      <text x="18" y="130" font-size="10.5" fill="#55606b">.htaccess   .user.ini   Home.dc.html</text>
+      <path d="M170 151 h70" stroke="#1d7a4b" stroke-width="3" marker-end="url(#a)"/>
+      <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#1d7a4b"/></marker></defs>
+      <text x="18" y="156" font-size="11" fill="#1d7a4b" font-weight="700">Extract to /public_html</text>
+    </svg>
+    <ul>
+      <li>cPanel → <b>File Manager</b> → <code>public_html</code> → <b>Upload</b> the zip, then <b>Extract</b> it there. With "Show Hidden Files" on, <code>.htaccess</code> and <code>.user.ini</code> must be there.</li>
+      <li>The domain must be the account's <b>primary</b> domain (folder <code>public_html</code>). If it isn't, ask GoDaddy.</li>
+      <li>cPanel → <b>MultiPHP Manager</b> → the newest PHP.</li>
+    </ul>
+  </li>
+  <li class="step">
+    <h2>DNS and the certificate <span class="when">(at a quiet hour)</span></h2>
+    <ul>
+      <li>Point the domain at the hosting (an A record to its IP and <code>www</code> as a CNAME, or GoDaddy's nameservers).</li>
+      <li>cPanel → <b>SSL/TLS Status</b> → Run AutoSSL. The bare domain and <code>www</code> must both be covered: the old site told browsers to insist on https.</li>
+    </ul>
+  </li>
+  <li class="step">
+    <h2>The https redirect</h2>
+    <p>In <code>public_html/.htaccess</code>, remove the <code>#</code> from the four marked lines. Check both addresses and an old link such as <code>/about</code>.</p>
+  </li>
+  <li class="step">
+    <h2>Email from the website</h2>
+    <ul>
+      <li>cPanel → <b>Email Accounts</b>: <code>noreply@</code> the domain, with a small quota.</li>
+      <li>DNS: SPF and DKIM (cPanel → <b>Email Deliverability</b>; the long DKIM record must be whole) and DMARC <code>v=DMARC1; p=none</code>.</li>
+      <li>Send a test claim with photos. In Gmail, ⋮ → <b>Show original</b>: SPF and DKIM say PASS.</li>
+    </ul>
+  </li>
+</ol>
+
+<section class="step together">
+  <h2>Set up the editor together: <span class="addr">thinksmartpublicadjusting.com/edit/install</span></h2>
+  <div class="strip">
+    <figure><img src="pictures/1-code.jpg" alt="The setup code screen"><figcaption>a. The setup code</figcaption></figure>
+    <figure><img src="pictures/2-checks.jpg" alt="The checks, all green"><figcaption>b. Checks, then the private folder</figcaption></figure>
+    <figure><img src="pictures/3-people.jpg" alt="Who can edit"><figcaption>c. John and Muneerah</figcaption></figure>
+    <figure><img src="pictures/4-leads.jpg" alt="Where leads are emailed"><figcaption>d. Where leads go</figcaption></figure>
+    <figure><img src="pictures/5-passwords.jpg" alt="The set-your-password codes"><figcaption>e. A code for each person</figcaption></figure>
+    <figure><img src="pictures/6-phone.jpg" alt="Setting the password on the iPhone"><figcaption>e. …used on their own iPhone</figcaption></figure>
+    <figure><img src="pictures/7-sheet.jpg" alt="The emergency sheet"><figcaption>f. The emergency sheet</figcaption></figure>
+  </div>
+  <p><b>a.</b> The setup code (capitals and dashes don't matter). <b>b.</b> Each red check says what to do (upload size: cPanel → <b>MultiPHP INI Editor</b> → <code>upload_max_filesize 16M</code>, <code>post_max_size 20M</code>); then <b>make the private folder</b>, which is tested from the web. <b>c.</b> John (gets the change alerts) and Muneerah: private usernames, not the business email, and their own emails. <b>d.</b> Leads go to thinksmartpublicadjusting@gmail.com; its test lead's <b>Yes, send leads here</b> can be tapped later. The old form's lead copies (90 days) move into the editor. <b>e.</b> <b>Set it up</b>; then each person, <b>on their own iPhone</b>, opens <span class="addr">thinksmartpublicadjusting.com/edit/?code</span> (or the button in their email), types the username and the 6-digit code, and lets the iPhone suggest and save a strong password. Check that Face ID fills it in, in Safari and from the Home Screen icon. <b>f.</b> Print the emergency sheet and save each person's second rescue code in their Passwords app (a note on the editor's password). <b>Done</b> closes the setup for good.</p>
+</section>
+
+<ol class="steps after">
+  <li class="step">
+    <h2>Hand over</h2>
+    <ul>
+      <li>The emergency sheet goes with the business papers.</li>
+      <li>John's Google Drive gets the launch kit: the zip, this guide, the checklist (with the setup code) and a copy of the website (editor → More → <b>Download a copy</b>).</li>
+      <li>A Gmail filter for mail from <code>noreply@</code>: never Spam, always important. If wanted, a free uptime alert to John's Gmail.</li>
+      <li>Walk Muneerah through the editor, screen-recorded into her camera roll.</li>
+    </ul>
+  </li>
+  <li class="step">
+    <h2>Last tidy-up</h2>
+    <ul>
+      <li>Retire the GitHub Pages staging copy and delete the Supabase project.</li>
+    </ul>
+  </li>
+</ol>
+
+<section class="again">
+  <h2>Reinstall and keep my content</h2>
+  <p>If the website folder is ever hacked, broken or moved to another hosting: <b>1.</b> Upload the launch-kit zip into <code>public_html</code> again and Extract it (overwrite). <b>2.</b> The same day, open <span class="addr">thinksmartpublicadjusting.com/edit/install/reinstall</span> and type the setup code (John gets an email about it). <b>3.</b> The same pages follow: the words, photos, contracts, logins, lead settings, History and leads are kept, the pages are rebuilt, and everyone signs in again (tick "Make new rescue codes" if the sheet may be lost).</p>
+  <p class="foot">For a developer: <code>~/thinksmart-private/README-developer.md</code> explains how the hosting is laid out; it's also in every "Download a copy".</p>
+</section>
+</div>
+</main>
+</body>
+</html>

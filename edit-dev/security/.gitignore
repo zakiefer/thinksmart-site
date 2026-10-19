@@ -1,0 +1,4 @@
+# Probes from the security reviews stay on this computer: the repository is public.
+# (The reports are in the hand-over notes, not here.)
+*
+!.gitignore

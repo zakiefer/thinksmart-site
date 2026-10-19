@@ -9,6 +9,10 @@ Options -Indexes
 <Files ".user.ini">
   Require all denied
 </Files>
+# PHP's error logs never download (the editor and the lead mailer write theirs outside this folder).
+<Files "error_log">
+  Require all denied
+</Files>
 ErrorDocument 404 /404.html
 
 AddType image/webp .webp
@@ -54,6 +58,10 @@ Header set Cache-Control "public, max-age=31536000, immutable"
 </FilesMatch>
 Header set X-Content-Type-Options "nosniff"
 Header set Referrer-Policy "strict-origin-when-cross-origin"
+# The pages (not the editor, which sets its own stricter policy): no plugins, no <base>, no framing by other sites.
+<FilesMatch "\.html$">
+Header set Content-Security-Policy "object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+</FilesMatch>
 </IfModule>
 
 <IfModule mod_deflate.c>

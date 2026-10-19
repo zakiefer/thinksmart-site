@@ -19,7 +19,8 @@ if (str_starts_with($uri, '/edit/')) {
         readfile($f);
         return true;
     }
-    if ($uri === '/edit/' || $uri === '/edit/index.php' || $uri === '/edit/undo' || str_starts_with($uri, '/edit/p/') || str_starts_with($uri, '/edit/api/')) {
+    if ($uri === '/edit/' || $uri === '/edit/index.php' || in_array($uri, ['/edit/undo', '/edit/confirm', '/edit/install'], true)
+        || str_starts_with($uri, '/edit/install/') || str_starts_with($uri, '/edit/p/') || str_starts_with($uri, '/edit/api/')) {
         require $app . '/index.php';
         return true;
     }
@@ -27,7 +28,13 @@ if (str_starts_with($uri, '/edit/')) {
     return true;
 }
 if ($uri === '/') { readfile("$root/Home.dc.html"); return true; }
-if (str_starts_with($uri, '/send-lead.php')) { http_response_code(403); echo 'not in tests'; return true; }
+// the real lead mailer runs only when this test site's mail goes to the outbox (nothing is ever sent)
+if (str_starts_with($uri, '/send-lead.php')) {
+    $cfg = json_decode((string)@file_get_contents(getenv('TS_PRIVATE_DIR') . '/config.json'), true);
+    if (($cfg['mail'] ?? '') !== 'outbox') { http_response_code(403); echo 'not in tests'; return true; }
+    require $root . '/send-lead.php';
+    return true;
+}
 $f = $root . $uri;
 if (!is_file($f)) { http_response_code(404); readfile("$root/404.html"); return true; }
 if (str_ends_with($uri, '.mjs')) { header('Content-Type: text/javascript'); readfile($f); return true; }

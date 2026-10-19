@@ -226,23 +226,35 @@ final class Changes
     {
         $fields = $schema['fields'] ?? [];
         $isList = fn(string $sp) => in_array($fields[$sp]['type'] ?? '', ['list', 'checklist'], true);
-        $allowed = function (string $sp) use ($fields, $isList): bool {
+        // the parts an address, a person, a guarantee, a number or a photo's focus point may have
+        $parts = ['address' => ['street', 'city', 'region', 'zip'], 'person' => ['name', 'title'], 'guarantee' => ['short', 'long'],
+            'number-quote' => ['value', 'plus', 'percent', 'caption', 'hidden'], 'focus' => ['x', 'y']];
+        $allowed = function (string $sp) use ($fields, $isList, $parts): bool {
             if (isset($fields[$sp])) return true;
             if (preg_match('/^(.*)\[\]\.hidden$/', $sp, $m) && $isList($m[1])) return true;
             // a part of an address, a person, a guarantee or a number
-            $pre = $sp;
-            while (($dot = strrpos($pre, '.')) !== false) {
-                $pre = substr($pre, 0, $dot);
-                if (in_array($fields[$pre]['type'] ?? '', ['address', 'person', 'guarantee', 'number-quote'], true)) return true;
-            }
-            return false;
+            $dot = strrpos($sp, '.');
+            if ($dot === false) return false;
+            $type = $fields[substr($sp, 0, $dot)]['type'] ?? '';
+            return isset($parts[$type]) && in_array(substr($sp, $dot + 1), $parts[$type], true);
+        };
+        // a whole address / person / … must have only its own parts, as plain values
+        $okShape = function (string $sp, $v) use ($fields, $parts): bool {
+            $type = $fields[$sp]['type'] ?? '';
+            if (!isset($parts[$type]) || $v === null) return true;
+            if (!is_array($v) || array_is_list($v)) return false;
+            foreach ($v as $k => $x) if (!in_array((string)$k, $parts[$type], true) || is_array($x)) return false;
+            return true;
         };
         $okValue = function ($v, int $depth = 0) use (&$okValue): bool {
             if ($depth > 8) return false;
             if ($v === null || is_bool($v) || is_int($v) || is_float($v)) return true;
             if (is_string($v)) return strlen($v) <= 20000;
             if (!is_array($v) || count($v) > 200) return false;
-            foreach ($v as $k => $x) if (!(is_int($k) || (is_string($k) && preg_match('/^[A-Za-z_][A-Za-z0-9_]{0,40}$/', $k))) || !$okValue($x, $depth + 1)) return false;
+            foreach ($v as $k => $x) {
+                if (is_string($k) && in_array($k, ['__proto__', 'constructor', 'prototype'], true)) return false;
+                if (!(is_int($k) || (is_string($k) && preg_match('/^[A-Za-z_][A-Za-z0-9_]{0,40}$/', $k))) || !$okValue($x, $depth + 1)) return false;
+            }
             return true;
         };
         $okPath = function ($path): bool {
@@ -267,7 +279,8 @@ final class Changes
             if (!is_array($op) || !$okPath($op['path'] ?? null)) continue;
             $sp = self::schemaPath($op['path']);
             if (($op['op'] ?? '') === 'set') {
-                if (!$allowed($sp) || !$okValue($op['value'] ?? null) || !$okValue($op['old'] ?? null)) continue;
+                // lists change only through "list" operations
+                if (!$allowed($sp) || $isList($sp) || !$okValue($op['value'] ?? null) || !$okValue($op['old'] ?? null) || !$okShape($sp, $op['value'] ?? null)) continue;
                 $out[] = ['op' => 'set', 'path' => $op['path'], 'value' => $op['value'] ?? null, 'old' => $op['old'] ?? null];
             } elseif (($op['op'] ?? '') === 'list') {
                 if (!$isList($sp)) continue;

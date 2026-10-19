@@ -48,7 +48,9 @@
     header[data-ref="nav"] a[href="Claim.dc.html"] { white-space: nowrap; letter-spacing: .08em !important; }
     header[data-ref="nav"] [data-ref="burger"] { width: 40px !important; height: 40px !important; }
     input, textarea, select { font-size: 16px !important; }
+⟦#if site.seal⟧
     [data-ref="caseConfirm"] { padding-bottom: 150px !important; }
+⟦/if⟧
   }
   @media (max-width: 350px) {
     header[data-ref="nav"] > a:first-child > span > span:first-child { font-size: 21px !important; }
@@ -84,7 +86,7 @@
 ⟦>top⟧
 
 <main id="main">
-<section data-screen-label="Claim Intake" style="position:relative; padding:calc(96px + 7vh) clamp(20px,4vw,56px) clamp(70px,10vh,130px); overflow:hidden;">
+<section data-screen-label="Claim Intake" style="position:relative; padding:calc(96px + 7vh⟦#if notice.on⟧ + var(--ts-bar-h, 0px)⟦/if⟧) clamp(20px,4vw,56px) clamp(70px,10vh,130px); overflow:hidden;">
   <div style="position:absolute; inset:0; opacity:.1; pointer-events:none;">
 ⟦#if claim.top.video.photo⟧
     <img src="⟦claim.top.video.photo⟧" alt="" style="width:100%; height:100%; object-fit:cover;⟦#if claim.top.video.photoFocus⟧ object-position:⟦claim.top.video.photoFocus.x⟧% ⟦claim.top.video.photoFocus.y⟧%;⟦/if⟧ display:block;">
@@ -262,7 +264,7 @@
         <img src="media/states/⟦x.code|lower⟧.webp" alt="" style="position:absolute; right:-16px; bottom:-20px; width:124px; height:124px; object-fit:contain; opacity:.22; pointer-events:none;">
         <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.22em; color:rgba(235,229,216,.58);">⟦claim.sign.callTag|upper⟧</span>
         <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; text-transform:uppercase; font-size:⟦x.code|statefont⟧px; line-height:1; color:#EBE5D8;">⟦x.code|statename⟧</span>
-        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:#F09A2E;">⟦claim.sign.callButton|upper⟧ →</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.14em; color:#F09A2E;">⟦claim.sign.callButton|upper⟧&nbsp;→</span>
       </a>
 ⟦/if⟧
       ⟦/each⟧
@@ -270,7 +272,7 @@
         <img src="media/mark.webp" alt="" style="position:absolute; right:-16px; bottom:-20px; width:118px; height:118px; object-fit:contain; opacity:.14; pointer-events:none;">
         <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.22em; color:rgba(235,229,216,.58);">⟦claim.byPhone.tag|upper⟧</span>
         <span style="font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; text-transform:uppercase; font-size:34px; line-height:1; color:#F09A2E;">⟦claim.byPhone.title⟧</span>
-        <span style="font-size:14px; line-height:1.6; color:rgba(235,229,216,⟦site.brightness|bright:.6⟧);">⟦claim.byPhone.text|rich:by-phone⟧</span>
+        <span style="font-size:14px; line-height:1.6; color:rgba(235,229,216,⟦site.brightness|bright:.6⟧);">⟦claim.byPhone.text|rich:by-phone-nowrap⟧</span>
       </div>
     </div>
     <div style="border:1px dashed rgba(240,154,46,.45); border-radius:4px; padding:28px 30px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:18px;">
@@ -587,29 +589,7 @@ class Component extends DCLogic {
           'Submitted from': location.href
         };
         this.setState({ sending: true, sendError: false });
-        const emailSend = fetch('https://formsubmit.co/ajax/thinksmartpublicadjusting@gmail.com', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(Object.assign({
-            _subject: 'New claim intake — ' + (fd.get('name') || 'Unknown') + ' — ' + n,
-            _template: 'table',
-            _captcha: 'false'
-          }, fields))
-        })
-          .then((r) => r.json().then((d) => r.ok && d && String(d.success) === 'true'))
-          .catch(() => false);
-        const dbStore = fetch('https://ptvgxvvmvtzsgmqdixef.supabase.co/rest/v1/website_leads', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': 'sb_publishable_dL2UsKU4RtA0AGB73wS19w_91PBsbOe',
-            'Prefer': 'return=minimal'
-          },
-          body: JSON.stringify({ kind: 'claim', case_no: n, payload: fields })
-        })
-          .then((r) => r.ok)
-          .catch(() => false);
-        // Same-origin PHP mailer: active on the business's own hosting, fails closed elsewhere.
+        // The website's own lead mailer saves the lead first, then emails it.
         const serverSend = fetch('send-lead.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -617,13 +597,13 @@ class Component extends DCLogic {
         })
           .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
           .catch(() => false);
-        // Show success as soon as any channel delivers; give up on a channel after 15s.
+        // Show success once the mailer has the lead safe; give up after 15s.
         const firstSuccess = (ps) => new Promise((resolve) => {
           let left = ps.length;
           ps.forEach((p) => Promise.race([p, new Promise((r) => setTimeout(() => r(false), 15000))])
             .then((ok) => { if (ok) resolve(true); else if (--left === 0) resolve(false); }));
         });
-        firstSuccess([serverSend, emailSend, dbStore])
+        firstSuccess([serverSend])
           .then((delivered) => {
             if (!delivered) throw new Error('all delivery channels failed');
             const photos = this.state.photos.slice();

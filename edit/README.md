@@ -52,9 +52,15 @@ bindings, text the camelCase regex would rewrite, link schemes, Google info JSON
 
     php edit-dev/convert.php          # Gate 1: today's files -> templates + content, byte for byte
     php edit-dev/compare.php          # built pages vs today's, as diffs (the intended differences)
-    php edit-dev/check-accepted.php   # built pages vs the accepted build (Gate 2, D1–D10), byte for byte
+    php edit-dev/check-accepted.php   # built pages vs the accepted build (Gate 2, D1–D12), byte for byte
     php edit-dev/tests/run.php        # encoders, input rules, lint, swap journal, content store
     php edit-dev/make-schema.php      # regenerate schema.json (fails on missing labels/design names)
+
+Step 6 (Chromium and WebKit; outputs go outside the repo):
+
+    php edit-dev/step6/variants.php OUT                              # content variants (states 1–12, reviews, notice, phrases, seal…)
+    node edit-dev/step6/matrix.js OUT chromium,webkit all all all 2  # every page × variant × 7 widths (about 20 minutes)
+    node edit-dev/step6/editor-sweep.js http://localhost:8790 /tmp/ts-dev   # every editor screen, phone and desktop
 
 Gate 2 (screenshots + DOM, Chromium and WebKit): `edit-dev/browser/capture.js`,
 `edit-dev/gate2/compare-shots.py`, `edit-dev/gate2/review.py`, list in `edit-dev/gate2/INTENDED.md`.
@@ -100,6 +106,39 @@ API call plus an Origin check, strict CSP (no inline scripts or styles, no frami
 only, uploads checked and cleaned in plain PHP and saved under server-chosen names
 (`media/u/`, with a FilesMatch guard), contracts kept privately until they go live.
 
+**Leads** (`send-lead.php` + `lib/Leads.php`): the public mailer runs without the editor's code. It
+saves every lead in `<private>/leads/<YYYY-MM>/<id>.json` (photos in `leads/photos/<case>/`) before
+emailing it, so the visitor's "sent" means it's safe; leads are kept 90 days, photos 14. It emails the
+addresses in `<private>/settings.json` (a new one takes over only after the link in its test lead is
+clicked), skips the business's own numbers using `<private>/filters.json`, and counts today's emails
+in `<private>/mail-count.json` together with the editor (lead emails stop at 400 a day, with one
+"leads are waiting" notice; sign-in codes keep a reserve up to 480). Each lead email carries an
+`X-TS-Lead` header so bounces can be matched when the hosting lets the editor read the noreply@
+mailbox (config `"bounce": {"mailbox": "{host:993/imap/ssl}INBOX", "user", "password"}`).
+
+**Health** (`lib/Health.php`): the start screen's status line (last lead, bounced or waiting leads;
+certificate and domain dates for John only, checked daily), self-repair from a fingerprinted copy in
+`<private>/pristine/` made at install (hourly; never .htaccess, .user.ini, .well-known, cgi-bin, media
+or docs), and "Repair the editor" in More. PHP's error logs go to `<private>/php-errors.log`.
+
+**Installer and launch kit** (`lib/Installer.php`, Step 5): `/edit/install` works before anything is set
+up and only with the setup code (`edit/install-code.hash` holds its hash). It checks PHP, https, upload
+limits, folders and disk; makes the private folder and proves it can't be reached over the web; creates
+both logins (each sets a password on their own phone with a code) and rescue codes; sends the test lead
+for the lead address; imports the old lead logs; writes config.json; builds and publishes; keeps the
+pristine copy for self-repair; prints the emergency sheet; then locks itself (`<private>/install.lock` +
+`edit/.installed`). `/edit/install/reinstall` (with the code, within a day of unzipping the kit there
+again; John is emailed) keeps all content, logins, settings, history and leads, makes a new secret and
+rebuilds. "Download a copy" (`lib/Backup.php`, More) streams words, photos and contracts, never logins,
+leads or history. After extracting a newer kit over a running site, run the reinstall right away, or the
+hourly self-repair puts the files it knows back.
+
+    php edit-dev/make-zip.php <setup code>               # the launch-kit zip (edit-dev/launch-kit/out/) + filled checklist
+    node edit-dev/launch-kit/make-pdfs.js                # guide.html and checklist.html as PDFs
+    php edit-dev/launch-kit/try-install.php <dir> <code> # unpacks the kit into <dir>/public_html for a local install
+    node edit-dev/launch-kit/try-installer.js …          # clicks through the installer in Chromium and WebKit
+    php edit-dev/tests/installer.php                     # installer, zip, backup
+
 ## Trying the editor locally
 
     php edit-dev/editor/dev-setup.php /tmp/ts-dev        # throwaway site + private folder + test logins
@@ -110,6 +149,7 @@ only, uploads checked and cleaned in plain PHP and saved under server-chosen nam
 Mail goes to `/tmp/ts-dev/private/outbox/` in development. Checks:
 
     php edit-dev/tests/editor.php                        # operations, publish/undo, sign-in, uploads, preview marks
+    php edit-dev/tests/leads.php                         # the lead mailer (own little server, outbox), Leads, settings, self-repair
     node edit-dev/editor/flows.js http://localhost:8790 /tmp/ts-dev chromium,webkit   # end-to-end, iPhone size
     node edit-dev/editor/help-pictures.js http://localhost:8790 /tmp/ts-dev           # remakes app/help/*.jpg
     php edit-dev/make-words.php                          # remakes app/words.json (Webster's 2nd + extras + site words)

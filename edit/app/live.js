@@ -282,7 +282,7 @@ export async function verify(r, show) {
 
 // ------------------------------------------------------------------ history
 
-const KIND = { launch: 'Launch day', undo: 'Undo', bringback: 'Brought back', restore: 'Whole website put back', autoundo: 'Put back automatically' };
+const KIND = { launch: 'Launch day', undo: 'Undo', bringback: 'Brought back', restore: 'Whole website put back', autoundo: 'Put back automatically', repair: 'Repaired' };
 
 export async function historyScreen() {
   const body = h('div.stack', h('p.small', { text: 'Loading…' }));

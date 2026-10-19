@@ -268,7 +268,7 @@ final class Publisher
     public function undo(string $person, int $rev, array $resolve, string $publishId, string $how = 'undo'): array
     {
         $e = $this->history->get($rev);
-        if (!$e || $e['kind'] === 'launch') return ['ok' => false, 'error' => 'That change can\'t be undone.'];
+        if (!$e || in_array($e['kind'], ['launch', 'repair'], true)) return ['ok' => false, 'error' => 'That change can\'t be undone.'];
         $inv = $this->inverse($rev);
         if ($inv === null) return ['ok' => false, 'error' => 'That change is too old to undo by itself. Use "Put the whole website back to this moment" instead.'];
         return $this->publish($person, $inv, $resolve, $publishId, $rev, $how, ['of' => $rev]);

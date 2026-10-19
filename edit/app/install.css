@@ -1,0 +1,110 @@
+/* The installer's pages (/edit/install) and the emergency sheet. Builds on app.css (the
+   sign-in card, fields, buttons, messages). The sheet prints black on white on one page. */
+
+.inst .inst-card { max-width: 560px; }
+.inst-step { margin: -6px 0 -8px; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.inst-card h2 { font-size: 19px; }
+.inst-note { padding: 10px 12px; border-radius: 10px; background: var(--info-bg); color: var(--info-ink); font-size: 15.5px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* checks */
+.inst-checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.inst-check { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: start; padding: 12px; border-radius: 12px; background: var(--card-2); border: 1px solid var(--line); }
+.inst-check > div { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 4px; font-size: 15.5px; }
+.inst-check-title { font-weight: 700; font-size: 16px; }
+.inst-mark { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+.inst-check.is-ok .inst-mark { background: var(--good-bg); color: var(--good); }
+.inst-check.is-warn .inst-mark { background: var(--warn-bg); color: var(--warn); }
+.inst-check.is-stop { border-color: var(--bad); }
+.inst-check.is-stop .inst-mark { background: var(--bad-bg); color: var(--bad); }
+.inst-check.is-info .inst-mark { background: var(--info-bg); color: var(--info-ink); font-style: italic; font-family: Georgia, serif; }
+.inst-do { margin-top: 2px; padding: 8px 10px; border-radius: 8px; background: var(--card); border-left: 4px solid var(--accent); }
+.inst-check.is-stop .inst-do { border-left-color: var(--bad); }
+.inst-details { font-size: 14px; color: var(--muted); }
+.inst-details summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
+.inst-details ul { margin: 6px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; overflow-wrap: anywhere; }
+
+/* forms */
+.inst-person-form { margin: 0; padding: 14px 14px 16px; border: 1px solid var(--line-2); border-radius: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.inst-person-form legend { padding: 0 6px; font-weight: 700; font-size: 15.5px; }
+.inst-choice { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--card); cursor: pointer; font-size: 15.5px; }
+.inst-choice input { width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--accent); }
+.inst-choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.inst-card .check { align-items: flex-start; font-size: 15.5px; }
+.inst-card .check input { flex: none; margin-top: 1px; }
+.inst-card .field small.bad-text { color: var(--bad); font-weight: 600; font-size: 14.5px; }
+.inst-card .field input[aria-invalid="true"] { border-color: var(--bad); border-width: 2px; }
+.inst-person-form > .small { margin-top: -6px; }
+/* app.css gives .big (the start screen's tiles) a navy look: this is a plain, tall button */
+.inst-wide { min-height: 54px; font-size: 17px; }
+
+/* summary and results */
+.inst-summary { margin: 0; display: grid; grid-template-columns: minmax(96px, 30%) 1fr; gap: 8px 12px; font-size: 15.5px; }
+.inst-summary dt { font-weight: 700; }
+.inst-summary dd { margin: 0; min-width: 0; overflow-wrap: break-word; }
+@media (max-width: 520px) {
+  .inst-summary { grid-template-columns: 1fr; gap: 2px; }
+  .inst-summary dd { margin-bottom: 10px; }
+}
+.inst-list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 15.5px; }
+.inst-person { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 14px; border: 1px solid var(--line-2); background: var(--card-2); }
+.inst-howto { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 8px; font-size: 16px; }
+.inst-howto .code-big { margin-top: 8px; letter-spacing: .14em; }
+.inst-howto b { overflow-wrap: anywhere; }
+.inst-code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+
+/* ---------------------------------------------------------------- the emergency sheet */
+.inst-sheet-page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; gap: 18px; background: var(--navy);
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px)); }
+.inst-tools { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 14px; padding: 22px 20px; border-radius: 18px; background: var(--card); }
+.inst-tools h1 { font-size: 24px; }
+.inst-second { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; background: var(--accent-soft); }
+.inst-second h2 { font-size: 17px; }
+
+.inst-sheet { width: 100%; max-width: 760px; display: flex; flex-direction: column; gap: 16px; padding: 28px 26px; border-radius: 6px;
+  background: #fff; color: #111; font-size: 15px; line-height: 1.45; box-shadow: 0 4px 24px rgba(0, 0, 0, .35); }
+.inst-sheet header { display: flex; flex-direction: column; gap: 4px; padding-bottom: 12px; border-bottom: 3px solid #111; }
+.inst-kicker { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #8a4f00; }
+.inst-sheet-title { font-size: 26px; color: #111; }
+.inst-sheet h3 { margin: 0 0 6px; font-size: 16px; text-transform: uppercase; letter-spacing: .05em; color: #111; }
+.inst-sheet ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.inst-sheet .small { color: #444; font-size: 13px; margin-top: 6px; }
+.inst-addr { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; }
+.inst-addr dt { font-weight: 700; }
+.inst-addr dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.inst-table { width: 100%; border-collapse: collapse; }
+.inst-table th, .inst-table td { text-align: left; padding: 7px 8px 7px 0; border-bottom: 1px solid #bbb; vertical-align: top; overflow-wrap: anywhere; }
+.inst-table thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #444; border-bottom: 2px solid #111; }
+.inst-box { padding: 12px 14px; border: 2px solid #111; border-radius: 6px; }
+
+@media (max-width: 480px) {
+  .inst-sheet { padding: 20px 16px; }
+  .inst-table, .inst-table tbody, .inst-table tr, .inst-table th, .inst-table td { display: block; }
+  .inst-table thead { display: none; }
+  .inst-table tr { padding: 8px 0; border-bottom: 1px solid #bbb; }
+  .inst-table th, .inst-table td { border: 0; padding: 1px 0; }
+  .inst-table td:nth-child(2)::before { content: "Username: "; font-weight: 400; color: #444; }
+  .inst-table td:nth-child(3)::before { content: "Rescue code: "; font-weight: 400; color: #444; }
+  .inst-addr { grid-template-columns: 1fr; gap: 0; }
+  .inst-addr dd { margin-bottom: 6px; }
+}
+
+@media print {
+  @page { margin: 14mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  .no-print { display: none !important; }
+  .inst-sheet-page { display: block; min-height: 0; padding: 0; background: #fff; }
+  .inst-sheet { max-width: none; padding: 0; border-radius: 0; box-shadow: none; font-size: 11.5pt; gap: 12pt; color: #000; }
+  .inst-sheet section, .inst-box, .inst-table tr { break-inside: avoid; page-break-inside: avoid; }
+  .inst-kicker { color: #000; }
+  .inst-sheet .small { color: #000; }
+  /* on paper the table is always a table, whatever the screen width */
+  .inst-table { display: table; }
+  .inst-table thead { display: table-header-group; }
+  .inst-table tbody { display: table-row-group; }
+  .inst-table tr { display: table-row; padding: 0; }
+  .inst-table th, .inst-table td { display: table-cell; padding: 5pt 6pt 5pt 0; border-bottom: 1px solid #000; }
+  .inst-table td::before { content: none !important; }
+  .inst-addr { grid-template-columns: max-content 1fr; gap: 2pt 10pt; }
+  .inst-addr dd { margin: 0; }
+}

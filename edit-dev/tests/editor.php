@@ -89,6 +89,15 @@ $san = Changes::sanitize([
     ['op' => 'list', 'path' => ['faq', 'items'], 'order' => ['a2'], 'add' => ['a2' => ['_id' => 'a2', 'q' => 'ok', 'home' => false]], 'old' => []],
 ], $schema);
 ok(count($san) === 4 && $san[1]['path'][2] === 'zip' && $san[3]['order'] === ['a2'], 'only known spots and items with known fields are accepted');
+$san2 = Changes::sanitize([
+    ['op' => 'set', 'path' => ['faq', 'items'], 'value' => [], 'old' => null],
+    ['op' => 'set', 'path' => ['site', 'adjuster', 'evilKey'], 'value' => 'x', 'old' => null],
+    ['op' => 'set', 'path' => ['site', 'adjuster'], 'value' => ['name' => 'A', 'evil' => 'x'], 'old' => null],
+    ['op' => 'set', 'path' => ['site', 'adjuster'], 'value' => ['name' => 'A', 'title' => 'B'], 'old' => null],
+    ['op' => 'set', 'path' => ['home', 'closed', 'photoFocus'], 'value' => ['x' => 10, 'y' => 20, '__proto__' => 1], 'old' => null],
+    ['op' => 'set', 'path' => ['home', 'closed', 'photoFocus'], 'value' => ['x' => 10, 'y' => 20], 'old' => null],
+], $schema);
+ok(count($san2) === 2 && $san2[0]['value'] === ['name' => 'A', 'title' => 'B'] && $san2[1]['value'] === ['x' => 10, 'y' => 20], 'lists change only through list operations; objects keep only their own parts');
 
 $t1 = $c0;
 $t1['home']['top']['title'][0] = 'Storms happen.';

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 foreach (['Html', 'Encode', 'Rich', 'Template', 'Site', 'Grid', 'Notice', 'Derive', 'Lint', 'Store', 'Build',
-    'Changes', 'App', 'Mail', 'Http', 'Auth', 'Live', 'Explain', 'Validate', 'Uploads', 'Publisher', 'Preview', 'Pages', 'Api', 'Editor'] as $f) {
+    'Changes', 'App', 'Mail', 'Http', 'Auth', 'Live', 'Explain', 'Validate', 'Uploads', 'Publisher', 'Preview', 'Pages', 'Api',
+    'Leads', 'Health', 'Zip', 'Backup', 'Installer', 'Editor'] as $f) {
     require_once __DIR__ . "/$f.php";
 }

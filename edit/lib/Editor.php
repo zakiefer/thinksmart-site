@@ -13,16 +13,29 @@ final class Editor
         $paths = Paths::detect();
         $cfg = Config::load($paths);
         Log::to($paths->private . '/editor-errors.log');
+        if (is_dir($paths->private)) {
+            // PHP's own log stays in the private folder, never in the web folder
+            ini_set('log_errors', '1');
+            ini_set('error_log', $paths->private . '/php-errors.log');
+        }
         set_error_handler(function (int $no, string $msg, string $file, int $line) {
             Log::error("php: $msg @$file:$line");
             return true;
         });
         Http::$dev = $cfg->dev();
+        Http::$trustProxy = (bool)$cfg->get('trustProxy', false);
 
         $people = new People($cfg);
         $sessions = new Sessions($cfg);
         $pages = new Pages($cfg, $people, $sessions);
 
+        $uri = (string)parse_url((string)($_SERVER['REQUEST_URI'] ?? '/edit/'), PHP_URL_PATH);
+        $route = (string)preg_replace('#^/edit#', '', rawurldecode($uri));
+        // the installer (Step 5) works before anything is set up, and refuses once it has run
+        if ($route === '/install' || str_starts_with($route, '/install/')) {
+            Installer::run($paths, substr($route, 8));
+            return;
+        }
         if (!$cfg->ready() || !is_dir($paths->private) || !$people->active()) {
             $pages->notice('Not set up yet', 'The website editor hasn\'t been set up on this hosting yet.', 503, '');
             return;
@@ -32,8 +45,6 @@ final class Editor
             return;
         }
 
-        $uri = (string)parse_url((string)($_SERVER['REQUEST_URI'] ?? '/edit/'), PHP_URL_PATH);
-        $route = (string)preg_replace('#^/edit#', '', rawurldecode($uri));
         if ($route === '' || $route === '/index.php') $route = '/';
         $session = $sessions->current();
         if ($session && !$people->find($session['person'])) { $sessions->end($session['token']); $session = null; }
@@ -50,7 +61,7 @@ final class Editor
             (new Preview($cfg, $pub))->serve($session['person'], substr($route, 3));
             return;
         }
-        if ($route === '/undo') {
+        if ($route === '/undo' || $route === '/confirm') {
             self::link($cfg, $people, $sessions, $pages);
             return;
         }
@@ -93,6 +104,12 @@ final class Editor
         } elseif ($e['action'] === 'restore-person') {
             $what = 'Let ' . $people->name($e['data']['person']) . ' sign in to the website editor again.';
             $button = 'Let them back in';
+        } elseif ($e['action'] === 'confirm-lead') {
+            $what = 'Send the website\'s leads (claims, messages and chats) to ' . $e['data']['email'] . '.';
+            $button = 'Yes, send leads here';
+        } elseif ($e['action'] === 'undo-lead-addresses') {
+            $what = 'Put back the addresses that get the website\'s leads: ' . implode(', ', array_map(fn($a) => $a['email'], $e['data']['list'])) . '.';
+            $button = 'Put them back';
         } else {
             $pages->notice('This link has been used', 'This link isn\'t valid any more.');
             return;
@@ -121,6 +138,16 @@ final class Editor
                 $pages->notice('Signed out everywhere', $people->name($id) . ' has to sign in again everywhere. If someone else may know the password, reset it in People.', 200);
                 return;
             }
+            if ($e['action'] === 'confirm-lead') {
+                LeadSettings::confirm($cfg, (string)$e['data']['email']);
+                $pages->notice('Confirmed', 'Leads now go to ' . $e['data']['email'] . '. Every lead is also kept in the website editor.', 200, '');
+                return;
+            }
+            if ($e['action'] === 'undo-lead-addresses') {
+                LeadSettings::restore($cfg, (array)$e['data']['list']);
+                $pages->notice('Put back', 'The addresses for the website\'s leads are back as they were.', 200);
+                return;
+            }
             $people->restore((string)$e['data']['person']);
             $people->save();
             $pages->notice('Let back in', $people->name((string)$e['data']['person']) . ' can sign in again with their password.', 200);
@@ -131,7 +158,7 @@ final class Editor
         header('Content-Type: text/html; charset=utf-8');
         echo Pages::layout($button, '<main class="signin"><div class="signin-card"><div class="signin-brand"><span class="dot"></span>Think Smart · Website editor</div>'
             . '<h1>' . Http::esc($button) . '?</h1><p class="pre">' . Http::esc($what) . '</p>'
-            . '<form method="post" action="/edit/undo" data-once><input type="hidden" name="t" value="' . Http::esc($t) . '"><input type="hidden" name="f" value="' . Http::esc($f) . '">'
+            . '<form method="post" action="/edit/' . ($e['action'] === 'confirm-lead' ? 'confirm' : 'undo') . '" data-once><input type="hidden" name="t" value="' . Http::esc($t) . '"><input type="hidden" name="f" value="' . Http::esc($f) . '">'
             . '<button class="btn primary big" type="submit">' . Http::esc($button) . '</button></form><p class="small"><a href="/edit/">Open the editor instead</a></p></div></main>');
     }
 }

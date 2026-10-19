@@ -4,6 +4,7 @@
 import { S, h, icon, clear, getAt, setAt, keyOf, parseKey, schemaPath, field, isList, order, splitLabel, changed, plain, go, api, toast, sheet, currentOps, whenOf, centralToEpoch, timeOf, on, emit, visibleStates } from './core.js';
 import { fieldBox } from './fields.js';
 import { listEditor, SIMPLE_LISTS } from './lists.js';
+import { healthCard, leadAddresses, repairEditor } from './leads.js';
 
 const P = (sp) => sp.split('.');
 const screenDef = (id) => S.schema.screens.find((s) => s.id === id);
@@ -52,15 +53,6 @@ export function sectioned(sps) {
 
 // ------------------------------------------------------------------ start screen
 
-export function statusLine() {
-  const l = S.live;
-  const by = l.by ? (l.by === S.me.id ? 'you' : S.names[l.by] || 'someone') : null;
-  return h('div.status-card',
-    h('span.dot.ok'),
-    h('span', { text: 'Website working' + (l.at && by ? ` · last change ${whenOf(l.at)} by ${by}` : '') }),
-    S.offline ? h('p.small.warn-text', { text: 'Not connected right now. Your changes are kept on this phone and sent when you\'re back online.' }) : null);
-}
-
 export function startScreen() {
   const n = S.draft.notice || {};
   const ops = currentOps();
@@ -88,7 +80,7 @@ export function startScreen() {
     title: 'Your website',
     home: true,
     body: h('div.stack',
-      statusLine(),
+      healthCard(),
       S.boot.status && S.boot.status.state === 'done' && S.boot.status.wentLive && (Date.now() / 1000 - S.boot.status.wentLive < 3600)
         ? h('p.callout.ok', { text: 'Your change went live at ' + timeOf(S.boot.status.wentLive) + '.' }) : null,
       h('div.bigs', big.map(([href, title, sub, ic, st]) => h('a.big' + (st ? '.' + st : ''), { href }, icon(ic), h('span.big-title', { text: title }), h('span.big-sub', { text: sub })))),
@@ -112,7 +104,7 @@ export function tileScreen(id) {
     const node = isList(sp) ? listEditor(P(sp)) : fieldBox(P(sp));
     if (node) body.append(node);
   }
-  if (id === 'business') body.append(alsoChangeCard());
+  if (id === 'business') { body.insertBefore(leadAddresses(), body.querySelector('[data-key="site.social"]')); body.append(alsoChangeCard()); }
   if (id === 'promises') { body.append(numbersWarning()); body.append(h('p.help', { text: 'The seal\'s artwork says "PAID OR FREE", so it can only be turned on or off.' })); }
   if (id === 'brightness') body.append(brightnessSamples());
   return { title: def.title, body };
@@ -225,9 +217,12 @@ export function moreScreen() {
     body: h('div.stack',
       h('nav.tiles', Object.keys(def.groups).map((g) => h('a.tile', { href: '#/group/' + encodeURIComponent(g) }, icon(g.startsWith('Google') ? 'globe' : 'chat'), h('span.tile-text', h('span.tile-title', { text: g })), icon('chev')))),
       h('nav.tiles',
+        h('a.tile', { href: '#/leads' }, icon('chat'), h('span.tile-text', h('span.tile-title', { text: 'Leads' }), h('span.small', { text: 'Every claim, message and chat, kept 90 days' })), icon('chev')),
         h('a.tile', { href: '#/people' }, icon('people'), h('span.tile-text', h('span.tile-title', { text: 'People' }), h('span.small', { text: 'Who can edit, passwords, rescue codes' })), icon('chev')),
         h('a.tile', { href: '#/words' }, icon('word'), h('span.tile-text', h('span.tile-title', { text: 'Words I taught' }), h('span.small', { text: 'Words the spelling check now knows' })), icon('chev')),
-        h('a.tile', { href: '#/search' }, icon('search'), h('span.tile-text', h('span.tile-title', { text: 'Find words' })), icon('chev'))),
+        h('a.tile', { href: '#/search' }, icon('search'), h('span.tile-text', h('span.tile-title', { text: 'Find words' })), icon('chev')),
+        h('a.tile', { href: '/edit/api/download', download: '' }, icon('pages'), h('span.tile-text', h('span.tile-title', { text: 'Download a copy' }), h('span.small', { text: 'Words, photos and contracts, to keep safe' })), icon('chev'))),
+      h('button.btn.ghost', { type: 'button', text: 'Repair the editor', onclick: repairEditor }),
       h('form.signout', { method: 'post', action: '/edit/' }, h('input', { type: 'hidden', name: 'do', value: 'signout' }), h('button.btn.ghost', { type: 'submit', text: 'Sign out of this phone' }))),
   };
 }

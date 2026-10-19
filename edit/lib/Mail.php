@@ -8,10 +8,6 @@ namespace ThinkSmart;
 
 final class Mailer
 {
-    // Well below GoDaddy's 500 a day, with a reserve kept for sign-in codes.
-    public const DAY_LIMIT = 60;
-    public const DAY_LIMIT_CODES = 150;
-
     private Config $cfg;
 
     public function __construct(Config $cfg)
@@ -30,7 +26,7 @@ final class Mailer
      * @param list<string> $to
      * @param array{0:string,1:string}|null $button  [words, link]
      */
-    public function send(array $to, string $subject, array $paragraphs, ?array $button = null, string $kind = 'note'): bool
+    public function send(array $to, string $subject, array $paragraphs, ?array $button = null, string $kind = 'note', array $extra = []): bool
     {
         $to = array_values(array_unique(array_filter(array_map(fn($a) => self::headerSafe(strtolower(trim((string)$a))), $to),
             fn($a) => (bool)preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/', $a))));
@@ -41,17 +37,17 @@ final class Mailer
         if ($this->cfg->mailMode() === 'outbox') {
             $dir = $this->cfg->paths->private . '/outbox';
             $name = sprintf('%s-%s.json', gmdate('Ymd-His', Clock::now()), bin2hex(random_bytes(3)));
-            Json::write("$dir/$name", ['to' => $to, 'subject' => $subject, 'text' => $text, 'html' => $html, 'kind' => $kind, 'at' => Clock::now()]);
+            Json::write("$dir/$name", ['to' => $to, 'subject' => $subject, 'text' => $text, 'html' => $html, 'kind' => $kind, 'at' => Clock::now(), 'headers' => $extra]);
             return true;
         }
         $from = 'noreply@' . $this->domain();
         $boundary = 'ts' . bin2hex(random_bytes(8));
-        $headers = implode("\r\n", [
+        $headers = implode("\r\n", array_merge([
             'From: Your website <' . $from . '>',
             'MIME-Version: 1.0',
             'Content-Type: multipart/alternative; boundary="' . $boundary . '"',
             'X-Auto-Response-Suppress: All',
-        ]);
+        ], array_map(fn($k, $v) => self::headerSafe((string)$k) . ': ' . self::headerSafe((string)$v), array_keys($extra), array_values($extra))));
         $body = "--$boundary\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n"
             . chunk_split(base64_encode($text))
             . "--$boundary\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n"
@@ -63,19 +59,10 @@ final class Mailer
         return $ok;
     }
 
+    /** Well below GoDaddy's 500 a day, counted together with the lead mailer; sign-in codes keep the biggest reserve. */
     private function count(string $kind): bool
     {
-        $f = $this->cfg->paths->private . '/mail-count.json';
-        return Lock::with($this->cfg->paths, 'mail', function () use ($f, $kind) {
-            $day = Clock::local(Clock::now())->format('Y-m-d');
-            $c = Json::read($f, []);
-            if (($c['day'] ?? '') !== $day) $c = ['day' => $day, 'n' => 0];
-            $limit = $kind === 'code' ? self::DAY_LIMIT_CODES : self::DAY_LIMIT;
-            if ($c['n'] >= $limit) return false;
-            $c['n']++;
-            Json::write($f, $c, false);
-            return true;
-        });
+        return MailCap::take($this->cfg->paths, $kind);
     }
 
     public static function headerSafe(string $s): string

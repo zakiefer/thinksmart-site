@@ -1,0 +1,9 @@
+# Step 6 outputs (screenshots, built variant sites, logs) live outside the repo, but keep
+# anything that lands here by accident out of git.
+out/
+shots/
+sites/
+*.png
+*.jpg
+*.log
+results*.json

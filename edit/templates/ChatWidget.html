@@ -151,31 +151,7 @@ class Component extends DCLogic {
     let tail = full.slice(-12000);
     if (/^[\uDC00-\uDFFF]/.test(tail)) tail = tail.slice(1);
     const transcript = full.length > 12000 ? '[earlier messages trimmed]\n' + tail : full;
-    const emailSend = fetch('https://formsubmit.co/ajax/thinksmartpublicadjusting@gmail.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: 'Website chat — ' + kind,
-        _template: 'table',
-        _captcha: 'false',
-        'Chat transcript': transcript,
-        'Sent from': location.href
-      })
-    })
-      .then((r) => r.json().then((d) => r.ok && d && String(d.success) === 'true'))
-      .catch(() => false);
-    const dbStore = fetch('https://ptvgxvvmvtzsgmqdixef.supabase.co/rest/v1/website_leads', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'sb_publishable_dL2UsKU4RtA0AGB73wS19w_91PBsbOe',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ kind: 'chat', payload: { stage: kind, transcript: transcript, page: location.href } })
-    })
-      .then((r) => r.ok)
-      .catch(() => false);
-    // Same-origin PHP mailer: active on the business's own hosting, fails closed elsewhere.
+    // The website's own lead mailer saves the lead first, then emails it.
     const serverSend = fetch('send-lead.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -183,9 +159,9 @@ class Component extends DCLogic {
     })
       .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
       .catch(() => false);
-    // Resolve as soon as any channel delivers; give up on a channel after 15s.
+    // Resolve once the mailer has the lead safe; give up after 15s.
     return new Promise((resolve) => {
-      const ps = [serverSend, emailSend, dbStore];
+      const ps = [serverSend];
       let left = ps.length;
       ps.forEach((p) => Promise.race([p, new Promise((r) => setTimeout(() => r(false), 15000))])
         .then((ok) => { if (ok) resolve(true); else if (--left === 0) resolve(false); }));

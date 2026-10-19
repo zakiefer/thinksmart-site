@@ -83,7 +83,7 @@
 ⟦>top⟧
 
 <main id="main">
-<section data-screen-label="Contact Hero" style="position:relative; overflow:hidden; padding:calc(96px + 9vh) clamp(20px,4vw,56px) clamp(50px,7vh,90px); border-bottom:1px solid rgba(235,229,216,.1);">
+<section data-screen-label="Contact Hero" style="position:relative; overflow:hidden; padding:calc(96px + 9vh⟦#if notice.on⟧ + var(--ts-bar-h, 0px)⟦/if⟧) clamp(20px,4vw,56px) clamp(50px,7vh,90px); border-bottom:1px solid rgba(235,229,216,.1);">
   <img src="media/clouds.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.32; transform:scaleX(-1); pointer-events:none;">
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,14,19,.7) 0%, rgba(11,14,19,.3) 50%, #0B0E13 100%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto;">
@@ -344,29 +344,7 @@ class Component extends DCLogic {
           'Submitted from': location.href
         };
         this.setState({ sending: true, sendError: false });
-        const emailSend = fetch('https://formsubmit.co/ajax/thinksmartpublicadjusting@gmail.com', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(Object.assign({
-            _subject: 'Website contact message — ' + (fd.get('name') || 'Unknown'),
-            _template: 'table',
-            _captcha: 'false'
-          }, fields))
-        })
-          .then((r) => r.json().then((d) => r.ok && d && String(d.success) === 'true'))
-          .catch(() => false);
-        const dbStore = fetch('https://ptvgxvvmvtzsgmqdixef.supabase.co/rest/v1/website_leads', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': 'sb_publishable_dL2UsKU4RtA0AGB73wS19w_91PBsbOe',
-            'Prefer': 'return=minimal'
-          },
-          body: JSON.stringify({ kind: 'chat', payload: Object.assign({ stage: 'contact form' }, fields) })
-        })
-          .then((r) => r.ok)
-          .catch(() => false);
-        // Same-origin PHP mailer: active on the business's own hosting, fails closed elsewhere.
+        // The website's own lead mailer saves the lead first, then emails it.
         const serverSend = fetch('send-lead.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -374,13 +352,13 @@ class Component extends DCLogic {
         })
           .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
           .catch(() => false);
-        // Show success as soon as any channel delivers; give up on a channel after 15s.
+        // Show success once the mailer has the lead safe; give up after 15s.
         const firstSuccess = (ps) => new Promise((resolve) => {
           let left = ps.length;
           ps.forEach((p) => Promise.race([p, new Promise((r) => setTimeout(() => r(false), 15000))])
             .then((ok) => { if (ok) resolve(true); else if (--left === 0) resolve(false); }));
         });
-        firstSuccess([serverSend, emailSend, dbStore])
+        firstSuccess([serverSend])
           .then((delivered) => {
             if (!delivered) throw new Error('all delivery channels failed');
             this.setState({ sending: false, submitted: true }, () => {

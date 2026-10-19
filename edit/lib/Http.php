@@ -9,6 +9,8 @@ namespace ThinkSmart;
 final class Http
 {
     public static bool $dev = false;
+    /** Trust X-Forwarded-Proto only when the hosting sits behind a proxy (config "trustProxy"). */
+    public static bool $trustProxy = false;
 
     /** 32 random bytes, URL-safe (43 characters). */
     public static function token(): string
@@ -20,7 +22,7 @@ final class Http
     {
         if (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off') return true;
         if ((int)($_SERVER['SERVER_PORT'] ?? 0) === 443) return true;
-        return strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
+        return self::$trustProxy && strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')) === 'https';
     }
 
     public static function isLocal(): bool

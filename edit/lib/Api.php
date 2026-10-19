@@ -26,7 +26,8 @@ final class Api
     }
 
     private const POST = ['draft', 'check', 'publish', 'undo', 'bringback', 'restore', 'autoundo', 'photo', 'contract', 'people-add',
-        'people-update', 'people-remove', 'people-restore', 'people-reset', 'people-rescue', 'password', 'words-add', 'words-remove', 'prefs', 'signout'];
+        'people-update', 'people-remove', 'people-restore', 'people-reset', 'people-rescue', 'password', 'words-add', 'words-remove', 'prefs', 'signout',
+        'lead-resend', 'lead-seen', 'lead-address-add', 'lead-address-remove', 'lead-address-resend', 'repair', 'health'];
 
     public function handle(string $name): void
     {
@@ -126,7 +127,8 @@ final class Api
             'callback' => Site::CALLBACK,
             'now' => Clock::now(),
             'site' => $this->cfg->siteUrl(),
-            'leadsLast' => null,
+            'leadsLast' => ($l = Leads::last($this->cfg->paths)) ? ['at' => (int)$l['at'], 'when' => Clock::when((int)$l['at'])] : null,
+            'leadTo' => $this->leadToOut(),
         ]);
     }
 
@@ -182,7 +184,7 @@ final class Api
             }
             foreach ($op['add'] ?? [] as $it) $rows[] = ['label' => $label, 'added' => $ex->title($it, $sp, $after)];
         }
-        Http::json(['entry' => $this->entryOut($e), 'rows' => $rows, 'canUndo' => $e['kind'] !== 'launch' && $this->pub->inverse($rev) !== null]);
+        Http::json(['entry' => $this->entryOut($e), 'rows' => $rows, 'canUndo' => !in_array($e['kind'], ['launch', 'repair'], true) && $this->pub->inverse($rev) !== null]);
     }
 
     private function doRestorePreview(array $q): void
@@ -481,6 +483,121 @@ final class Api
         }
         Json::write($this->cfg->paths->private . '/prefs/' . $this->me() . '.json', $p, false);
         Http::json(['ok' => true, 'prefs' => $p]);
+    }
+
+    // ---------------------------------------------------------------- leads
+
+    private function leadToOut(): array
+    {
+        return array_map(fn($a) => ['email' => $a['email'], 'state' => $a['state'] ?? 'waiting', 'when' => isset($a['confirmed']) && $a['confirmed'] ? Clock::when((int)$a['confirmed']) : Clock::when((int)($a['added'] ?? 0))],
+            LeadSettings::load($this->cfg)['leadTo']);
+    }
+
+    private function doLeads(array $q): void
+    {
+        if (random_int(1, 5) === 1) Leads::tidy($this->cfg->paths);
+        $st = Health::status($this->cfg, !empty($this->me['alerts']));
+        Http::json(['leads' => Leads::listing($this->cfg->paths), 'keepDays' => Leads::KEEP_DAYS, 'photoDays' => Leads::PHOTO_DAYS,
+            'reader' => $st['mail'], 'bounced' => $st['bounced'], 'to' => $this->leadToOut()]);
+    }
+
+    private function doLead(array $q): void
+    {
+        $l = Leads::get($this->cfg->paths, (string)($q['id'] ?? ''));
+        if (!$l) throw new UserError('That lead is no longer kept (leads are kept ' . Leads::KEEP_DAYS . ' days).');
+        $d = Leads::detail($this->cfg->paths, $l);
+        // the claim's photos arrive as separate leads with the same case number
+        if (($l['kind'] ?? '') === 'claim' && ($l['case_no'] ?? '') !== '') {
+            $d['photoFiles'] = Leads::photos($this->cfg->paths, ['case_no' => $l['case_no']]);
+        }
+        Http::json(['lead' => $d]);
+    }
+
+    /** A lead's photo, only for a signed-in person, never run or shown as a page. */
+    private function doLeadPhoto(array $q): void
+    {
+        $l = Leads::get($this->cfg->paths, (string)($q['id'] ?? ''));
+        $file = (string)($q['file'] ?? '');
+        $dir = $l ? Leads::photoDir($this->cfg->paths, ($l['kind'] ?? '') === 'claim' ? ['case_no' => $l['case_no'] ?? ''] : $l) : null;
+        if (!$l || $dir === null || !preg_match('/^[A-Za-z0-9._-]+\.(jpg|png|webp|gif)$/', $file) || !is_file("$dir/$file")) { http_response_code(404); return; }
+        $data = (string)file_get_contents("$dir/$file");
+        $type = str_starts_with($data, "\xFF\xD8") ? 'image/jpeg' : (str_starts_with($data, "\x89PNG") ? 'image/png' : (str_starts_with($data, 'GIF8') ? 'image/gif' : 'image/webp'));
+        Http::headers('api');
+        header("Content-Security-Policy: default-src 'none'; sandbox");
+        header('Content-Type: ' . $type);
+        header('Content-Disposition: inline; filename="' . $file . '"');
+        echo $data;
+    }
+
+    /** "Email it to me again" for a lead (counts toward today's emails). */
+    private function doLeadResend(array $d): void
+    {
+        $l = Leads::get($this->cfg->paths, (string)($d['id'] ?? ''));
+        if (!$l) throw new UserError('That lead is no longer kept.');
+        $det = Leads::detail($this->cfg->paths, $l);
+        $paras = [$det['what'] . ' from the website, ' . $det['when'] . ($det['caseNo'] ? ' (case ' . $det['caseNo'] . ')' : '') . ' — sent again from the website editor.'];
+        foreach ($det['rows'] as [$k, $v]) $paras[] = "$k: $v";
+        if ($det['photoFiles']) $paras[] = count($det['photoFiles']) . ' photo(s) are in the website editor (kept ' . Leads::PHOTO_DAYS . ' days).';
+        $to = LeadSettings::recipients($this->cfg);
+        $ok = (new Mailer($this->cfg))->send($to, 'Website lead (sent again): ' . $det['what'] . ($det['name'] ? ' - ' . $det['name'] : ''), $paras, null, 'lead', ['X-TS-Lead' => $l['id']]);
+        if (!$ok) throw new UserError('It couldn\'t be emailed right now (today\'s email allowance may be used up). It\'s still kept here.');
+        $l['mail'] = ['state' => 'sent', 'at' => Clock::now(), 'to' => $to, 'again' => true];
+        Leads::put($this->cfg->paths, $l);
+        Http::json(['ok' => true, 'lead' => Leads::detail($this->cfg->paths, $l)]);
+    }
+
+    private function doLeadSeen(array $d): void
+    {
+        $l = Leads::get($this->cfg->paths, (string)($d['id'] ?? ''));
+        if ($l) { $l['seenBounce'] = true; Leads::put($this->cfg->paths, $l); }
+        Http::json(['ok' => true]);
+    }
+
+    private function doLeadAddressAdd(array $d): void
+    {
+        $email = strtolower(trim((string)($d['email'] ?? '')));
+        LeadSettings::addPending($this->cfg, $email, $this->me());
+        $this->alert('A new address for the website\'s leads', [$this->me['name'] . " added $email as an address for the website's leads (" . Clock::when(Clock::now()) . '). It gets leads once someone taps the link in the test lead sent to it.']);
+        Http::json(['ok' => true, 'to' => $this->leadToOut()]);
+    }
+
+    private function doLeadAddressResend(array $d): void
+    {
+        LeadSettings::addPending($this->cfg, strtolower(trim((string)($d['email'] ?? ''))), $this->me());
+        Http::json(['ok' => true, 'to' => $this->leadToOut()]);
+    }
+
+    private function doLeadAddressRemove(array $d): void
+    {
+        $email = strtolower(trim((string)($d['email'] ?? '')));
+        $before = LeadSettings::remove($this->cfg, $email);
+        $tok = (new Tokens($this->cfg))->make('undo-lead-addresses', ['list' => $before]);
+        (new Mailer($this->cfg))->send($this->people->alertEmails(), 'An address for the website\'s leads was removed', [
+            $this->me['name'] . " removed $email from the addresses that get the website's leads (" . Clock::when(Clock::now()) . ').',
+            'If that was a mistake, tap Undo to put the addresses back as they were.',
+        ], ['Undo this change', $this->cfg->siteUrl() . '/edit/undo?t=' . $tok], 'alert');
+        Http::json(['ok' => true, 'to' => $this->leadToOut()]);
+    }
+
+    // ---------------------------------------------------------------- health
+
+    private function doHealth(array $q): void
+    {
+        Health::check($this->cfg, $this->people);
+        Health::daily($this->cfg);
+        Http::json(Health::status($this->cfg, !empty($this->me['alerts'])));
+    }
+
+    private function doRepair(array $d): void
+    {
+        $fixed = Health::repairEditor($this->cfg, $this->people);
+        Http::json(['ok' => true, 'fixed' => count($fixed)]);
+    }
+
+    /** "Download a copy" (Step 5: lib/Backup.php). */
+    private function doDownload(array $q): void
+    {
+        Backup::download($this->cfg);
     }
 
     private function doSignout(array $d): void

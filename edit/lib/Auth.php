@@ -137,11 +137,11 @@ final class People
         return $ok;
     }
 
-    public function setPassword(string $id, string $pw): void
+    public function setPassword(string $id, string $pw, bool $checkName = true): void
     {
         $p = $this->find($id);
         if (!$p) throw new UserError('That person is no longer here.');
-        if (($e = self::passwordProblem($pw, $p['username'])) !== null) throw new UserError($e);
+        if (($e = self::passwordProblem($pw, $checkName ? $p['username'] : '')) !== null) throw new UserError($e);
         $p['hash'] = password_hash($pw, PASSWORD_DEFAULT);
         $p['changed'] = Clock::now();
         $this->put($p);

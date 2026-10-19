@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your website's launch kit</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- For John's Google Drive. edit-dev/make-zip.php writes a copy with the setup code and the
+     zip's name filled in (out/launch-kit-checklist.html); make-pdfs.js turns it into a PDF. -->
+<style>
+  :root { --ink: #15191f; --muted: #5b6270; --line: #d9d2c4; --accent: #f09a2e; --soft: #fff4e2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f4f1ea; color: var(--ink); font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 28px 16px 48px; }
+  .paper { background: #fff; border-radius: 10px; padding: 28px 26px; box-shadow: 0 2px 14px rgba(0,0,0,.08); }
+  .kicker { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #8a4f00; }
+  h1 { margin: 4px 0 6px; font-size: 26px; line-height: 1.2; }
+  h2 { margin: 22px 0 8px; font-size: 16px; text-transform: uppercase; letter-spacing: .05em; }
+  p { margin: 0 0 8px; }
+  .lead { color: var(--muted); }
+  ul.boxes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  ul.boxes li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; }
+  ul.boxes li::before { content: ""; width: 18px; height: 18px; margin-top: 3px; border: 2px solid var(--ink); border-radius: 3px; }
+  .code { font: 700 20px/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: .06em; padding: 10px 12px; border-radius: 8px; background: var(--soft); border: 2px solid var(--accent); display: inline-block; margin: 4px 0 2px; overflow-wrap: anywhere; }
+  .file { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 14px; overflow-wrap: anywhere; }
+  .box { margin-top: 20px; padding: 14px 16px; border: 2px solid var(--ink); border-radius: 8px; }
+  .box h2 { margin-top: 0; }
+  .small { font-size: 13px; color: var(--muted); }
+  @media print {
+    body { background: #fff; }
+    main { padding: 0; max-width: none; }
+    .paper { box-shadow: none; padding: 0; }
+    @page { margin: 16mm; }
+  }
+</style>
+</head>
+<body>
+<main>
+<div class="paper">
+  <p class="kicker">Think Smart Public Adjusting</p>
+  <h1>Your website's launch kit</h1>
+  <p class="lead">Keep this folder in your Google Drive. You won't need it day to day: the website is changed in the editor, at thinksmartpublicadjusting.com/edit. This folder is only for the day the website has to be set up again, for example after a problem with the hosting.</p>
+
+  <h2>In this folder</h2>
+  <ul class="boxes">
+    <li><span>The website's setup file: <span class="file">%ZIP_NAME%</span></span></li>
+    <li><span>The setup guide (guide.pdf), for whoever sets it up.</span></li>
+    <li><span>A copy of the website made on handover day. To make one: in the editor, open <b>More</b>, then <b>Download a copy</b>, and put the file here.</span></li>
+    <li><span>This page, with the setup code:<br><span class="code">%SETUP_CODE%</span><br><span class="small">The setup code only opens the setup page. Keep it here, not on the website.</span></span></li>
+  </ul>
+
+  <h2>Kept by John (not in this folder)</h2>
+  <ul class="boxes">
+    <li><span>The printed emergency sheet, with the business papers. It has the editor's address, the usernames and a rescue code for each person.</span></li>
+    <li><span>The GoDaddy login, and the phone that gets its sign-in codes.</span></li>
+  </ul>
+
+  <h2>Who owns what</h2>
+  <p>All of these should be in John's name, with John's phone and email for recovery:</p>
+  <ul class="boxes">
+    <li><span>The GoDaddy account (the hosting and the domain name thinksmartpublicadjusting.com, with auto-renew on).</span></li>
+    <li><span>The Gmail account that gets the leads (thinksmartpublicadjusting@gmail.com).</span></li>
+    <li><span>The Adobe Sign account behind the e-sign links.</span></li>
+  </ul>
+
+  <div class="box">
+    <h2>If the website ever has to be set up again</h2>
+    <p>Give this folder to any web person. They follow <b>"Reinstall and keep my content"</b> in the setup guide. The website's words, photos, contracts, logins and leads are kept.</p>
+  </div>
+  <p class="small">Made %MADE%.</p>
+</div>
+</main>
+</body>
+</html>

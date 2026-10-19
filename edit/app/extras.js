@@ -153,6 +153,12 @@ export const CARDS = [
     ['Tap the change, check before and after, and tap "Undo this change". Deleted items have a "Bring back" button.', 'history-1'],
     ['To put everything back to how it was at that moment, tap "Put the whole website back to this moment". Logins and passwords are never touched.', null],
   ] },
+  { id: 'leads', title: 'Find a lead from the website', go: '#/leads', steps: [
+    ['On the start screen, tap "Last lead received". Or tap More, then Leads.', 'start-lead'],
+    ['Every claim, message and chat is here for 90 days (photos 14 days), even if its email never arrived. Tap one to see everything the visitor wrote.', 'leads-1'],
+    ['Tap Call to phone them back, or "Email it to me again" to get it in your inbox.', null],
+    ['If the start screen says leads didn\'t reach your email, check the addresses under Business details → "Where leads are emailed".', null],
+  ] },
   { id: 'password', title: 'Forgot my password', go: null, steps: [
     ['On the sign-in screen, tap "Forgot your password?".', null],
     ['Type your username or email and tap "Email me a code". Type the 6-digit code from the email with a new password; let your iPhone save it.', null],

@@ -126,7 +126,8 @@ export function processPhoto(file, opt = {}) {
           URL.revokeObjectURL(url);
           if (!b) { reject(new Error('That photo couldn\'t be prepared. Try another one.')); return; }
           // iPhone Safari can't make WebP from a canvas; it makes JPEG fine, PNG as a last resort
-          resolve({ blob: b, type: b.type, width: c.width, height: c.height, lum, url: URL.createObjectURL(b), small: Math.min(img.naturalWidth, img.naturalHeight) < 700 });
+          resolve({ blob: b, type: b.type, width: c.width, height: c.height, lum, url: URL.createObjectURL(b),
+            small: Math.min(img.naturalWidth, img.naturalHeight) < 700 || (opt.wide && img.naturalWidth < 1600) });
         }, 'image/jpeg', 0.82);
       } catch (e) { URL.revokeObjectURL(url); reject(new Error('That photo couldn\'t be prepared. Try another one.')); }
     };
@@ -202,11 +203,11 @@ function photoEditor(path, sp, f, opt) {
     body.append(h('div.row', h('button.btn.primary', { type: 'button', onclick: choose }, icon('photo'), fresh ? 'Pick a different photo' : 'Choose a new photo')));
     body.append(h('p.small', { text: 'No house numbers, faces or license plates.' }));
     if (OVER_TEXT.test(sp)) {
-      const sw = h('button.switch', { type: 'button', role: 'switch', 'aria-checked': String(darken), onclick: async () => { darken = !darken; if (file) { fresh = await processPhoto(file, { darken }); } draw(); } }, h('span.knob'), h('span.switch-text', { text: darken ? 'On' : 'Off' }));
+      const sw = h('button.switch', { type: 'button', role: 'switch', 'aria-checked': String(darken), onclick: async () => { darken = !darken; if (file) { fresh = await processPhoto(file, { darken, wide: true }); } draw(); } }, h('span.knob'), h('span.switch-text', { text: darken ? 'On' : 'Off' }));
       body.append(h('div.field-box', h('div.field-head', h('span.field-label', { text: 'Match the site\'s look (darken a little)' })), h('p.help', { text: 'Words sit on top of this photo. Darkening keeps them easy to read.' }), sw));
       if (fresh && fresh.lum > 0.42) body.append(h('p.callout.warn', { text: 'This photo is bright where the words sit, so they may be hard to read. Keep the darkening on, or pick a darker photo.' }));
     }
-    if (fresh && fresh.small) body.append(h('p.callout.warn', { text: 'This photo is small, so it may look blurry on big screens.' }));
+    if (fresh && fresh.small) body.append(h('p.callout.warn', { text: OVER_TEXT.test(sp) ? 'This photo is small for a big spot (under 1600 pixels wide), so it may look soft on computers. A photo straight from the phone\'s camera works best.' : 'This photo is small, so it may look blurry on big screens.' }));
     if (hasAlt) {
       const box = fieldBox(altPath, { label: 'What\'s in this photo? (for blind visitors and Google)' });
       if (fresh && JSON.stringify(getAt(S.draft, altPath)) === JSON.stringify(getAt(S.live.content, altPath))) box.prepend(h('p.callout.warn', { text: 'New photo: describe it here. This still describes the old photo.' }));
@@ -229,7 +230,7 @@ function photoEditor(path, sp, f, opt) {
     if (!picked) return;
     try {
       file = picked;
-      fresh = await processPhoto(picked, { darken });
+      fresh = await processPhoto(picked, { darken, wide: OVER_TEXT.test(sp) || /^site\.sharePicture$/.test(sp) });
       focus = null;
       draw();
     } catch (e) { toast(e.message, 'bad', 5000); }

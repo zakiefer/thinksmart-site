@@ -1,0 +1,2 @@
+# Built launch kits (they hold the setup code's hash, and the checklist holds the code itself).
+out/
