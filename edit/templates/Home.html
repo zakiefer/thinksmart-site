@@ -51,7 +51,17 @@
     header[data-ref="nav"] a[href="Claim.dc.html"] { white-space: nowrap; letter-spacing: .08em !important; }
     header[data-ref="nav"] [data-ref="burger"] { width: 40px !important; height: 40px !important; }
     input, textarea, select { font-size: 16px !important; }
+    /* Top line over the headline wraps on phones: dot beside the first line, tighter even lines. */
+    [data-ref="heroContent"] > div:first-child { align-items: flex-start !important; gap: 12px !important; }
+    [data-ref="heroContent"] > div:first-child > span:first-child { margin-top: 6px; }
+    [data-ref="heroContent"] > div:first-child > span:last-child { letter-spacing: .16em !important; line-height: 20px; text-wrap: balance; }
   }
+  [data-ref="heroContent"] > div:first-child > span:first-child { flex: none; }
+  /* Short windows turn the damage strip into a swipe row; its scrollbar (desktop only) matches the page's. */
+  [data-ref="stripTrack"] { scrollbar-width: thin; scrollbar-color: #2A313D transparent; }
+  [data-ref="stripTrack"]::-webkit-scrollbar { height: 6px; }
+  [data-ref="stripTrack"]::-webkit-scrollbar-track { background: transparent; }
+  [data-ref="stripTrack"]::-webkit-scrollbar-thumb { background: #2A313D; border-radius: 3px; }
   @media (max-width: 350px) {
     header[data-ref="nav"] > a:first-child > span > span:first-child { font-size: 21px !important; }
     header[data-ref="nav"] > a:first-child > span > span:last-child { font-size: 7px !important; letter-spacing: .1em !important; }
