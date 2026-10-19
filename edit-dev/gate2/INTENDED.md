@@ -43,6 +43,13 @@ be deleted then. Generator: `edit-dev/states/make-outlines.py`.
 **D4. Reveal delays capped at 200ms.** FAQ questions 7–10 now fade in after 200ms instead of
 240–360ms; Home "How we work" step 4 after 200ms instead of 240ms. Longer lists never wait longer.
 
+**D13. Newer Illinois contract** (content update, 2026-10-19). The Illinois e-sign link now opens
+"IL LOR 2026", the one on the live site's File a Claim page; it was "IL LOR 24-1", which only the
+live site's leftover "File a Claim 1" page still links. The other four states already matched the
+live site (IN LOR 2025, OH contract 2024-1 (1), Approved KY LOR 2026, PA Contract TN), and both PDFs
+(Indiana, Kentucky) are byte-for-byte the live site's. Also changed in `Claim.dc.html` today.
+Gate 1's snapshot (`edit-dev/gate1/files`) keeps the old link: it records the pages as of c5efbf7.
+
 ## Changes visitors can't see
 
 **D5. Copyright year from the visitor's browser.** "© {{ year }}" with `year` returned by each
