@@ -25,7 +25,7 @@ final class Paths
     public static function detect(array $over = []): self
     {
         $app = dirname(__DIR__);
-        $webroot = $over['webroot'] ?? dirname($app);
+        $webroot = $over['webroot'] ?? (getenv('TS_WEBROOT') ?: dirname($app));
         $private = $over['private'] ?? (getenv('TS_PRIVATE_DIR') ?: dirname($webroot) . '/thinksmart-private');
         return new self($webroot, $private, $app);
     }

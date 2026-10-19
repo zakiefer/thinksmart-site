@@ -1,0 +1,43 @@
+# Words the spelling check knows besides Webster's 2nd (public domain, /usr/share/dict/web2),
+# its proper names list and the website's own words. One per line; plurals and -ed/-ing/-er/-ly
+# forms of known words are recognised by the check itself. Lines starting with # are notes.
+# -- modern everyday words
+email emails emailed emailing e-mail website websites webpage online offline internet app apps smartphone smartphones iphone iphones ipad android
+text texted texting texts voicemail voicemails login logins logout username usernames password passwords upload uploaded uploads download downloaded downloads
+google googled facebook instagram tiktok youtube linkedin nextdoor yelp bbb gmail outlook icloud wifi wi-fi bluetooth pdf pdfs jpeg jpg png heic
+selfie selfies emoji online-only covid covid-19 pandemic livestream podcast podcasts blog blogs vlog hashtag hashtags inbox spam unsubscribe
+okay ok hi hey yeah thanks thank-you ma'am o'clock y'all gonna wanna kinda
+e-sign esign e-signature signup sign-up checkup check-in checklist checklists follow-up followup walkthrough walk-through workaround
+anytime anymore everyday cannot whatnot healthcare childcare daycare homeschool weekend weekends nonprofit nonprofits
+zip zipcode zip-code cellphone cellphones landline landlines fax faxed toll-free 24/7 24-hour 48-hour
+# -- contractions
+can't won't don't doesn't isn't aren't wasn't weren't haven't hasn't hadn't couldn't shouldn't wouldn't didn't mustn't needn't
+it's i'm i've i'll i'd you're you've you'll you'd we're we've we'll we'd they're they've they'll they'd he's she's he'd she'd he'll she'll
+that's there's here's what's where's who's how's let's that'll there'll who'll what'll
+# -- insurance and claims
+adjuster adjusters adjusting adjustor claimant claimants policyholder policyholders insurer insurers underwriter underwriters underwriting
+deductible deductibles depreciation recoverable non-recoverable acv rcv actual-cash-value replacement-cost subrogation appraisal appraisals appraiser umpire
+endorsement endorsements exclusion exclusions declarations dec-page rider riders premium premiums lapse lapsed renewal renewals
+xactimate symbility eagleview hover estimate estimates estimator estimators scope scoping supplement supplements supplemented supplementing
+underpaid underpayment underpayments lowball lowballed lowballing denial denials overturned overturn reopen reopened re-inspection reinspection
+mitigation remediation restoration contents inventory itemized itemize ale additional-living-expense loss-of-use bad-faith proof-of-loss
+claimant's insured's carrier carriers carrier's mortgagee mortgagees lienholder escrow check checks reissued
+licensed licensure licensee contingency contingency-fee pa pas public-adjuster public-adjusters
+fema nfip flood-zone floodplain sinkhole sinkholes earthquake earthquakes wildfire wildfires
+# -- damage and building
+roof roofs roofer roofers roofing reroof re-roof shingle shingles granule granules underlayment decking flashing soffit soffits fascia gutter gutters downspout downspouts
+siding vinyl stucco drywall sheetrock subfloor joist joists rafter rafters truss trusses attic attics crawlspace crawl-space basement basements foundation
+hvac furnace furnaces condenser condensers ductwork water-heater sump sump-pump backflow sewer sewage backup backups mold mildew asbestos
+hailstorm hailstorms hailstone hailstones windstorm windstorms thunderstorm thunderstorms tornado tornadoes derecho derechos hurricane hurricanes microburst
+lightning ice-dam ice-dams freeze frozen burst-pipe burst-pipes leak leaks leaking leaked waterline smoke soot fire-damage
+tarp tarps tarped tarping boarded board-up boardup inspection inspections inspector inspectors contractor contractors subcontractor subcontractors
+homeowner homeowners homeowner's landlord landlords tenant tenants condo condos hoa hoas townhome townhomes duplex duplexes
+storefront storefronts warehouse warehouses business-interruption commercial residential
+cyber aviation maritime vandalism theft
+# -- places
+indiana kentucky ohio illinois tennessee michigan wisconsin missouri iowa minnesota texas florida georgia alabama mississippi louisiana arkansas oklahoma kansas nebraska
+evansville louisville indianapolis lexington cincinnati columbus cleveland chicago nashville memphis knoxville owensboro bloomington terre haute jasper vincennes
+newburgh boonville tell city santa claus dale ferdinand huntingburg rockport princeton fort wayne gary lafayette muncie dayton toledo akron peoria springfield
+dubois spencer warrick vanderburgh perry gibson posey pike daviess
+# -- business words on the site
+xactimate's thinksmart think-smart jonathan nelson muneerah oppaga llc inc

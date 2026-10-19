@@ -1,0 +1,7 @@
+# The editor's screens and pictures (public: they hold no content or passwords).
+Require all granted
+AddType text/javascript .mjs
+AddType application/manifest+json .webmanifest
+<IfModule mod_headers.c>
+Header set Cache-Control "no-cache"
+</IfModule>

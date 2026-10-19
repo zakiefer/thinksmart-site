@@ -37,6 +37,7 @@
                 "site.phone2",
                 "site.email",
                 "site.address",
+                "site.adjuster",
                 "site.social",
                 "site.businessName"
             ]
@@ -150,11 +151,13 @@
             "fit": [
                 38,
                 51
-            ]
+            ],
+            "order": 102
         },
         "about.adjuster.photo": {
             "label": "The adjuster: photo",
-            "type": "photo"
+            "type": "photo",
+            "order": 100
         },
         "about.adjuster.photoAlt": {
             "label": "The adjuster: what's in this photo",
@@ -166,7 +169,15 @@
             "fit": [
                 90,
                 141
-            ]
+            ],
+            "order": 101
+        },
+        "about.adjuster.photoFocus": {
+            "label": "The adjuster: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "about.adjuster.role": {
             "label": "The adjuster: title line under the name",
@@ -178,14 +189,16 @@
             "fit": [
                 35,
                 48
-            ]
+            ],
+            "order": 103
         },
         "about.bio": {
             "label": "The adjuster: story paragraphs",
             "type": "list",
             "min": 1,
             "max": 6,
-            "add": "Add a paragraph"
+            "add": "Add a paragraph",
+            "order": 105
         },
         "about.bio[].text": {
             "label": "The adjuster: story paragraph",
@@ -193,7 +206,8 @@
             "fit": [
                 573,
                 900
-            ]
+            ],
+            "order": 104
         },
         "about.cta.claimButton": {
             "label": "Orange band at the bottom of About: claim button",
@@ -201,7 +215,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 112
         },
         "about.cta.title": {
             "label": "Orange band at the bottom of About: headline",
@@ -209,18 +224,21 @@
             "fit": [
                 32,
                 43
-            ]
+            ],
+            "order": 111
         },
         "about.principles.items": {
             "label": "What we stand on: principles",
             "type": "list",
             "min": 1,
             "max": 6,
-            "add": "Add a principle"
+            "add": "Add a principle",
+            "order": 98
         },
         "about.principles.items[].highlight": {
             "label": "Orange title",
-            "type": "tick"
+            "type": "tick",
+            "order": 99999
         },
         "about.principles.items[].text": {
             "label": "What we stand on: principle text",
@@ -228,7 +246,8 @@
             "fit": [
                 176,
                 277
-            ]
+            ],
+            "order": 99
         },
         "about.principles.items[].title": {
             "label": "What we stand on: principle title",
@@ -236,7 +255,8 @@
             "fit": [
                 32,
                 43
-            ]
+            ],
+            "order": 97
         },
         "about.principles.kicker": {
             "label": "What we stand on: small heading",
@@ -245,7 +265,8 @@
             "fit": [
                 24,
                 34
-            ]
+            ],
+            "order": 96
         },
         "about.referral.kicker": {
             "label": "A note on referrals: small heading",
@@ -254,7 +275,8 @@
             "fit": [
                 28,
                 38
-            ]
+            ],
+            "order": 108
         },
         "about.referral.text": {
             "label": "A note on referrals: paragraph",
@@ -262,7 +284,8 @@
             "fit": [
                 273,
                 429
-            ]
+            ],
+            "order": 110
         },
         "about.referral.title": {
             "label": "A note on referrals: big words",
@@ -275,7 +298,8 @@
             "fit": [
                 141,
                 222
-            ]
+            ],
+            "order": 109
         },
         "about.tags": {
             "label": "The adjuster: credential tags",
@@ -283,7 +307,8 @@
             "min": 0,
             "max": 8,
             "add": "Add a tag",
-            "hard": 40
+            "hard": 40,
+            "order": 107
         },
         "about.tags[].text": {
             "label": "The adjuster: credential tag",
@@ -292,7 +317,8 @@
             "fit": [
                 44,
                 59
-            ]
+            ],
+            "order": 106
         },
         "about.top.kicker": {
             "label": "Top of About: small line above the headline",
@@ -301,11 +327,13 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 92
         },
         "about.top.photo": {
             "label": "Top of About: photo",
-            "type": "photo"
+            "type": "photo",
+            "order": 90
         },
         "about.top.photoAlt": {
             "label": "Top of About: what's in this photo",
@@ -313,7 +341,15 @@
             "fit": [
                 63,
                 83
-            ]
+            ],
+            "order": 91
+        },
+        "about.top.photoFocus": {
+            "label": "Top of About: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "about.top.text": {
             "label": "Top of About: paragraph",
@@ -321,7 +357,8 @@
             "fit": [
                 192,
                 301
-            ]
+            ],
+            "order": 95
         },
         "about.top.title.0": {
             "label": "Top of About: headline, line 1",
@@ -334,7 +371,8 @@
             "fit": [
                 23,
                 32
-            ]
+            ],
+            "order": 93
         },
         "about.top.title.1": {
             "label": "Top of About: headline, line 2",
@@ -347,7 +385,8 @@
             "fit": [
                 33,
                 45
-            ]
+            ],
+            "order": 94
         },
         "chat.askAgain": {
             "label": "Chat: asks again",
@@ -355,7 +394,8 @@
             "fit": [
                 97,
                 152
-            ]
+            ],
+            "order": 286
         },
         "chat.askContact": {
             "label": "Chat: asks for a phone or email",
@@ -363,7 +403,8 @@
             "fit": [
                 119,
                 187
-            ]
+            ],
+            "order": 285
         },
         "chat.close": {
             "label": "Chat: button words while open",
@@ -371,7 +412,8 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 289
         },
         "chat.doneNoContact": {
             "label": "Chat: reply after a message without a phone or email",
@@ -382,7 +424,8 @@
             "fit": [
                 220,
                 345
-            ]
+            ],
+            "order": 283
         },
         "chat.doneWithContact": {
             "label": "Chat: reply after a message with a phone or email",
@@ -393,7 +436,8 @@
             "fit": [
                 189,
                 297
-            ]
+            ],
+            "order": 282
         },
         "chat.fail": {
             "label": "Chat: reply if sending fails",
@@ -405,7 +449,8 @@
             "fit": [
                 200,
                 315
-            ]
+            ],
+            "order": 281
         },
         "chat.followUp": {
             "label": "Chat: reply to later messages",
@@ -413,7 +458,8 @@
             "fit": [
                 59,
                 78
-            ]
+            ],
+            "order": 284
         },
         "chat.intro": {
             "label": "Chat: first message",
@@ -421,7 +467,8 @@
             "fit": [
                 231,
                 363
-            ]
+            ],
+            "order": 280
         },
         "chat.note": {
             "label": "Chat: small line at the bottom",
@@ -430,7 +477,8 @@
             "fit": [
                 29,
                 40
-            ]
+            ],
+            "order": 278
         },
         "chat.open": {
             "label": "Chat: button words",
@@ -438,7 +486,8 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 290
         },
         "chat.placeholder": {
             "label": "Chat: hint in the message box",
@@ -446,7 +495,8 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 276
         },
         "chat.send": {
             "label": "Chat: send button",
@@ -454,7 +504,8 @@
             "fit": [
                 9,
                 14
-            ]
+            ],
+            "order": 277
         },
         "chat.subtitle": {
             "label": "Chat: line under the title",
@@ -463,7 +514,8 @@
             "fit": [
                 42,
                 56
-            ]
+            ],
+            "order": 275
         },
         "chat.title": {
             "label": "Chat: title",
@@ -471,7 +523,8 @@
             "fit": [
                 35,
                 48
-            ]
+            ],
+            "order": 274
         },
         "chat.urgent": {
             "label": "Chat: urgent link at the bottom",
@@ -483,7 +536,8 @@
             "fit": [
                 29,
                 40
-            ]
+            ],
+            "order": 279
         },
         "chat.usLabel": {
             "label": "Chat: label over our messages",
@@ -491,7 +545,8 @@
             "fit": [
                 18,
                 26
-            ]
+            ],
+            "order": 288
         },
         "chat.youLabel": {
             "label": "Chat: label over the visitor's messages",
@@ -499,7 +554,8 @@
             "fit": [
                 8,
                 13
-            ]
+            ],
+            "order": 287
         },
         "chrome.footer.callLink": {
             "label": "Bottom of every page: call link",
@@ -510,7 +566,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 82
         },
         "chrome.footer.claimLink": {
             "label": "Bottom of every page: \"File a claim\" link",
@@ -518,7 +575,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 80
         },
         "chrome.footer.emailLink": {
             "label": "Bottom of every page: email link",
@@ -526,7 +584,8 @@
             "fit": [
                 14,
                 21
-            ]
+            ],
+            "order": 84
         },
         "chrome.footer.license": {
             "label": "Bottom of every page: license line",
@@ -538,11 +597,13 @@
             "fit": [
                 160,
                 251
-            ]
+            ],
+            "order": 86
         },
         "chrome.footer.licenseAuto": {
             "label": "License line: write it from your states",
-            "type": "switch"
+            "type": "switch",
+            "order": 99999
         },
         "chrome.footer.photosLink": {
             "label": "Bottom of every page: \"Submit photos\" link",
@@ -550,7 +611,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 81
         },
         "chrome.footer.promise": {
             "label": "Bottom of every page: the promise",
@@ -558,11 +620,13 @@
             "fit": [
                 160,
                 251
-            ]
+            ],
+            "order": 85
         },
         "claim.byPhone.otherStates": {
             "label": "\"By phone\" card: other states it names (yours are left out automatically)",
-            "type": "states"
+            "type": "states",
+            "order": 99999
         },
         "claim.byPhone.tag": {
             "label": "\"By phone\" card: tag",
@@ -571,7 +635,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 262
         },
         "claim.byPhone.text": {
             "label": "\"By phone\" card: words",
@@ -585,7 +650,8 @@
             "fit": [
                 144,
                 227
-            ]
+            ],
+            "order": 264
         },
         "claim.byPhone.title": {
             "label": "\"By phone\" card: title",
@@ -593,7 +659,8 @@
             "fit": [
                 14,
                 21
-            ]
+            ],
+            "order": 263
         },
         "claim.damageChoices": {
             "label": "Claim form damage choices (\"Other\" stays last)",
@@ -601,7 +668,8 @@
             "min": 2,
             "max": 10,
             "add": "Add a choice",
-            "hard": 24
+            "hard": 24,
+            "order": 229
         },
         "claim.damageChoices[].name": {
             "label": "Claim form damage choices: choice",
@@ -610,7 +678,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 228
         },
         "claim.hardCopy.text": {
             "label": "\"Need a hard copy?\" box: words",
@@ -622,7 +691,8 @@
             "fit": [
                 266,
                 418
-            ]
+            ],
+            "order": 266
         },
         "claim.hardCopy.title": {
             "label": "\"Need a hard copy?\" box: heading",
@@ -631,7 +701,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 265
         },
         "claim.sign.callButton": {
             "label": "Sign for your state: button words on a \"Call to sign\" card",
@@ -643,7 +714,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 99999
         },
         "claim.sign.callTag": {
             "label": "Sign for your state: tag on a \"Call to sign\" card",
@@ -653,7 +725,8 @@
                 19,
                 27
             ],
-            "hard": 22
+            "hard": 22,
+            "order": 99999
         },
         "claim.sign.cardButton": {
             "label": "Sign for your state: button words on each card",
@@ -662,7 +735,8 @@
             "fit": [
                 14,
                 21
-            ]
+            ],
+            "order": 261
         },
         "claim.sign.cardTag": {
             "label": "Sign for your state: tag on each state card",
@@ -671,7 +745,8 @@
             "fit": [
                 24,
                 34
-            ]
+            ],
+            "order": 260
         },
         "claim.sign.kicker": {
             "label": "Sign for your state: small heading",
@@ -680,7 +755,8 @@
             "fit": [
                 38,
                 51
-            ]
+            ],
+            "order": 254
         },
         "claim.sign.text": {
             "label": "Sign for your state: paragraph",
@@ -688,7 +764,8 @@
             "fit": [
                 244,
                 383
-            ]
+            ],
+            "order": 256
         },
         "claim.sign.title": {
             "label": "Sign for your state: headline",
@@ -701,14 +778,16 @@
             "fit": [
                 43,
                 58
-            ]
+            ],
+            "order": 255
         },
         "claim.steps": {
             "label": "File a Claim steps",
             "type": "list",
             "min": 2,
             "max": 5,
-            "add": "Add a step"
+            "add": "Add a step",
+            "order": 214
         },
         "claim.steps[].text": {
             "label": "File a Claim steps: step text",
@@ -716,7 +795,8 @@
             "fit": [
                 85,
                 134
-            ]
+            ],
+            "order": 215
         },
         "claim.steps[].title": {
             "label": "File a Claim steps: step title",
@@ -727,7 +807,8 @@
             "fit": [
                 38,
                 51
-            ]
+            ],
+            "order": 213
         },
         "claim.top.kicker": {
             "label": "Top of File a Claim: small line above the headline",
@@ -736,7 +817,8 @@
             "fit": [
                 32,
                 43
-            ]
+            ],
+            "order": 209
         },
         "claim.top.photosLink": {
             "label": "Top of File a Claim: photos link",
@@ -745,7 +827,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 216
         },
         "claim.top.text": {
             "label": "Top of File a Claim: paragraph",
@@ -753,7 +836,8 @@
             "fit": [
                 235,
                 370
-            ]
+            ],
+            "order": 212
         },
         "claim.top.title.0": {
             "label": "Top of File a Claim: headline, line 1",
@@ -766,7 +850,8 @@
             "fit": [
                 9,
                 14
-            ]
+            ],
+            "order": 210
         },
         "claim.top.title.1": {
             "label": "Top of File a Claim: headline, line 2",
@@ -779,15 +864,32 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 211
+        },
+        "claim.top.video.photo": {
+            "label": "Top of File a Claim: photo instead of the video",
+            "type": "photo",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
+        },
+        "claim.top.video.photoFocus": {
+            "label": "Top of File a Claim: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "claim.top.video.poster": {
             "label": "Top of File a Claim: background video: still picture shown before the video plays",
-            "type": "photo"
+            "type": "photo",
+            "order": 207
         },
         "claim.top.video.video": {
             "label": "Top of File a Claim: background video: video",
-            "type": "video"
+            "type": "video",
+            "order": 208
         },
         "contact.channels.call.kicker": {
             "label": "Ways to reach us, Call card: small heading",
@@ -796,7 +898,8 @@
             "fit": [
                 13,
                 19
-            ]
+            ],
+            "order": 167
         },
         "contact.channels.call.text": {
             "label": "Ways to reach us, Call card: words",
@@ -804,7 +907,8 @@
             "fit": [
                 122,
                 191
-            ]
+            ],
+            "order": 169
         },
         "contact.channels.call.title": {
             "label": "Ways to reach us, Call card: title",
@@ -812,7 +916,8 @@
             "fit": [
                 14,
                 21
-            ]
+            ],
+            "order": 168
         },
         "contact.channels.claim.action": {
             "label": "Ways to reach us, File-a-claim card: action words",
@@ -821,7 +926,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 173
         },
         "contact.channels.claim.kicker": {
             "label": "Ways to reach us, File-a-claim card: small heading",
@@ -830,7 +936,8 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 170
         },
         "contact.channels.claim.text": {
             "label": "Ways to reach us, File-a-claim card: words",
@@ -841,7 +948,8 @@
             "fit": [
                 112,
                 176
-            ]
+            ],
+            "order": 172
         },
         "contact.channels.claim.title": {
             "label": "Ways to reach us, File-a-claim card: title",
@@ -849,7 +957,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 171
         },
         "contact.channels.email.kicker": {
             "label": "Ways to reach us, Email card: small heading",
@@ -858,7 +967,8 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 178
         },
         "contact.channels.email.text": {
             "label": "Ways to reach us, Email card: words",
@@ -866,7 +976,8 @@
             "fit": [
                 123,
                 194
-            ]
+            ],
+            "order": 180
         },
         "contact.channels.email.title": {
             "label": "Ways to reach us, Email card: title",
@@ -874,7 +985,8 @@
             "fit": [
                 14,
                 21
-            ]
+            ],
+            "order": 179
         },
         "contact.channels.photos.action": {
             "label": "Ways to reach us, Photos card: action words",
@@ -883,7 +995,8 @@
             "fit": [
                 12,
                 18
-            ]
+            ],
+            "order": 177
         },
         "contact.channels.photos.kicker": {
             "label": "Ways to reach us, Photos card: small heading",
@@ -892,7 +1005,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 174
         },
         "contact.channels.photos.text": {
             "label": "Ways to reach us, Photos card: words",
@@ -900,7 +1014,8 @@
             "fit": [
                 104,
                 163
-            ]
+            ],
+            "order": 176
         },
         "contact.channels.photos.title": {
             "label": "Ways to reach us, Photos card: title",
@@ -908,7 +1023,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 175
         },
         "contact.form.kicker": {
             "label": "Leave a message: small heading",
@@ -917,11 +1033,13 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 181
         },
         "contact.form.photo": {
             "label": "Leave a message: photo",
-            "type": "photo"
+            "type": "photo",
+            "order": 187
         },
         "contact.form.photoAlt": {
             "label": "Leave a message: what's in this photo",
@@ -929,7 +1047,15 @@
             "fit": [
                 28,
                 38
-            ]
+            ],
+            "order": 188
+        },
+        "contact.form.photoFocus": {
+            "label": "Leave a message: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "contact.form.text": {
             "label": "Leave a message: paragraph",
@@ -937,7 +1063,8 @@
             "fit": [
                 196,
                 308
-            ]
+            ],
+            "order": 183
         },
         "contact.form.title": {
             "label": "Leave a message: headline",
@@ -950,14 +1077,16 @@
             "fit": [
                 23,
                 32
-            ]
+            ],
+            "order": 182
         },
         "contact.rows": {
             "label": "Contact details rows",
             "type": "list",
             "min": 1,
             "max": 10,
-            "add": "Add a row"
+            "add": "Add a row",
+            "order": 185
         },
         "contact.rows[].label": {
             "label": "Contact details row: label",
@@ -966,7 +1095,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 184
         },
         "contact.rows[].text": {
             "label": "Contact details row: words",
@@ -979,7 +1109,8 @@
             "fit": [
                 85,
                 134
-            ]
+            ],
+            "order": 186
         },
         "contact.rows[].type": {
             "label": "Kind of row",
@@ -989,7 +1120,8 @@
                 "phone": "A phone number",
                 "email": "The email",
                 "states": "Automatic from your states"
-            }
+            },
+            "order": 99999
         },
         "contact.rows[].which": {
             "label": "Which phone",
@@ -998,7 +1130,8 @@
                 "phone": "Main phone",
                 "phone2": "Second phone"
             },
-            "optional": true
+            "optional": true,
+            "order": 99999
         },
         "contact.top.kicker": {
             "label": "Top of Contact: small line above the headline",
@@ -1007,7 +1140,8 @@
             "fit": [
                 50,
                 67
-            ]
+            ],
+            "order": 164
         },
         "contact.top.text": {
             "label": "Top of Contact: paragraph",
@@ -1015,7 +1149,8 @@
             "fit": [
                 172,
                 271
-            ]
+            ],
+            "order": 166
         },
         "contact.top.title": {
             "label": "Top of Contact: headline",
@@ -1028,7 +1163,8 @@
             "fit": [
                 32,
                 43
-            ]
+            ],
+            "order": 165
         },
         "faq.cta.callButton": {
             "label": "Orange band at the bottom of FAQ: call button",
@@ -1039,7 +1175,8 @@
             "fit": [
                 30,
                 42
-            ]
+            ],
+            "order": 159
         },
         "faq.cta.claimButton": {
             "label": "Orange band at the bottom of FAQ: claim button",
@@ -1047,7 +1184,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 160
         },
         "faq.cta.title": {
             "label": "Orange band at the bottom of FAQ: headline",
@@ -1055,7 +1193,8 @@
             "fit": [
                 32,
                 43
-            ]
+            ],
+            "order": 158
         },
         "faq.items": {
             "label": "Questions & answers",
@@ -1063,14 +1202,16 @@
             "min": 3,
             "max": 20,
             "add": "Add a question",
-            "rule": "exactly 3 shown on Home"
+            "rule": "exactly 3 shown on Home",
+            "order": 71
         },
         "faq.items[].a": {
             "label": "Answer paragraphs",
             "type": "list",
             "min": 1,
             "max": 6,
-            "add": "Add a paragraph"
+            "add": "Add a paragraph",
+            "order": 157
         },
         "faq.items[].a[].text": {
             "label": "FAQ: answer paragraph",
@@ -1086,11 +1227,13 @@
             "fit": [
                 535,
                 840
-            ]
+            ],
+            "order": 156
         },
         "faq.items[].home": {
             "label": "Show on Home",
-            "type": "star"
+            "type": "star",
+            "order": 99999
         },
         "faq.items[].homeA": {
             "label": "Shorter answer for Home (optional)",
@@ -1102,7 +1245,8 @@
                 276,
                 433
             ],
-            "optional": true
+            "optional": true,
+            "order": 72
         },
         "faq.items[].homeQ": {
             "label": "Shorter question for Home (optional)",
@@ -1111,7 +1255,8 @@
                 52,
                 69
             ],
-            "optional": true
+            "optional": true,
+            "order": 70
         },
         "faq.items[].q": {
             "label": "FAQ: question",
@@ -1119,7 +1264,8 @@
             "fit": [
                 72,
                 94
-            ]
+            ],
+            "order": 155
         },
         "faq.top.kicker": {
             "label": "Top of FAQ: small line above the headline",
@@ -1128,7 +1274,8 @@
             "fit": [
                 37,
                 50
-            ]
+            ],
+            "order": 151
         },
         "faq.top.text": {
             "label": "Top of FAQ: paragraph",
@@ -1140,7 +1287,8 @@
             "fit": [
                 139,
                 218
-            ]
+            ],
+            "order": 154
         },
         "faq.top.title.0": {
             "label": "Top of FAQ: headline, line 1",
@@ -1153,7 +1301,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 152
         },
         "faq.top.title.1": {
             "label": "Top of FAQ: headline, line 2",
@@ -1166,7 +1315,8 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 153
         },
         "forms.claim.another": {
             "label": "Claim form, after sending: \"file another\" button",
@@ -1175,7 +1325,8 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 253
         },
         "forms.claim.confidential": {
             "label": "Claim form: \"confidential\" tag",
@@ -1184,7 +1335,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 218
         },
         "forms.claim.donePhotosLink": {
             "label": "Claim form, after sending: photos link",
@@ -1192,7 +1344,8 @@
             "fit": [
                 37,
                 50
-            ]
+            ],
+            "order": 251
         },
         "forms.claim.doneTag": {
             "label": "Claim form, after sending: tag before the case number",
@@ -1201,7 +1354,8 @@
             "fit": [
                 24,
                 34
-            ]
+            ],
+            "order": 247
         },
         "forms.claim.doneText": {
             "label": "Claim form, after sending: paragraph",
@@ -1212,7 +1366,8 @@
             "fit": [
                 183,
                 288
-            ]
+            ],
+            "order": 249
         },
         "forms.claim.doneTitle": {
             "label": "Claim form, after sending: headline",
@@ -1225,7 +1380,8 @@
             "fit": [
                 29,
                 40
-            ]
+            ],
+            "order": 248
         },
         "forms.claim.doneUrgent": {
             "label": "Claim form, after sending: urgent line",
@@ -1238,7 +1394,8 @@
             "fit": [
                 49,
                 66
-            ]
+            ],
+            "order": 252
         },
         "forms.claim.dropText": {
             "label": "Claim form: photo box words",
@@ -1246,7 +1403,8 @@
             "fit": [
                 112,
                 176
-            ]
+            ],
+            "order": 240
         },
         "forms.claim.dropTitle": {
             "label": "Claim form: photo box title",
@@ -1255,7 +1413,8 @@
             "fit": [
                 53,
                 70
-            ]
+            ],
+            "order": 239
         },
         "forms.claim.emailPhotosLead": {
             "label": "Claim form: line before \"email your photos\"",
@@ -1264,7 +1423,8 @@
             "fit": [
                 42,
                 56
-            ]
+            ],
+            "order": 241
         },
         "forms.claim.emailPhotosLink": {
             "label": "Claim form: \"email your photos\" link",
@@ -1273,7 +1433,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 242
         },
         "forms.claim.error": {
             "label": "Claim form: message if sending fails",
@@ -1287,7 +1448,8 @@
             "fit": [
                 230,
                 361
-            ]
+            ],
+            "order": 246
         },
         "forms.claim.fileTag": {
             "label": "Claim form: tag at the top",
@@ -1296,7 +1458,8 @@
             "fit": [
                 23,
                 32
-            ]
+            ],
+            "order": 217
         },
         "forms.claim.labels.address": {
             "label": "Claim form: label",
@@ -1305,7 +1468,8 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 225
         },
         "forms.claim.labels.carrier": {
             "label": "Claim form: label",
@@ -1314,7 +1478,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 231
         },
         "forms.claim.labels.damage": {
             "label": "Claim form: damage choices label",
@@ -1323,7 +1488,8 @@
             "fit": [
                 52,
                 69
-            ]
+            ],
+            "order": 227
         },
         "forms.claim.labels.date": {
             "label": "Claim form: label",
@@ -1332,7 +1498,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 230
         },
         "forms.claim.labels.email": {
             "label": "Claim form: label",
@@ -1341,7 +1508,8 @@
             "fit": [
                 10,
                 16
-            ]
+            ],
+            "order": 223
         },
         "forms.claim.labels.name": {
             "label": "Claim form: label",
@@ -1350,7 +1518,8 @@
             "fit": [
                 18,
                 26
-            ]
+            ],
+            "order": 219
         },
         "forms.claim.labels.phone": {
             "label": "Claim form: label",
@@ -1359,7 +1528,8 @@
             "fit": [
                 13,
                 19
-            ]
+            ],
+            "order": 221
         },
         "forms.claim.labels.photos": {
             "label": "Claim form: photos label",
@@ -1368,7 +1538,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 238
         },
         "forms.claim.labels.status": {
             "label": "Claim form: claim status label",
@@ -1377,7 +1548,8 @@
             "fit": [
                 42,
                 56
-            ]
+            ],
+            "order": 233
         },
         "forms.claim.labels.story": {
             "label": "Claim form: label",
@@ -1386,7 +1558,8 @@
             "fit": [
                 30,
                 42
-            ]
+            ],
+            "order": 243
         },
         "forms.claim.photosFailed": {
             "label": "Claim form, after sending: if photos fail",
@@ -1394,7 +1567,8 @@
             "fit": [
                 133,
                 209
-            ]
+            ],
+            "order": 271
         },
         "forms.claim.photosPartial": {
             "label": "Claim form, after sending: after \"2 of 5\"",
@@ -1402,7 +1576,8 @@
             "fit": [
                 87,
                 136
-            ]
+            ],
+            "order": 270
         },
         "forms.claim.photosSending": {
             "label": "Claim form, after sending: while photos upload",
@@ -1410,7 +1585,8 @@
             "fit": [
                 68,
                 90
-            ]
+            ],
+            "order": 268
         },
         "forms.claim.photosSent": {
             "label": "Claim form, after sending: after \"3 photos\"",
@@ -1418,7 +1594,8 @@
             "fit": [
                 42,
                 56
-            ]
+            ],
+            "order": 269
         },
         "forms.claim.placeholders.address": {
             "label": "Claim form: hint in a box",
@@ -1426,7 +1603,8 @@
             "fit": [
                 28,
                 38
-            ]
+            ],
+            "order": 226
         },
         "forms.claim.placeholders.carrier": {
             "label": "Claim form: hint in a box",
@@ -1434,7 +1612,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 232
         },
         "forms.claim.placeholders.email": {
             "label": "Claim form: hint in a box",
@@ -1442,7 +1621,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 224
         },
         "forms.claim.placeholders.name": {
             "label": "Claim form: hint in a box",
@@ -1450,7 +1630,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 220
         },
         "forms.claim.placeholders.phone": {
             "label": "Claim form: hint in a box",
@@ -1458,7 +1639,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 222
         },
         "forms.claim.placeholders.story": {
             "label": "Claim form: hint in the story box",
@@ -1466,7 +1648,8 @@
             "fit": [
                 88,
                 139
-            ]
+            ],
+            "order": 244
         },
         "forms.claim.send": {
             "label": "Claim form: button words",
@@ -1474,7 +1657,8 @@
             "fit": [
                 28,
                 38
-            ]
+            ],
+            "order": 273
         },
         "forms.claim.sending": {
             "label": "Claim form: button while sending",
@@ -1482,7 +1666,8 @@
             "fit": [
                 33,
                 45
-            ]
+            ],
+            "order": 272
         },
         "forms.claim.status.denied": {
             "label": "Claim form: claim status choice",
@@ -1490,7 +1675,8 @@
             "fit": [
                 12,
                 18
-            ]
+            ],
+            "order": 237
         },
         "forms.claim.status.notFiled": {
             "label": "Claim form: claim status choice",
@@ -1498,7 +1684,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 234
         },
         "forms.claim.status.underpaid": {
             "label": "Claim form: claim status choice",
@@ -1506,7 +1693,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 236
         },
         "forms.claim.status.waiting": {
             "label": "Claim form: claim status choice",
@@ -1514,7 +1702,8 @@
             "fit": [
                 23,
                 32
-            ]
+            ],
+            "order": 235
         },
         "forms.claim.submitNote": {
             "label": "Claim form: line beside the button",
@@ -1526,7 +1715,8 @@
             "fit": [
                 64,
                 85
-            ]
+            ],
+            "order": 245
         },
         "forms.claim.whileYouWait": {
             "label": "Claim form, after sending: small heading",
@@ -1535,7 +1725,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 250
         },
         "forms.contact.another": {
             "label": "Message form, after sending: \"send another\" button",
@@ -1544,7 +1735,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 200
         },
         "forms.contact.doneTag": {
             "label": "Message form, after sending: small heading",
@@ -1553,7 +1745,8 @@
             "fit": [
                 24,
                 34
-            ]
+            ],
+            "order": 197
         },
         "forms.contact.doneText": {
             "label": "Message form, after sending: paragraph",
@@ -1567,7 +1760,8 @@
             "fit": [
                 144,
                 227
-            ]
+            ],
+            "order": 199
         },
         "forms.contact.doneTitle": {
             "label": "Message form, after sending: headline",
@@ -1575,7 +1769,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 198
         },
         "forms.contact.error": {
             "label": "Message form: message if sending fails",
@@ -1589,7 +1784,8 @@
             "fit": [
                 190,
                 299
-            ]
+            ],
+            "order": 196
         },
         "forms.contact.messageLabel": {
             "label": "Message form: message label",
@@ -1598,7 +1794,8 @@
             "fit": [
                 24,
                 34
-            ]
+            ],
+            "order": 193
         },
         "forms.contact.messagePlaceholder": {
             "label": "Message form: hint in the message box",
@@ -1606,7 +1803,8 @@
             "fit": [
                 63,
                 83
-            ]
+            ],
+            "order": 194
         },
         "forms.contact.nameLabel": {
             "label": "Message form: name label",
@@ -1615,7 +1813,8 @@
             "fit": [
                 12,
                 18
-            ]
+            ],
+            "order": 189
         },
         "forms.contact.namePlaceholder": {
             "label": "Message form: hint in the name box",
@@ -1623,7 +1822,8 @@
             "fit": [
                 15,
                 22
-            ]
+            ],
+            "order": 190
         },
         "forms.contact.phoneLabel": {
             "label": "Message form: phone label",
@@ -1632,7 +1832,8 @@
             "fit": [
                 13,
                 19
-            ]
+            ],
+            "order": 191
         },
         "forms.contact.phonePlaceholder": {
             "label": "Message form: hint in the phone box",
@@ -1640,7 +1841,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 192
         },
         "forms.contact.replies": {
             "label": "Message form: line beside the button",
@@ -1652,7 +1854,8 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 195
         },
         "forms.contact.send": {
             "label": "Message form: button words",
@@ -1660,7 +1863,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 202
         },
         "forms.contact.sending": {
             "label": "Message form: button while sending",
@@ -1668,7 +1872,8 @@
             "fit": [
                 14,
                 21
-            ]
+            ],
+            "order": 201
         },
         "forms.noscript": {
             "label": "Notice when a visitor's browser has JavaScript off",
@@ -1682,7 +1887,8 @@
             "fit": [
                 171,
                 268
-            ]
+            ],
+            "order": 163
         },
         "forms.phoneInvalid": {
             "label": "Forms: message when the phone number is too short",
@@ -1690,7 +1896,8 @@
             "fit": [
                 74,
                 98
-            ]
+            ],
+            "order": 203
         },
         "forms.required": {
             "label": "Forms: message when a required box is empty",
@@ -1698,7 +1905,8 @@
             "fit": [
                 38,
                 51
-            ]
+            ],
+            "order": 204
         },
         "home.closed.kicker": {
             "label": "Case closed: small heading",
@@ -1707,11 +1915,13 @@
             "fit": [
                 40,
                 54
-            ]
+            ],
+            "order": 58
         },
         "home.closed.photo": {
             "label": "Case closed: photo",
-            "type": "photo"
+            "type": "photo",
+            "order": 56
         },
         "home.closed.photoAlt": {
             "label": "Case closed: what's in this photo",
@@ -1719,7 +1929,15 @@
             "fit": [
                 70,
                 93
-            ]
+            ],
+            "order": 57
+        },
+        "home.closed.photoFocus": {
+            "label": "Case closed: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "home.closed.text": {
             "label": "Case closed: paragraph",
@@ -1727,7 +1945,8 @@
             "fit": [
                 139,
                 218
-            ]
+            ],
+            "order": 60
         },
         "home.closed.title": {
             "label": "Case closed: headline",
@@ -1740,18 +1959,21 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 59
         },
         "home.damage.cards": {
             "label": "Damage photo cards",
             "type": "list",
             "min": 3,
             "max": 7,
-            "add": "Add a card"
+            "add": "Add a card",
+            "order": 20
         },
         "home.damage.cards[].photo": {
             "label": "Damage photo card: photo",
-            "type": "photo"
+            "type": "photo",
+            "order": 19
         },
         "home.damage.cards[].photoAlt": {
             "label": "Damage photo card: what's in this photo",
@@ -1759,7 +1981,14 @@
             "fit": [
                 48,
                 64
-            ]
+            ],
+            "order": 21
+        },
+        "home.damage.cards[].photoFocus": {
+            "label": "Damage photo card: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "order": 99999
         },
         "home.damage.cards[].tag": {
             "label": "Damage photo card: tag word",
@@ -1768,7 +1997,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 22
         },
         "home.damage.cards[].text": {
             "label": "Damage photo card: short text",
@@ -1776,7 +2006,8 @@
             "fit": [
                 169,
                 266
-            ]
+            ],
+            "order": 24
         },
         "home.damage.cards[].title": {
             "label": "Damage photo card: title",
@@ -1784,7 +2015,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 23
         },
         "home.damage.endLink": {
             "label": "Damage photos (sideways strip): last card link",
@@ -1793,7 +2025,8 @@
             "fit": [
                 28,
                 38
-            ]
+            ],
+            "order": 26
         },
         "home.damage.endTitle": {
             "label": "Damage photos (sideways strip): last card words",
@@ -1806,7 +2039,8 @@
             "fit": [
                 75,
                 99
-            ]
+            ],
+            "order": 25
         },
         "home.damage.hint": {
             "label": "Damage photos (sideways strip): small line under the strip",
@@ -1815,7 +2049,8 @@
             "fit": [
                 42,
                 56
-            ]
+            ],
+            "order": 27
         },
         "home.damage.kicker": {
             "label": "Damage photos (sideways strip): small heading",
@@ -1824,7 +2059,8 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 17
         },
         "home.damage.title": {
             "label": "Damage photos (sideways strip): headline",
@@ -1837,7 +2073,8 @@
             "fit": [
                 55,
                 74
-            ]
+            ],
+            "order": 18
         },
         "home.faq.link": {
             "label": "Questions on Home: link to all questions",
@@ -1846,7 +2083,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 69
         },
         "home.faq.title": {
             "label": "Questions on Home: headline",
@@ -1859,7 +2097,8 @@
             "fit": [
                 35,
                 48
-            ]
+            ],
+            "order": 68
         },
         "home.fight.kicker": {
             "label": "How we work: small heading",
@@ -1868,7 +2107,8 @@
             "fit": [
                 15,
                 22
-            ]
+            ],
+            "order": 41
         },
         "home.fight.text": {
             "label": "How we work: paragraph",
@@ -1876,7 +2116,8 @@
             "fit": [
                 202,
                 317
-            ]
+            ],
+            "order": 43
         },
         "home.fight.title": {
             "label": "How we work: headline",
@@ -1889,15 +2130,32 @@
             "fit": [
                 30,
                 42
-            ]
+            ],
+            "order": 42
+        },
+        "home.fight.video.photo": {
+            "label": "How we work: photo instead of the video",
+            "type": "photo",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
+        },
+        "home.fight.video.photoFocus": {
+            "label": "How we work: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "home.fight.video.poster": {
             "label": "How we work: background video: still picture shown before the video plays",
-            "type": "photo"
+            "type": "photo",
+            "order": 39
         },
         "home.fight.video.video": {
             "label": "How we work: background video: video",
-            "type": "video"
+            "type": "video",
+            "order": 40
         },
         "home.final.callButton": {
             "label": "Bottom of Home: call button",
@@ -1908,7 +2166,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 77
         },
         "home.final.claimButton": {
             "label": "Bottom of Home: claim button",
@@ -1916,7 +2175,8 @@
             "fit": [
                 28,
                 38
-            ]
+            ],
+            "order": 78
         },
         "home.final.kicker": {
             "label": "Bottom of Home: small heading",
@@ -1925,7 +2185,8 @@
             "fit": [
                 45,
                 61
-            ]
+            ],
+            "order": 75
         },
         "home.final.photosLink": {
             "label": "Bottom of Home: photos link",
@@ -1934,7 +2195,8 @@
             "fit": [
                 53,
                 70
-            ]
+            ],
+            "order": 79
         },
         "home.final.title": {
             "label": "Bottom of Home: headline",
@@ -1947,15 +2209,32 @@
             "fit": [
                 43,
                 58
-            ]
+            ],
+            "order": 76
+        },
+        "home.final.video.photo": {
+            "label": "Bottom of Home: photo instead of the video",
+            "type": "photo",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
+        },
+        "home.final.video.photoFocus": {
+            "label": "Bottom of Home: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "home.final.video.poster": {
             "label": "Bottom of Home: background video: still picture shown before the video plays",
-            "type": "photo"
+            "type": "photo",
+            "order": 73
         },
         "home.final.video.video": {
             "label": "Bottom of Home: background video: video",
-            "type": "video"
+            "type": "video",
+            "order": 74
         },
         "home.guarantee.button": {
             "label": "Paid-or-Free section: button",
@@ -1963,7 +2242,8 @@
             "fit": [
                 24,
                 34
-            ]
+            ],
+            "order": 54
         },
         "home.guarantee.finePrint": {
             "label": "Paid-or-Free section: fine print",
@@ -1972,7 +2252,8 @@
             "fit": [
                 125,
                 196
-            ]
+            ],
+            "order": 55
         },
         "home.guarantee.kicker": {
             "label": "Paid-or-Free section: small heading",
@@ -1981,7 +2262,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 51
         },
         "home.guarantee.text": {
             "label": "Paid-or-Free section: paragraph",
@@ -1996,7 +2278,8 @@
             "fit": [
                 176,
                 277
-            ]
+            ],
+            "order": 53
         },
         "home.guarantee.title": {
             "label": "Paid-or-Free section: headline",
@@ -2009,7 +2292,8 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 52
         },
         "home.lowball.kicker": {
             "label": "What insurers do: small heading",
@@ -2018,11 +2302,13 @@
             "fit": [
                 18,
                 26
-            ]
+            ],
+            "order": 28
         },
         "home.lowball.photo": {
             "label": "What insurers do: photo of the letter",
-            "type": "photo"
+            "type": "photo",
+            "order": 34
         },
         "home.lowball.photoAlt": {
             "label": "What insurers do: what's in this photo",
@@ -2030,7 +2316,8 @@
             "fit": [
                 40,
                 54
-            ]
+            ],
+            "order": 35
         },
         "home.lowball.photoCaption": {
             "label": "What insurers do: words under the photo",
@@ -2038,7 +2325,15 @@
             "fit": [
                 73,
                 96
-            ]
+            ],
+            "order": 38
+        },
+        "home.lowball.photoFocus": {
+            "label": "What insurers do: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "home.lowball.photoTag": {
             "label": "What insurers do: tag under the photo",
@@ -2047,7 +2342,8 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 37
         },
         "home.lowball.stamp": {
             "label": "What insurers do: stamp word on the letter",
@@ -2055,7 +2351,8 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 36
         },
         "home.lowball.text": {
             "label": "What insurers do: paragraph",
@@ -2063,7 +2360,8 @@
             "fit": [
                 253,
                 398
-            ]
+            ],
+            "order": 30
         },
         "home.lowball.title": {
             "label": "What insurers do: headline",
@@ -2076,7 +2374,8 @@
             "fit": [
                 42,
                 56
-            ]
+            ],
+            "order": 29
         },
         "home.marquee.phrases": {
             "label": "Scrolling words band: phrases",
@@ -2085,11 +2384,13 @@
             "max": 30,
             "add": "Add a phrase",
             "hard": 24,
-            "caps": true
+            "caps": true,
+            "order": 16.5
         },
         "home.marquee.phrases[].on": {
             "label": "Shown",
-            "type": "tick"
+            "type": "tick",
+            "order": 99999
         },
         "home.marquee.phrases[].text": {
             "label": "Phrase",
@@ -2099,14 +2400,78 @@
                 25,
                 35
             ],
-            "hard": 24
+            "hard": 24,
+            "order": 99999
         },
         "home.reviews.items": {
             "label": "Customer reviews",
             "type": "list",
             "min": 0,
             "max": 12,
-            "add": "Add a review"
+            "add": "Add a review",
+            "order": 67.3
+        },
+        "home.reviews.items[].claimType": {
+            "label": "Kind of claim",
+            "type": "text",
+            "optional": true,
+            "order": 304
+        },
+        "home.reviews.items[].month": {
+            "label": "Month",
+            "type": "month",
+            "optional": true,
+            "order": 305
+        },
+        "home.reviews.items[].name": {
+            "label": "Their name (shown as \"Michael R.\")",
+            "type": "name",
+            "order": 301
+        },
+        "home.reviews.items[].real": {
+            "label": "Real customer, copied word for word",
+            "type": "tick",
+            "required": true,
+            "order": 309
+        },
+        "home.reviews.items[].source": {
+            "label": "Where it was posted",
+            "type": "text",
+            "optional": true,
+            "default": "Google",
+            "order": 306
+        },
+        "home.reviews.items[].stars": {
+            "label": "Stars",
+            "type": "stars",
+            "optional": true,
+            "order": 307
+        },
+        "home.reviews.items[].state": {
+            "label": "State",
+            "type": "text",
+            "optional": true,
+            "order": 303
+        },
+        "home.reviews.items[].text": {
+            "label": "Their words (copied exactly)",
+            "type": "para",
+            "fit": [
+                320,
+                600
+            ],
+            "order": 300
+        },
+        "home.reviews.items[].town": {
+            "label": "Town",
+            "type": "text",
+            "optional": true,
+            "order": 302
+        },
+        "home.reviews.items[].trimmed": {
+            "label": "Shortened with \"…\"",
+            "type": "tick",
+            "order": 308
         },
         "home.reviews.kicker": {
             "label": "Reviews on Home: small heading",
@@ -2115,7 +2480,8 @@
             "fit": [
                 37,
                 50
-            ]
+            ],
+            "order": 67.1
         },
         "home.reviews.title": {
             "label": "Reviews on Home: headline",
@@ -2128,7 +2494,8 @@
             "fit": [
                 40,
                 54
-            ]
+            ],
+            "order": 67.2
         },
         "home.services.link": {
             "label": "Services on Home: link to all services",
@@ -2137,7 +2504,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 62
         },
         "home.services.title": {
             "label": "Services on Home: headline",
@@ -2145,7 +2513,8 @@
             "fit": [
                 23,
                 32
-            ]
+            ],
+            "order": 61
         },
         "home.statement.hint": {
             "label": "Big statement: small line under it",
@@ -2154,7 +2523,8 @@
             "fit": [
                 57,
                 75
-            ]
+            ],
+            "order": 50
         },
         "home.statement.kicker": {
             "label": "Big statement: small heading",
@@ -2163,7 +2533,8 @@
             "fit": [
                 34,
                 46
-            ]
+            ],
+            "order": 47
         },
         "home.statement.lines.0": {
             "label": "Big statement: first line (orange words fill in last)",
@@ -2171,7 +2542,8 @@
             "fit": [
                 32,
                 43
-            ]
+            ],
+            "order": 48
         },
         "home.statement.lines.1": {
             "label": "Big statement: second line (orange words fill in last)",
@@ -2179,14 +2551,16 @@
             "fit": [
                 30,
                 42
-            ]
+            ],
+            "order": 49
         },
         "home.steps": {
             "label": "How we work: steps",
             "type": "list",
             "min": 2,
             "max": 6,
-            "add": "Add a step"
+            "add": "Add a step",
+            "order": 45
         },
         "home.steps[].text": {
             "label": "How we work: step text",
@@ -2194,7 +2568,8 @@
             "fit": [
                 157,
                 246
-            ]
+            ],
+            "order": 46
         },
         "home.steps[].title": {
             "label": "How we work: step title",
@@ -2202,7 +2577,8 @@
             "fit": [
                 23,
                 32
-            ]
+            ],
+            "order": 44
         },
         "home.top.callButton": {
             "label": "Top of Home: call button",
@@ -2213,7 +2589,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 16
         },
         "home.top.claimButton": {
             "label": "Top of Home: claim button",
@@ -2221,7 +2598,8 @@
             "fit": [
                 23,
                 32
-            ]
+            ],
+            "order": 15
         },
         "home.top.kicker": {
             "label": "Top of Home: small line above the headline",
@@ -2229,11 +2607,13 @@
             "fit": [
                 84,
                 132
-            ]
+            ],
+            "order": 10
         },
         "home.top.kickerAuto": {
             "label": "Top of Home small line: write it from your states",
-            "type": "switch"
+            "type": "switch",
+            "order": 99999
         },
         "home.top.text": {
             "label": "Top of Home: paragraph",
@@ -2245,7 +2625,8 @@
             "fit": [
                 203,
                 319
-            ]
+            ],
+            "order": 14
         },
         "home.top.title.0": {
             "label": "Top of Home: headline, line 1",
@@ -2258,7 +2639,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 11
         },
         "home.top.title.1": {
             "label": "Top of Home: headline, line 2",
@@ -2271,15 +2653,32 @@
             "fit": [
                 22,
                 30
-            ]
+            ],
+            "order": 12
+        },
+        "home.top.video.photo": {
+            "label": "Top of Home: photo instead of the storm video",
+            "type": "photo",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
+        },
+        "home.top.video.photoFocus": {
+            "label": "Top of Home: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "home.top.video.poster": {
             "label": "Top of Home: storm video: still picture shown before the video plays",
-            "type": "photo"
+            "type": "photo",
+            "order": 8
         },
         "home.top.video.video": {
             "label": "Top of Home: storm video: video",
-            "type": "video"
+            "type": "video",
+            "order": 9
         },
         "notfound.claimButton": {
             "label": "Page not found: claim button",
@@ -2287,7 +2686,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 295
         },
         "notfound.homeButton": {
             "label": "Page not found: home button",
@@ -2295,7 +2695,8 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 294
         },
         "notfound.tag": {
             "label": "Page not found: small line at the top",
@@ -2304,7 +2705,8 @@
             "fit": [
                 37,
                 50
-            ]
+            ],
+            "order": 291
         },
         "notfound.text": {
             "label": "Page not found: paragraph",
@@ -2312,7 +2714,8 @@
             "fit": [
                 196,
                 308
-            ]
+            ],
+            "order": 293
         },
         "notfound.title": {
             "label": "Page not found: headline",
@@ -2324,7 +2727,8 @@
             "fit": [
                 30,
                 42
-            ]
+            ],
+            "order": 292
         },
         "notice.away.link": {
             "label": "Out of office: button",
@@ -2333,7 +2737,8 @@
                 "call": "Call",
                 "claim": "File online",
                 "none": "No button"
-            }
+            },
+            "order": 99999
         },
         "notice.away.text": {
             "label": "Out of office: words",
@@ -2344,7 +2749,8 @@
             "fit": [
                 70,
                 110
-            ]
+            ],
+            "order": 99999
         },
         "notice.closed.link": {
             "label": "Office closed: button",
@@ -2353,7 +2759,8 @@
                 "call": "Call",
                 "claim": "File online",
                 "none": "No button"
-            }
+            },
+            "order": 99999
         },
         "notice.closed.text": {
             "label": "Office closed: words",
@@ -2361,12 +2768,14 @@
             "fit": [
                 70,
                 110
-            ]
+            ],
+            "order": 99999
         },
         "notice.end": {
             "label": "Ends (Indiana time)",
             "type": "datetime",
-            "optional": true
+            "optional": true,
+            "order": 99999
         },
         "notice.kind": {
             "label": "Which notice",
@@ -2375,16 +2784,19 @@
                 "storm": "Storm response",
                 "closed": "Office closed",
                 "away": "John is out until…"
-            }
+            },
+            "order": 99999
         },
         "notice.on": {
             "label": "Show a notice",
-            "type": "switch"
+            "type": "switch",
+            "order": 99999
         },
         "notice.start": {
             "label": "Starts (Indiana time)",
             "type": "datetime",
-            "optional": true
+            "optional": true,
+            "order": 99999
         },
         "notice.storm.link": {
             "label": "Storm response: button",
@@ -2393,7 +2805,8 @@
                 "call": "Call",
                 "claim": "File online",
                 "none": "No button"
-            }
+            },
+            "order": 99999
         },
         "notice.storm.text": {
             "label": "Storm response: words",
@@ -2401,15 +2814,18 @@
             "fit": [
                 70,
                 110
-            ]
+            ],
+            "order": 99999
         },
         "numbers.higher": {
             "label": "Number: higher settlements",
-            "type": "number-quote"
+            "type": "number-quote",
+            "order": 32
         },
         "numbers.overturned": {
             "label": "Number: denied claims overturned",
-            "type": "number-quote"
+            "type": "number-quote",
+            "order": 128
         },
         "numbers.source": {
             "label": "Numbers: where they come from",
@@ -2418,11 +2834,13 @@
             "fit": [
                 137,
                 216
-            ]
+            ],
+            "order": 33
         },
         "numbers.underpaid": {
             "label": "Number: claims underpaid or denied",
-            "type": "number-quote"
+            "type": "number-quote",
+            "order": 31
         },
         "seo.about.description": {
             "label": "About page: short description on Google",
@@ -2430,7 +2848,8 @@
             "fit": [
                 214,
                 337
-            ]
+            ],
+            "order": 89
         },
         "seo.about.title": {
             "label": "About page: name on Google",
@@ -2438,7 +2857,8 @@
             "fit": [
                 49,
                 66
-            ]
+            ],
+            "order": 88
         },
         "seo.claim.description": {
             "label": "File a Claim page: short description on Google",
@@ -2449,7 +2869,8 @@
             "fit": [
                 196,
                 308
-            ]
+            ],
+            "order": 206
         },
         "seo.claim.title": {
             "label": "File a Claim page: name on Google",
@@ -2457,7 +2878,8 @@
             "fit": [
                 58,
                 77
-            ]
+            ],
+            "order": 205
         },
         "seo.contact.description": {
             "label": "Contact page: short description on Google",
@@ -2468,7 +2890,8 @@
             "fit": [
                 178,
                 279
-            ]
+            ],
+            "order": 162
         },
         "seo.contact.title": {
             "label": "Contact page: name on Google",
@@ -2476,7 +2899,8 @@
             "fit": [
                 52,
                 69
-            ]
+            ],
+            "order": 161
         },
         "seo.faq.description": {
             "label": "FAQ page: short description on Google",
@@ -2484,7 +2908,8 @@
             "fit": [
                 178,
                 279
-            ]
+            ],
+            "order": 150
         },
         "seo.faq.title": {
             "label": "FAQ page: name on Google",
@@ -2492,7 +2917,8 @@
             "fit": [
                 47,
                 62
-            ]
+            ],
+            "order": 149
         },
         "seo.home.description": {
             "label": "Home page: short description on Google",
@@ -2504,7 +2930,8 @@
             "fit": [
                 307,
                 482
-            ]
+            ],
+            "order": 2
         },
         "seo.home.title": {
             "label": "Home page: name on Google",
@@ -2515,7 +2942,8 @@
             "fit": [
                 98,
                 154
-            ]
+            ],
+            "order": 1
         },
         "seo.services.description": {
             "label": "Services page: short description on Google",
@@ -2523,7 +2951,8 @@
             "fit": [
                 220,
                 345
-            ]
+            ],
+            "order": 114
         },
         "seo.services.title": {
             "label": "Services page: name on Google",
@@ -2531,7 +2960,8 @@
             "fit": [
                 53,
                 70
-            ]
+            ],
+            "order": 113
         },
         "services.coverage.commercial.name": {
             "label": "What we cover: \"Commercial\" tile name",
@@ -2539,7 +2969,8 @@
             "fit": [
                 17,
                 24
-            ]
+            ],
+            "order": 142
         },
         "services.coverage.commercial.text": {
             "label": "What we cover: \"Commercial\" tile words",
@@ -2547,7 +2978,8 @@
             "fit": [
                 139,
                 218
-            ]
+            ],
+            "order": 141
         },
         "services.coverage.kicker": {
             "label": "What we cover: small heading",
@@ -2556,7 +2988,8 @@
             "fit": [
                 27,
                 37
-            ]
+            ],
+            "order": 132
         },
         "services.coverage.kicker2": {
             "label": "What we cover: small line on the right",
@@ -2565,7 +2998,8 @@
             "fit": [
                 55,
                 74
-            ]
+            ],
+            "order": 133
         },
         "services.coverage.tags": {
             "label": "What we cover: also on the list",
@@ -2574,7 +3008,8 @@
             "max": 30,
             "add": "Add",
             "caps": true,
-            "hard": 36
+            "hard": 36,
+            "order": 145
         },
         "services.coverage.tagsTitle": {
             "label": "What we cover: \"Also on the list\" heading",
@@ -2583,7 +3018,8 @@
             "fit": [
                 24,
                 34
-            ]
+            ],
+            "order": 143
         },
         "services.coverage.tags[].text": {
             "label": "What we cover: also on the list",
@@ -2592,14 +3028,16 @@
             "fit": [
                 38,
                 51
-            ]
+            ],
+            "order": 144
         },
         "services.coverage.tiles": {
             "label": "What we cover: photo tiles",
             "type": "list",
             "min": 1,
             "max": 8,
-            "add": "Add a tile"
+            "add": "Add a tile",
+            "order": 136
         },
         "services.coverage.tiles[].name": {
             "label": "What we cover: tile name",
@@ -2607,11 +3045,13 @@
             "fit": [
                 19,
                 27
-            ]
+            ],
+            "order": 138
         },
         "services.coverage.tiles[].photo": {
             "label": "What we cover: tile photo",
-            "type": "photo"
+            "type": "photo",
+            "order": 135
         },
         "services.coverage.tiles[].photoAlt": {
             "label": "What we cover: what's in this photo",
@@ -2619,15 +3059,30 @@
             "fit": [
                 30,
                 42
-            ]
+            ],
+            "order": 137
+        },
+        "services.coverage.tiles[].photoFocus": {
+            "label": "What we cover: important part of the tile photo",
+            "type": "focus",
+            "optional": true,
+            "order": 99999
         },
         "services.coverage.tiles[].poster": {
             "label": "What we cover: tile: still picture shown before the video plays",
-            "type": "photo"
+            "type": "photo",
+            "order": 139
         },
         "services.coverage.tiles[].video": {
             "label": "What we cover: tile: video",
-            "type": "video"
+            "type": "video",
+            "order": 140
+        },
+        "services.coverage.tiles[].videoWas": {
+            "label": "What we cover: tile video while a photo shows",
+            "type": "keep",
+            "optional": true,
+            "order": 99999
         },
         "services.coverage.title": {
             "label": "What we cover: headline",
@@ -2635,7 +3090,8 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 134
         },
         "services.cta.callButton": {
             "label": "Orange band at the bottom of Services: call button",
@@ -2646,7 +3102,8 @@
             "fit": [
                 25,
                 35
-            ]
+            ],
+            "order": 147
         },
         "services.cta.note": {
             "label": "Orange band at the bottom of Services: small line under the button",
@@ -2655,7 +3112,8 @@
             "fit": [
                 58,
                 77
-            ]
+            ],
+            "order": 148
         },
         "services.cta.title": {
             "label": "Orange band at the bottom of Services: headline",
@@ -2663,18 +3121,21 @@
             "fit": [
                 42,
                 56
-            ]
+            ],
+            "order": 146
         },
         "services.items": {
             "label": "Services",
             "type": "list",
             "min": 1,
             "max": 8,
-            "add": "Add a service"
+            "add": "Add a service",
+            "order": 64
         },
         "services.items[].bigNumber": {
             "label": "Show the \"denied claims overturned\" number",
-            "type": "tick"
+            "type": "tick",
+            "order": 99999
         },
         "services.items[].button": {
             "label": "Service: button words",
@@ -2683,7 +3144,8 @@
             "fit": [
                 29,
                 40
-            ]
+            ],
+            "order": 125
         },
         "services.items[].buttonTo": {
             "label": "Button goes to",
@@ -2691,7 +3153,8 @@
             "options": {
                 "claim": "File a claim",
                 "contact": "Contact"
-            }
+            },
+            "order": 99999
         },
         "services.items[].finePrint": {
             "label": "Fine print (optional)",
@@ -2704,7 +3167,8 @@
                 232,
                 365
             ],
-            "optional": true
+            "optional": true,
+            "order": 131
         },
         "services.items[].headline": {
             "label": "Service: headline",
@@ -2717,11 +3181,13 @@
             "fit": [
                 38,
                 51
-            ]
+            ],
+            "order": 121
         },
         "services.items[].highlight": {
             "label": "Highlight on Home (orange name)",
-            "type": "tick"
+            "type": "tick",
+            "order": 99999
         },
         "services.items[].icon": {
             "label": "Small drawing",
@@ -2731,12 +3197,14 @@
                 "media/picto-denied.webp",
                 "media/picto-estimates.webp",
                 "media/picto-supplements.webp"
-            ]
+            ],
+            "order": 65
         },
         "services.items[].id": {
             "label": "Link address (set once)",
             "type": "slug",
-            "locked": true
+            "locked": true,
+            "order": 63
         },
         "services.items[].intro": {
             "label": "Service: paragraph",
@@ -2744,7 +3212,8 @@
             "fit": [
                 293,
                 460
-            ]
+            ],
+            "order": 122
         },
         "services.items[].name": {
             "label": "Service: name",
@@ -2753,11 +3222,13 @@
             "fit": [
                 20,
                 29
-            ]
+            ],
+            "order": 66
         },
         "services.items[].photo": {
             "label": "Service: photo",
-            "type": "photo"
+            "type": "photo",
+            "order": 126
         },
         "services.items[].photoAlt": {
             "label": "Service: what's in this photo",
@@ -2765,14 +3236,22 @@
             "fit": [
                 49,
                 66
-            ]
+            ],
+            "order": 127
+        },
+        "services.items[].photoFocus": {
+            "label": "Service: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "order": 99999
         },
         "services.items[].points": {
             "label": "Checklist points",
             "type": "list",
             "min": 2,
             "max": 5,
-            "add": "Add a point"
+            "add": "Add a point",
+            "order": 124
         },
         "services.items[].points[].text": {
             "label": "Service: checklist point",
@@ -2780,7 +3259,8 @@
             "fit": [
                 87,
                 136
-            ]
+            ],
+            "order": 123
         },
         "services.items[].summary": {
             "label": "Service: short summary on Home",
@@ -2788,18 +3268,21 @@
             "fit": [
                 74,
                 98
-            ]
+            ],
+            "order": 67
         },
         "services.items[].tags": {
             "label": "Price tags",
             "type": "list",
             "min": 0,
             "max": 3,
-            "add": "Add a tag"
+            "add": "Add a tag",
+            "order": 130
         },
         "services.items[].tags[].highlight": {
             "label": "Orange",
-            "type": "tick"
+            "type": "tick",
+            "order": 99999
         },
         "services.items[].tags[].text": {
             "label": "Service: price tag",
@@ -2811,7 +3294,8 @@
             "fit": [
                 77,
                 101
-            ]
+            ],
+            "order": 129
         },
         "services.top.kicker": {
             "label": "Top of Services: small line above the headline",
@@ -2820,7 +3304,8 @@
             "fit": [
                 40,
                 54
-            ]
+            ],
+            "order": 117
         },
         "services.top.text": {
             "label": "Top of Services: paragraph",
@@ -2828,7 +3313,8 @@
             "fit": [
                 169,
                 266
-            ]
+            ],
+            "order": 120
         },
         "services.top.title.0": {
             "label": "Top of Services: headline, line 1",
@@ -2844,7 +3330,8 @@
             "fit": [
                 15,
                 22
-            ]
+            ],
+            "order": 118
         },
         "services.top.title.1": {
             "label": "Top of Services: headline, line 2",
@@ -2857,15 +3344,32 @@
             "fit": [
                 15,
                 22
-            ]
+            ],
+            "order": 119
+        },
+        "services.top.video.photo": {
+            "label": "Top of Services: photo instead of the video",
+            "type": "photo",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
+        },
+        "services.top.video.photoFocus": {
+            "label": "Top of Services: important part of the photo",
+            "type": "focus",
+            "optional": true,
+            "editorOnly": true,
+            "order": 99999
         },
         "services.top.video.poster": {
             "label": "Top of Services: still picture shown before the video plays",
-            "type": "photo"
+            "type": "photo",
+            "order": 115
         },
         "services.top.video.video": {
             "label": "Top of Services: video",
-            "type": "video"
+            "type": "video",
+            "order": 116
         },
         "site.address": {
             "label": "Office address",
@@ -2875,15 +3379,18 @@
                 "city": "Town",
                 "region": "State (2 letters)",
                 "zip": "ZIP code"
-            }
+            },
+            "order": 99999
         },
         "site.adjuster": {
-            "label": "Adjuster",
+            "label": "Adjuster (name and title)",
             "type": "person",
+            "help": "Used on the About page, the license line at the bottom of every page and the Contact page.",
             "parts": {
                 "name": "Name",
                 "title": "Title"
-            }
+            },
+            "order": 99999
         },
         "site.brightness": {
             "label": "Easier to read: body text brightness",
@@ -2892,7 +3399,8 @@
                 "standard": "Standard",
                 "brighter": "Brighter",
                 "brightest": "Brightest"
-            }
+            },
+            "order": 13
         },
         "site.businessName": {
             "label": "Business name (copyright line and Google)",
@@ -2901,7 +3409,8 @@
             "fit": [
                 36,
                 48
-            ]
+            ],
+            "order": 87
         },
         "site.callback": {
             "label": "Callback promise",
@@ -2911,11 +3420,13 @@
                 "sameday": "the same business day",
                 "nextday": "by the next business day",
                 "48h": "within 48 hours"
-            }
+            },
+            "order": 99999
         },
         "site.email": {
             "label": "Email shown on the site",
-            "type": "email"
+            "type": "email",
+            "order": 83
         },
         "site.guarantee": {
             "label": "Guarantee wording",
@@ -2923,38 +3434,45 @@
             "parts": {
                 "short": "Short version (inside a sentence)",
                 "long": "Long version (with what isn't included)"
-            }
+            },
+            "order": 99999
         },
         "site.phone": {
             "label": "Main phone number",
             "type": "phone",
-            "help": "Updates every phone number and Call button on the site."
+            "help": "Updates every phone number and Call button on the site.",
+            "order": 4
         },
         "site.phone2": {
             "label": "Second phone number (free claim review line)",
             "type": "phone",
             "help": "Left blank, the main number is used.",
-            "optional": true
+            "optional": true,
+            "order": 99999
         },
         "site.price": {
             "label": "Stand-alone estimate price ($)",
-            "type": "money"
+            "type": "money",
+            "order": 99999
         },
         "site.seal": {
             "label": "\"Paid or Free\" seal",
             "type": "switch",
-            "help": "Shows or hides the seal in all 4 places."
+            "help": "Shows or hides the seal in all 4 places.",
+            "order": 99999
         },
         "site.sharePicture": {
             "label": "Share picture (shown when the site is shared by text or on Facebook)",
-            "type": "photo"
+            "type": "photo",
+            "order": 3
         },
         "site.social": {
             "label": "Social links",
             "type": "list",
             "min": 0,
             "max": 8,
-            "add": "Add a social link"
+            "add": "Add a social link",
+            "order": 6
         },
         "site.social[].platform": {
             "label": "Platform",
@@ -2971,38 +3489,51 @@
                 "Nextdoor",
                 "Yelp",
                 "BBB"
-            ]
+            ],
+            "order": 7
         },
         "site.social[].url": {
             "label": "Link (or just @name)",
-            "type": "link"
+            "type": "link",
+            "order": 5
         },
         "states": {
             "label": "States we serve",
             "type": "list",
             "min": 1,
             "max": 12,
-            "add": "Add a state"
+            "add": "Add a state",
+            "order": 258
         },
         "states[].code": {
             "label": "State",
-            "type": "state"
+            "type": "state",
+            "order": 259
         },
         "states[].esign": {
             "label": "E-sign link (Adobe web form)",
             "type": "esign",
             "help": "Without a link, the state shows a \"Call to sign\" card.",
-            "optional": true
+            "optional": true,
+            "order": 257
         },
         "states[].licensed": {
             "label": "Licensed here (required)",
             "type": "tick",
-            "required": true
+            "required": true,
+            "order": 99999
         },
         "states[].pdf": {
             "label": "Contract PDF (for \"Need a hard copy?\")",
             "type": "pdf",
-            "optional": true
+            "optional": true,
+            "order": 267
+        },
+        "states[].pdfV": {
+            "label": "Contract version",
+            "type": "pdfv",
+            "optional": true,
+            "order": 99999
         }
     }
 }

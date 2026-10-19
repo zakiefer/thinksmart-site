@@ -82,7 +82,11 @@
 <main id="main">
 <section data-screen-label="Services Hero" style="position:relative; padding:calc(96px + 10vh) clamp(20px,4vw,56px) clamp(60px,9vh,110px); border-bottom:1px solid rgba(235,229,216,.1); overflow:hidden;">
   <div style="position:absolute; inset:0; opacity:.12; pointer-events:none;">
+⟦#if services.top.video.photo⟧
+    <img src="⟦services.top.video.photo⟧" alt="" style="width:100%; height:100%; object-fit:cover;⟦#if services.top.video.photoFocus⟧ object-position:⟦services.top.video.photoFocus.x⟧% ⟦services.top.video.photoFocus.y⟧%;⟦/if⟧ display:block;">
+⟦#else⟧
     <video poster="⟦services.top.video.poster⟧" src="⟦services.top.video.video⟧" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(⟦services.top.video.poster|cssurl⟧) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
+⟦/if⟧
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,14,19,.6) 0%, rgba(11,14,19,.2) 50%, #0B0E13 100%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto;">
@@ -102,7 +106,7 @@
   <div style="max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(32px,5vw,80px); align-items:center;">
 ⟦#if @odd⟧
     <figure data-rv="120" style="margin:0; overflow:hidden; border:1px solid rgba(235,229,216,.12); border-radius:4px; aspect-ratio:16/11;">
-      <img data-plx="1" src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.12); will-change:transform;">
+      <img data-plx="1" src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="width:100%; height:100%; object-fit:cover;⟦#if x.photoFocus⟧ object-position:⟦x.photoFocus.x⟧% ⟦x.photoFocus.y⟧%;⟦/if⟧ display:block; transform:scale(1.12); will-change:transform;">
     </figure>
 ⟦/if⟧
     <div>
@@ -135,7 +139,7 @@
     </div>
 ⟦#if @even⟧
     <figure data-rv="120" style="margin:0; overflow:hidden; border:1px solid rgba(235,229,216,.12); border-radius:4px; aspect-ratio:16/11;">
-      <img data-plx="1" src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.12); will-change:transform;">
+      <img data-plx="1" src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="width:100%; height:100%; object-fit:cover;⟦#if x.photoFocus⟧ object-position:⟦x.photoFocus.x⟧% ⟦x.photoFocus.y⟧%;⟦/if⟧ display:block; transform:scale(1.12); will-change:transform;">
     </figure>
 ⟦/if⟧
   </div>
@@ -155,7 +159,7 @@
 ⟦#if x.video⟧
         <video poster="⟦x.poster⟧" src="⟦x.video⟧" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(⟦x.poster|cssurl⟧) center/cover no-repeat; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55;"></video>
 ⟦#else⟧
-        <img src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55; transition:opacity .4s ease;">
+        <img src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;⟦#if x.photoFocus⟧ object-position:⟦x.photoFocus.x⟧% ⟦x.photoFocus.y⟧%;⟦/if⟧ opacity:.55; transition:opacity .4s ease;">
 ⟦/if⟧
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 30%, rgba(7,10,15,.85) 100%);"></div>
         <div style="position:absolute; left:24px; bottom:20px; right:24px; display:flex; justify-content:space-between; align-items:baseline; gap:12px;">

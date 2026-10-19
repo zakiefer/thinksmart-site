@@ -1,0 +1,7 @@
+{
+  "note": "Test logins for the local editor only (edit-dev/editor/dev-setup.php). Never used on the real site.",
+  "people": [
+    {"name": "John", "username": "john", "email": "john@example.test", "password": "storm-test-2026-alpha", "alerts": true},
+    {"name": "Muneerah", "username": "muneerah", "email": "muneerah@example.test", "password": "hail-test-2026-bravo", "alerts": false}
+  ]
+}

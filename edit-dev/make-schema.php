@@ -146,9 +146,38 @@ foreach ($leaves as $path => $examples) {
 foreach ($over['fields'] as $path => $ov) {
     if (in_array($ov['type'], ['list', 'checklist'], true)) $fields[$path] = $ov + ($fields[$path] ?? []);
 }
+// fields of list items no item has yet (reviews start empty), and spots only the editor sets
+foreach ($over['fields'] as $path => $ov) {
+    if (isset($fields[$path]) || (!str_contains($path, '[]') && empty($ov['editorOnly']))) continue;
+    $f = ['label' => $ov['label'], 'type' => $ov['type']];
+    foreach (['caps', 'style', 'marks', 'chips', 'fit', 'help', 'options', 'parts', 'optional', 'required', 'hard', 'min', 'max', 'add', 'rule', 'default', 'locked', 'editorOnly'] as $k) if (isset($ov[$k])) $f[$k] = $ov[$k];
+    $fields[$path] = $f;
+}
 foreach ($fields as $path => $f) if (in_array($f['type'], ['list', 'checklist'], true) && !isset($f['min'], $f['max'])) $problems[] = "list without limits: $path";
 if ($problems) { fwrite(STDERR, implode("\n", $problems) . "\n"); exit(1); }
 
+// site order: where each spot first appears when the pages are built (for "Every page")
+$paths = ThinkSmart\Paths::detect(['private' => sys_get_temp_dir() . '/ts-schema-' . getmypid()]);
+$b = new ThinkSmart\Build($paths);
+$b->render($content, $traces);
+$order = [];
+$n = 0;
+foreach ($traces as $file => $trace) {
+    foreach ($trace as $t) {
+        $abs = $t[4] ?? null;
+        if ($abs === null) continue;
+        $seg = explode('.', $abs);
+        for ($k = count($seg); $k > 0; $k--) {
+            $sp = norm(implode('.', array_slice($seg, 0, $k)), $lists);
+            if (isset($fields[$sp])) { $order[$sp] ??= ++$n; break; }
+        }
+        // a list comes where its first item does
+        $sp = norm($abs, $lists);
+        while (($p = strrpos($sp, '[]')) !== false) { $sp = substr($sp, 0, $p); if (isset($fields[$sp])) $order[$sp] ??= ++$n; }
+    }
+}
+foreach ($fields as $path => &$f) $f['order'] = $over['fields'][$path]['order'] ?? $order[$path] ?? 99999;
+unset($f);
 ksort($fields);
 $schema = [
     'version' => 1,

@@ -41,8 +41,12 @@ RewriteRule ^_files/ugd/274ef5_(ef650220209045328e86b9d35054d796|19ebdb6af92b457
 <FilesMatch "\.(html|js|php)$">
 Header set Cache-Control "no-cache"
 </FilesMatch>
-<FilesMatch "\.(webp|png|mp4|pdf)$">
+<FilesMatch "\.(webp|png|jpe?g|mp4)$">
 Header set Cache-Control "public, max-age=2592000"
+</FilesMatch>
+# Contracts keep one permanent address and get replaced in the editor: always check for a newer one.
+<FilesMatch "\.pdf$">
+Header set Cache-Control "no-cache"
 </FilesMatch>
 # vendor/ files carry their version in the name and never change.
 <FilesMatch "-\d+\.\d+\.\d+\.production\.min\.js$">

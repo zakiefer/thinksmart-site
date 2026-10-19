@@ -159,7 +159,7 @@ final class Template
     /**
      * Render a template. $root is the content plus page variables (e.g. 'page' => 'Home').
      * Returns the finished file. When $trace is given, it receives one entry per inserted
-     * value: [path, context, start, end] with byte offsets into the result.
+     * value: [path, context, start, end, stored path] with byte offsets into the result.
      */
     public function render(string $name, array $root, ?array &$trace = null): string
     {
@@ -179,7 +179,7 @@ final class Template
                     break;
                 case 'val':
                     $id = count($slots);
-                    $slots[] = ['path' => $node[1], 'filters' => $node[2], 'value' => $this->resolve($node[1], $scope, $name), 'scope' => $scope];
+                    $slots[] = ['path' => $node[1], 'filters' => $node[2], 'value' => $this->resolve($node[1], $scope, $name), 'scope' => $scope, 'abs' => self::absPath($node[1], $scope)];
                     $out .= self::S0 . $id . self::S1;
                     break;
                 case 'part':
@@ -192,10 +192,15 @@ final class Template
                     $list = $this->resolve($node[1], $scope, $name);
                     if ($list === null) $list = [];
                     if (!is_array($list) || !array_is_list($list)) throw new BuildError("$name: {$node[1]} is not a list");
-                    $items = array_values(array_filter($list, fn($it) => !(is_array($it) && !empty($it['hidden']))));
+                    $listAbs = self::absPath($node[1], $scope);
+                    $items = [];
+                    foreach ($list as $k => $it) if (!(is_array($it) && !empty($it['hidden']))) $items[] = [$k, $it];
                     $count = count($items);
-                    foreach ($items as $i => $item) {
-                        $frame = ['alias' => $node[2], 'item' => $item, 'vars' => [
+                    foreach ($items as $i => [$k, $item]) {
+                        // where the item is stored (for the editor's "Fix a word I saw"); derived
+                        // lists name their source item in "_src"
+                        $abs = is_array($item) && isset($item['_src']) ? (string)$item['_src'] : ($listAbs === null ? null : "$listAbs.$k");
+                        $frame = ['alias' => $node[2], 'item' => $item, 'abs' => $abs, 'vars' => [
                             'index' => $i, 'n' => $i + 1, 'count' => $count, 'first' => $i === 0,
                             'last' => $i === $count - 1, 'odd' => $i % 2 === 1, 'even' => $i % 2 === 0,
                         ]];
@@ -228,6 +233,25 @@ final class Template
         // ⟦ref.phone⟧: a chip on its own (the setting as visitors read it)
         if ($seg[0] === 'ref' && count($seg) === 2) return ($this->refResolver)($seg[1], $scope);
         return self::dig($scope['root'], $seg);
+    }
+
+    /**
+     * The stored path a template path reads ("x.q" inside faq.items -> "faq.items.3.q"), or null
+     * for loop variables. Derived items may map a field to its source with "_edit".
+     */
+    private static function absPath(string $path, array $scope): ?string
+    {
+        if ($path[0] === '@') return null;
+        $seg = explode('.', $path);
+        for ($k = count($scope['frames']) - 1; $k >= 0; $k--) {
+            $f = $scope['frames'][$k];
+            if ($seg[0] !== $f['alias']) continue;
+            $rest = implode('.', array_slice($seg, 1));
+            if (is_array($f['item']) && isset($f['item']['_edit'][$rest])) return (string)$f['item']['_edit'][$rest];
+            if (($f['abs'] ?? null) === null) return null;
+            return $rest === '' ? $f['abs'] : $f['abs'] . '.' . $rest;
+        }
+        return $path;
     }
 
     private static function dig($cur, array $seg)
@@ -294,7 +318,7 @@ final class Template
             $out .= substr($draft, $pos, $at - $pos);
             $start = strlen($out);
             $out .= $this->encodeSlot($slots[$id], $ctx, $name);
-            $trace[] = [$slots[$id]['path'], $ctx['kind'], $start, strlen($out)];
+            $trace[] = [$slots[$id]['path'], $ctx['kind'], $start, strlen($out), $slots[$id]['abs']];
             $pos = $at + strlen($whole);
         }
         return $out . substr($draft, $pos);

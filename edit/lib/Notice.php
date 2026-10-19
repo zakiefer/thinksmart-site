@@ -56,6 +56,17 @@ final class Notice
         return $until ? $until->format('l, M j') : 'further notice';
     }
 
+    /** "Fri Oct 23, 5:00 pm" for a start or end time. */
+    public static function wordsFor(string $s): string
+    {
+        try {
+            $d = self::time($s);
+        } catch (BuildError $e) {
+            return $s;
+        }
+        return $d ? $d->format('D M j, g:i a') : '';
+    }
+
     /** Plain status for the editor: "Off", "Showing now", "Starts Fri 5:00 pm", "Ended Sun 6:00 pm". */
     public static function status(array $n, int $nowTs): string
     {

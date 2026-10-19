@@ -39,12 +39,24 @@ final class Build
         return $out;
     }
 
+    /** Render one file (for the editor's preview). */
+    public function renderOne(array $content, string $file, ?array &$trace = null): string
+    {
+        $name = array_search($file, Site::PAGES, true);
+        if ($name === false) throw new BuildError("$file is not a page");
+        $content = Content::clean($content);
+        $eng = new Template($this->paths->templates(), Site::refResolver());
+        $root = $content + ['page' => $name, 'derived' => Derive::all($content)];
+        $trace = [];
+        return $eng->render("$name.html", $root, $trace);
+    }
+
     /**
      * Build into a new side folder and check it. Throws BuildError (with every problem
      * listed) if a check fails; the live site is never touched here.
      * @return array{id: string, dir: string, files: array<string, array{sha: string, bytes: int}>}
      */
-    public function build(array $content): array
+    public function build(array $content, array $extra = []): array
     {
         $bad = Content::problems(Content::clean($content));
         if ($bad) throw new BuildError("The content needs fixing first:\n  " . implode("\n  ", $bad));
@@ -66,13 +78,21 @@ final class Build
             Files::writeAtomic("$dir/site/$file", $text);
             $manifest[$file] = ['sha' => hash('sha256', $text), 'bytes' => strlen($text)];
         }
+        // files copied as they are (a new contract PDF at its permanent address)
+        foreach ($extra as $file => $src) {
+            if (!preg_match('~^docs/[a-z0-9._-]+\.pdf$~', $file)) throw new BuildError("Refusing to place $file");
+            $data = (string)@file_get_contents($src);
+            if (strncmp($data, '%PDF-', 5) !== 0) throw new BuildError("$src is not a PDF");
+            Files::writeAtomic("$dir/site/$file", $data);
+            $manifest[$file] = ['sha' => hash('sha256', $data), 'bytes' => strlen($data)];
+        }
         // re-read what was written: the disk must hold exactly what was built
         foreach ($manifest as $file => $m) {
             if (Files::sha("$dir/site/$file") !== $m['sha']) throw new BuildError("Side folder copy of $file doesn't match");
         }
         Files::writeAtomic("$dir/filters.json", json_encode(self::filters(Content::clean($content)), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
         Files::writeAtomic("$dir/manifest.json", json_encode(['id' => $id, 'built' => gmdate('c'), 'files' => $manifest], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
-        return ['id' => $id, 'dir' => $dir, 'files' => $manifest];
+        return ['id' => $id, 'dir' => $dir, 'files' => $manifest, 'traces' => $traces];
     }
 
     /** Own phone numbers and email: the chat and the lead mailer don't treat them as a visitor's. */

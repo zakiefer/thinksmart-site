@@ -135,7 +135,7 @@
         ⟦#each contact.rows as x⟧
         <div style="display:flex; justify-content:space-between; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.2em; color:rgba(235,229,216,.6);">⟦x.label|upper⟧</span>⟦#if x.type == 'phone'⟧<a href="tel:⟦#if x.which == 'phone2'⟧⟦ref.phone2|tel⟧⟦#else⟧⟦site.phone|tel⟧⟦/if⟧" style="font-size:14px; color:#F09A2E; text-align:right;">⟦#if x.which == 'phone2'⟧⟦ref.phone2⟧⟦#else⟧⟦site.phone⟧⟦/if⟧</a>⟦#else⟧⟦#if x.type == 'email'⟧<a href="mailto:⟦site.email⟧" style="font-size:14px; color:#F09A2E; text-align:right; overflow-wrap:anywhere;">⟦ref.email|wbr⟧</a>⟦#else⟧<span style="font-size:14px; color:rgba(235,229,216,⟦site.brightness|bright:.75⟧); text-align:right;">⟦#if x.type == 'states'⟧⟦ref.stateNames⟧⟦#else⟧⟦x.text⟧⟦/if⟧</span>⟦/if⟧⟦/if⟧</div>
         ⟦/each⟧
-        <figure style="margin:18px 0 0; overflow:hidden; border:1px solid rgba(235,229,216,.12); border-radius:4px; aspect-ratio:16/10;"><img src="⟦contact.form.photo⟧" alt="⟦contact.form.photoAlt⟧" style="width:100%; height:100%; object-fit:cover; display:block;"></figure>
+        <figure style="margin:18px 0 0; overflow:hidden; border:1px solid rgba(235,229,216,.12); border-radius:4px; aspect-ratio:16/10;"><img src="⟦contact.form.photo⟧" alt="⟦contact.form.photoAlt⟧" style="width:100%; height:100%; object-fit:cover;⟦#if contact.form.photoFocus⟧ object-position:⟦contact.form.photoFocus.x⟧% ⟦contact.form.photoFocus.y⟧%;⟦/if⟧ display:block;"></figure>
       </div>
     </div>
 

@@ -96,10 +96,16 @@
 <main id="main">
 <section data-screen-label="Hero — The Storm" style="position:relative; height:100vh; min-height:640px; overflow:hidden; display:flex; align-items:flex-end;">
   <div data-ref="heroVid" style="position:absolute; inset:-6% 0; z-index:0; transform:scale(1.08);">
+⟦#if home.top.video.photo⟧
+    <img src="⟦home.top.video.photo⟧" alt="" style="width:100%; height:100%; object-fit:cover;⟦#if home.top.video.photoFocus⟧ object-position:⟦home.top.video.photoFocus.x⟧% ⟦home.top.video.photoFocus.y⟧%;⟦/if⟧ display:block;">
+⟦#else⟧
     <video poster="⟦home.top.video.poster⟧" src="⟦home.top.video.video⟧" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(⟦home.top.video.poster|cssurl⟧) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
+⟦/if⟧
   </div>
+⟦#if !home.top.video.photo⟧
   <canvas data-ref="rain" style="position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:.55; mix-blend-mode:screen;"></canvas>
   <div data-ref="flash" style="position:absolute; inset:0; z-index:1; background:#E8F0FF; opacity:0; pointer-events:none;"></div>
+⟦/if⟧
   <div style="position:absolute; inset:0; z-index:1; background:linear-gradient(180deg, rgba(11,14,19,.55) 0%, rgba(11,14,19,.15) 38%, rgba(11,14,19,.6) 72%, #0B0E13 100%);"></div>
   <div style="position:absolute; inset:0; z-index:1; background:radial-gradient(120% 90% at 50% 110%, transparent 40%, rgba(7,10,15,.55) 100%);"></div>
   <div data-ref="heroContent" style="position:relative; z-index:2; width:100%; padding:0 clamp(20px,4vw,56px) 12vh;">
@@ -147,7 +153,7 @@
     <div data-ref="stripTrack" style="display:flex; gap:clamp(16px,2vw,28px); padding:0 clamp(20px,4vw,56px); will-change:transform; width:max-content;">
       ⟦#each home.damage.cards as x⟧
       <article data-tilt="1" style="width:min(520px,78vw); flex:none; background:#10141B; border:1px solid rgba(235,229,216,.12); border-radius:4px; overflow:hidden; transform-style:preserve-3d;⟦#if @odd⟧ margin-top:44px;⟦/if⟧">
-        <div style="overflow:hidden; aspect-ratio:16/10;"><img data-plx="1" src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.12); will-change:transform;"></div>
+        <div style="overflow:hidden; aspect-ratio:16/10;"><img data-plx="1" src="⟦x.photo⟧" alt="⟦x.photoAlt⟧" style="width:100%; height:100%; object-fit:cover;⟦#if x.photoFocus⟧ object-position:⟦x.photoFocus.x⟧% ⟦x.photoFocus.y⟧%;⟦/if⟧ display:block; transform:scale(1.12); will-change:transform;"></div>
         <div style="padding:22px 24px 26px; display:flex; flex-direction:column; gap:10px;">
           <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.26em; color:#F09A2E;">EXHIBIT ⟦@index|letter⟧ — ⟦x.tag|upper⟧</span>
           <h3 style="margin:0; font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:700; text-transform:uppercase; font-size:34px; line-height:1; color:#EBE5D8;">⟦x.title⟧</h3>
@@ -199,7 +205,7 @@
       </div>
       <figure data-rv="120" style="margin:0; position:relative;">
         <div style="overflow:hidden; border:1px solid rgba(235,229,216,.14); border-radius:4px; aspect-ratio:4/3; position:relative;">
-          <img data-plx="1" src="⟦home.lowball.photo⟧" alt="⟦home.lowball.photoAlt⟧" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.12); will-change:transform;">
+          <img data-plx="1" src="⟦home.lowball.photo⟧" alt="⟦home.lowball.photoAlt⟧" style="width:100%; height:100%; object-fit:cover;⟦#if home.lowball.photoFocus⟧ object-position:⟦home.lowball.photoFocus.x⟧% ⟦home.lowball.photoFocus.y⟧%;⟦/if⟧ display:block; transform:scale(1.12); will-change:transform;">
           <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 55%, rgba(7,10,15,.75) 100%);"></div>
           <div data-ref="stamp" style="position:absolute; top:50%; left:50%; margin:-15% 0 0 -34%; transform:rotate(-12deg); border:5px solid #F09A2E; color:#F09A2E; border-radius:6px; padding:10px 26px; font-family:'Big Shoulders Display',Impact,sans-serif; font-weight:800; font-size:clamp(40px,4.6vw,72px); letter-spacing:.06em; text-transform:uppercase; box-shadow:0 0 0 2px rgba(240,154,46,.2) inset; background:rgba(7,10,15,.25);">⟦home.lowball.stamp⟧</div>
         </div>
@@ -214,7 +220,11 @@
 
 <section id="fight" data-screen-label="Act 03 — The Fight" style="position:relative; background:#0B0E13; overflow:hidden; padding:clamp(80px,12vh,160px) clamp(20px,4vw,56px);">
   <div style="position:absolute; inset:0; opacity:.14; pointer-events:none;">
+⟦#if home.fight.video.photo⟧
+    <img src="⟦home.fight.video.photo⟧" alt="" style="width:100%; height:100%; object-fit:cover;⟦#if home.fight.video.photoFocus⟧ object-position:⟦home.fight.video.photoFocus.x⟧% ⟦home.fight.video.photoFocus.y⟧%;⟦/if⟧ display:block;">
+⟦#else⟧
     <video poster="⟦home.fight.video.poster⟧" src="⟦home.fight.video.video⟧" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(⟦home.fight.video.poster|cssurl⟧) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
+⟦/if⟧
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg,#0B0E13 0%, rgba(11,14,19,.35) 30%, rgba(11,14,19,.35) 70%, #0B0E13 100%); pointer-events:none;"></div>
   <div style="position:relative; max-width:1400px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr)); gap:clamp(32px,5vw,80px);">
@@ -276,7 +286,7 @@
 
 <section data-screen-label="Case Closed" style="position:relative; min-height:92vh; display:flex; align-items:flex-end; overflow:hidden;">
   <div style="position:absolute; inset:0; overflow:hidden;">
-    <img data-plx="1" src="⟦home.closed.photo⟧" alt="⟦home.closed.photoAlt⟧" style="width:100%; height:112%; object-fit:cover; display:block; transform:translateY(-4%); will-change:transform;">
+    <img data-plx="1" src="⟦home.closed.photo⟧" alt="⟦home.closed.photoAlt⟧" style="width:100%; height:112%; object-fit:cover;⟦#if home.closed.photoFocus⟧ object-position:⟦home.closed.photoFocus.x⟧% ⟦home.closed.photoFocus.y⟧%;⟦/if⟧ display:block; transform:translateY(-4%); will-change:transform;">
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, #0B0E13 0%, rgba(11,14,19,.2) 34%, rgba(11,14,19,.78) 100%);"></div>
   <div style="position:relative; width:100%; max-width:1400px; margin:0 auto; padding:120px clamp(20px,4vw,56px) clamp(70px,10vh,120px); display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:28px;">
@@ -352,7 +362,11 @@
 
 <section data-screen-label="Final CTA" style="position:relative; min-height:88vh; display:flex; align-items:center; overflow:hidden;">
   <div style="position:absolute; inset:0;">
+⟦#if home.final.video.photo⟧
+    <img src="⟦home.final.video.photo⟧" alt="" style="width:100%; height:100%; object-fit:cover;⟦#if home.final.video.photoFocus⟧ object-position:⟦home.final.video.photoFocus.x⟧% ⟦home.final.video.photoFocus.y⟧%;⟦/if⟧ display:block;">
+⟦#else⟧
     <video poster="⟦home.final.video.poster⟧" src="⟦home.final.video.video⟧" muted="{{ true }}" loop="{{ true }}" playsinline preload="none" style="background:#0B0E13 url(⟦home.final.video.poster|cssurl⟧) center/cover no-repeat; width:100%; height:100%; object-fit:cover; display:block;"></video>
+⟦/if⟧
   </div>
   <div style="position:absolute; inset:0; background:linear-gradient(180deg, #0B0E13 0%, rgba(11,14,19,.45) 40%, rgba(11,14,19,.85) 100%);"></div>
   <div style="position:relative; width:100%; max-width:1400px; margin:0 auto; padding:100px clamp(20px,4vw,56px); text-align:center; display:flex; flex-direction:column; align-items:center; gap:28px;">

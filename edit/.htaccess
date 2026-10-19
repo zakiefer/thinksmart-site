@@ -1,2 +1,15 @@
-# The editor (Step 3) adds its own entry point here. Until then nothing in edit/ is served.
+# The website editor. Only index.php and the app's own files (app/) are served; the builder's
+# code, templates and starting content in this folder are never reachable from the web.
+Options -Indexes
+DirectoryIndex index.php
+
 Require all denied
+<Files "index.php">
+  Require all granted
+</Files>
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(p|api)/ index.php [L,QSA]
+RewriteRule ^undo$ index.php [L,QSA]
+</IfModule>

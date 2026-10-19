@@ -28,7 +28,10 @@ final class Derive
             'licenseLine' => self::licenseLine($c),
             'homeTopLine' => self::homeTopLine($c),
             'notice' => Notice::derive($c),
-            'homeNumbers' => self::visible(array_values(array_filter([$c['numbers']['underpaid'] ?? null, $c['numbers']['higher'] ?? null]))),
+            'homeNumbers' => self::visible(array_values(array_filter([
+                isset($c['numbers']['underpaid']) ? $c['numbers']['underpaid'] + ['_src' => 'numbers.underpaid'] : null,
+                isset($c['numbers']['higher']) ? $c['numbers']['higher'] + ['_src' => 'numbers.higher'] : null,
+            ]))),
             'damageNextLetter' => chr(65 + count(self::visible($c['home']['damage']['cards'] ?? []))),
         ];
     }
@@ -114,7 +117,7 @@ final class Derive
     public static function statement(array $c): array
     {
         $lines = [];
-        foreach ($c['home']['statement']['lines'] ?? [] as $line) {
+        foreach ($c['home']['statement']['lines'] ?? [] as $li => $line) {
             $words = [];
             foreach (Rich::runs($line, 'big statement') as $r) {
                 $text = is_string($r) ? $r : (string)($r['hl'] ?? '');
@@ -122,7 +125,7 @@ final class Derive
                 foreach (preg_split('/(?<= )/u', $text, -1, PREG_SPLIT_NO_EMPTY) as $w) $words[] = ['text' => $w, 'amber' => $amber];
             }
             if ($words) $words[count($words) - 1]['text'] = rtrim($words[count($words) - 1]['text']);
-            $lines[] = ['words' => $words];
+            $lines[] = ['words' => $words, '_src' => "home.statement.lines.$li"];
         }
         return $lines;
     }
@@ -135,7 +138,8 @@ final class Derive
     public static function reviews(array $c): array
     {
         $out = [];
-        foreach (self::visible($c['home']['reviews']['items'] ?? []) as $r) {
+        foreach ($c['home']['reviews']['items'] ?? [] as $k => $r) {
+            if (!is_array($r) || !empty($r['hidden'])) continue;
             $text = trim((string)($r['text'] ?? ''));
             $name = trim((string)($r['name'] ?? ''));
             // only reviews confirmed as a real customer's own words
@@ -151,6 +155,7 @@ final class Derive
             if (!empty($r['trimmed'])) $meta[] = 'shortened';
             $stars = (int)($r['stars'] ?? 0);
             $out[] = [
+                '_src' => "home.reviews.items.$k",
                 'text' => $text,
                 'name' => self::shortName($name),
                 'meta' => implode(' · ', $meta),
@@ -192,11 +197,13 @@ final class Derive
     public static function homeFaq(array $c): array
     {
         $out = [];
-        foreach (self::visible($c['faq']['items'] ?? []) as $it) {
-            if (empty($it['home'])) continue;
+        foreach ($c['faq']['items'] ?? [] as $k => $it) {
+            if (!is_array($it) || !empty($it['hidden']) || empty($it['home'])) continue;
             $out[] = [
                 'q' => $it['homeQ'] ?? $it['q'],
                 'a' => $it['homeA'] ?? ($it['a'][0]['text'] ?? ''),
+                '_src' => "faq.items.$k",
+                '_edit' => ['q' => "faq.items.$k." . (isset($it['homeQ']) ? 'homeQ' : 'q'), 'a' => "faq.items.$k." . (isset($it['homeA']) ? 'homeA' : 'a.0.text')],
             ];
         }
         return $out;

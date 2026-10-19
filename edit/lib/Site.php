@@ -121,11 +121,11 @@ final class Site
     public static function states(array $root): array
     {
         $out = [];
-        foreach ($root['states'] ?? [] as $s) {
+        foreach ($root['states'] ?? [] as $i => $s) {
             if (!empty($s['hidden'])) continue;
             $code = (string)($s['code'] ?? '');
             if (!isset(self::STATES[$code])) throw new BuildError("Unknown state '$code'");
-            $out[] = $s + ['name' => self::STATES[$code]];
+            $out[] = $s + ['name' => self::STATES[$code], '_src' => "states.$i"];
         }
         return $out;
     }
