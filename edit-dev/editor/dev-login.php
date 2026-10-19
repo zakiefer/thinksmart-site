@@ -9,7 +9,15 @@ require dirname(__DIR__, 2) . '/edit/lib/load.php';
 use ThinkSmart\{Config, Http, People, Paths, Sessions};
 
 $cfg = json_decode((string)@file_get_contents(getenv('TS_PRIVATE_DIR') . '/config.json'), true);
-$local = PHP_SAPI === 'cli-server' && in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true);
+// A tunnel (cloudflared, ngrok) also connects from 127.0.0.1, so the Host must be this Mac's own
+// name and no proxy may have touched the request.
+$host = strtolower((string)preg_replace('/:\d+$/', '', (string)($_SERVER['HTTP_HOST'] ?? '')));
+$proxied = false;
+foreach (['HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED_HOST', 'HTTP_FORWARDED', 'HTTP_CF_CONNECTING_IP', 'HTTP_CF_RAY', 'HTTP_X_REAL_IP'] as $h) {
+    if (isset($_SERVER[$h])) $proxied = true;
+}
+$local = PHP_SAPI === 'cli-server' && in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true)
+    && in_array($host, ['localhost', '127.0.0.1', '[::1]'], true) && !$proxied;
 if (!$local || ($cfg['dev'] ?? false) !== true || ($cfg['mail'] ?? '') !== 'outbox') {
     http_response_code(403);
     echo 'Only for the local test copy.';
