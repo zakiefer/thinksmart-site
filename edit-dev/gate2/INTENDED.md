@@ -55,6 +55,8 @@ Gate 1's snapshot (`edit-dev/gate1/files`) keeps the old link: it records the pa
 - The callback promise is "within 48 hours" (8 spots on Claim and Contact).
 - The states are listed Indiana, Kentucky, Ohio, Illinois, Tennessee: in the Home titles and descriptions and the Claim cards.
 
+**D15. Home top line without a state** (Zack, 2026-10-19). Now "Licensed Public Adjusters · Policyholder Side Only" (was "… · Indiana", which read as Indiana-only). On phones the dot sits beside the first line and keeps its round shape. The damage strip's swipe-row scrollbar is styled thin and dark.
+
 From here the repo's page files are the editor's own build of `edit/seed/content.json`, so staging shows exactly what launches. Tests that hard-coded the old starting number now read it from the starting content.
 
 ## Changes visitors can't see
