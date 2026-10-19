@@ -158,11 +158,12 @@ $pub = new Publisher($cfg, $people);
 $pub->settle();
 ok($pub->history->rev() === 1 && $pub->history->head()['kind'] === 'launch', 'the launch-day version is the first History entry');
 $live = $pub->live->load();
-$ops = [['op' => 'set', 'path' => ['site', 'phone'], 'value' => '812-774-5050', 'old' => $live['site']['phone']]];
+$startPhone = $live['site']['phone']; // the launch-day main number, whatever the starting content says
+$ops = [['op' => 'set', 'path' => ['site', 'phone'], 'value' => '812-774-5050', 'old' => $startPhone]];
 $r = $pub->publish($john['id'], $ops, [], 'pub-test-0001', 1);
 ok($r['ok'] && $r['entry']['rev'] === 2, 'phone change goes live as change 2');
-ok(str_contains((string)file_get_contents("$tmp/site/Contact.dc.html"), '812-774-5050') && !str_contains((string)file_get_contents("$tmp/site/Home.dc.html"), '812-774-5049'), 'the new number is on the pages, the old one gone');
-ok(($r['entry']['lines'][0] ?? '') === 'changed main phone number from “812-774-5049” to “812-774-5050” (all pages)', 'History says: ' . ($r['entry']['lines'][0] ?? '?'));
+ok(str_contains((string)file_get_contents("$tmp/site/Contact.dc.html"), '812-774-5050') && !str_contains((string)file_get_contents("$tmp/site/Home.dc.html"), $startPhone), 'the new number is on the pages, the old one gone');
+ok(($r['entry']['lines'][0] ?? '') === "changed main phone number from “{$startPhone}” to “812-774-5050” (all pages)", 'History says: ' . ($r['entry']['lines'][0] ?? '?'));
 ok(json_decode((string)file_get_contents("$tmp/private/filters.json"), true)['ownPhones'][0] === '8127745050', 'the mailer\'s own-number filter follows');
 $mails = $outbox();
 $last = $mails ? Json::read(end($mails)) : [];
@@ -170,7 +171,7 @@ ok($last && str_contains($last['subject'], 'John changed the website') && str_co
 $r2 = $pub->publish($john['id'], $ops, [], 'pub-test-0001', 1);
 ok($r2['ok'] && !empty($r2['again']) && $pub->history->rev() === 2, 'sending the same publish twice changes nothing (dropped connection retry)');
 $u = $pub->undo($mun['id'], 2, [], 'undo-test-0001');
-ok($u['ok'] && str_contains((string)file_get_contents("$tmp/site/Contact.dc.html"), '812-774-5049'), 'Undo puts the old number back');
+ok($u['ok'] && str_contains((string)file_get_contents("$tmp/site/Home.dc.html"), $startPhone) && !str_contains((string)file_get_contents("$tmp/site/Home.dc.html"), '812-774-5050'), 'Undo puts the old number back');
 ok($pub->history->head()['kind'] === 'undo' && $pub->history->head()['by'] === $mun['id'], 'the undo is its own History entry');
 // delete a question, then bring it back
 $live = $pub->live->load();
@@ -197,7 +198,7 @@ $later = $pub->laterChanges(1, $john['id']);
 ok(count($later) >= 2 && $later[0]['byName'] === 'Muneerah', 'restore lists the other person\'s later changes');
 $r = $pub->restore($john['id'], 1, 'restore-test-1');
 $live = $pub->live->load();
-ok($r['ok'] && $live['site']['price'] === 299 && $live['site']['phone'] === '812-774-5049', 'Put the whole website back to launch day');
+ok($r['ok'] && $live['site']['price'] === 299 && $live['site']['phone'] === $startPhone, 'Put the whole website back to launch day');
 foreach ($b->render(Json::read("$tmp/private/history/r1.json.gz")['content']) as $file => $text) {
     if (file_get_contents("$tmp/site/$file") !== $text) { ok(false, "after restore $file matches launch day"); break; }
 }

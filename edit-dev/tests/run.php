@@ -111,7 +111,8 @@ ok(Files::sha("$tmp/site/Home.dc.html") === $r1['files']['Home.dc.html']['sha'],
 ok(count(array_filter(array_keys($r1['files']), fn($f) => Files::sha("$tmp/site/$f") === $r1['files'][$f]['sha'])) === 10, 'all 10 files are live');
 ok(Files::sha("$tmp/site/.htaccess") === $ht, '.htaccess is never touched');
 ok(Journal::read($p)['state'] === 'done', 'journal says done');
-ok(json_decode((string)file_get_contents("$tmp/private/filters.json"), true)['ownPhones'] === ['8127745049', '8128501050'], 'publish installs the own-number filters for the mailer');
+$ownPhones = array_values(array_unique([preg_replace('/\D/', '', $seed['site']['phone']), preg_replace('/\D/', '', $seed['site']['phone2'])]));
+ok(json_decode((string)file_get_contents("$tmp/private/filters.json"), true)['ownPhones'] === $ownPhones, 'publish installs the own-number filters for the mailer');
 Journal::rollback($p);
 ok(file_get_contents("$tmp/site/Home.dc.html") === "old Home.dc.html\n" && !is_file("$tmp/site/FAQ.dc.html"), 'undo puts back the old files (and removes new ones)');
 

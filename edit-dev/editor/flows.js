@@ -8,6 +8,7 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const pw = require('/Users/program/Documents/joe/frontend/node_modules/playwright-core');
 const people = require('./dev-people.json').people;
+const startPhone = require('../../edit/seed/content.json').site.phone; // the launch-day main number
 
 const [base, devDir, browsersArg = 'chromium,webkit', onlyArg = ''] = process.argv.slice(2);
 const repo = path.resolve(__dirname, '../..');
@@ -148,7 +149,7 @@ const FLOWS = {
     ok(t !== 'Check your changes' && /Done/.test(t), `${which}: one tap puts it live and the page check passed ("${t}")`);
     await shot(page, which + '-done');
     await sheetButton(page, 'OK');
-    ok(live('Contact.dc.html').includes('812-774-5050') && !live('Home.dc.html').includes('812-774-5049'), `${which}: the live pages have the new number`);
+    ok(live('Contact.dc.html').includes('812-774-5050') && !live('Home.dc.html').includes(startPhone), `${which}: the live pages have the new number`);
     const mail = outbox().filter((m) => /changed the website/.test(m.subject));
     ok(mail.length >= 1 && mail[mail.length - 1].text.includes('812-774-5050') && mail[mail.length - 1].html.includes('/edit/undo?t='), `${which}: John was emailed with an Undo button`);
     ok(!(await page.isVisible('.traybar')), `${which}: nothing left in "Not live yet"`);
@@ -645,7 +646,7 @@ Object.assign(FLOWS, {
     ok((await p2.textContent('h1')).includes('Undo this change'), `${which}: the email's Undo link asks first (scanners can't trigger it)`);
     await Promise.all([p2.waitForLoadState('load'), p2.click('button[type=submit]')]);
     await p2.waitForSelector('h1');
-    ok((await p2.textContent('h1')).includes('Undone') && content().site.phone === '812-774-5049', `${which}: John's Undo from the email worked`);
+    ok((await p2.textContent('h1')).includes('Undone') && content().site.phone === startPhone, `${which}: John's Undo from the email worked`);
     await other.close();
     await ctx.close();
   },

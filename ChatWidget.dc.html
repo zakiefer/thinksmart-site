@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
 <style>
-  @media (max-width: 600px), (pointer: coarse) { input[placeholder="Type your message…"] { font-size: 16px !important; } }
+  @media (max-width: 600px), (pointer: coarse) { input[data-ref="chatInput"] { font-size: 16px !important; } }
   @media (max-height: 500px) {
     [data-ref="chatPanel"] { top: 12px !important; bottom: 12px !important; height: auto !important; }
     [data-ref="chatLauncher"][aria-expanded="true"] { display: none !important; }
@@ -55,12 +55,12 @@
         </sc-if>
       </div>
       <div style="display:flex; gap:10px; padding:14px 14px; border-top:1px solid rgba(235,229,216,.12); background:#0B0E13;">
-        <input ref="{{ inputRef }}" onKeyDown="{{ keydown }}" type="text" aria-label="Your message" placeholder="Type your message…" style="flex:1; background:#10141B; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:13px 14px; border-radius:2px; font-size:14px; font-family:'Archivo',sans-serif; outline:none; min-width:0;" style-focus="border-color:#F09A2E;">
+        <input data-ref="chatInput" ref="{{ inputRef }}" onKeyDown="{{ keydown }}" type="text" aria-label="Your message" placeholder="Type your message…" style="flex:1; background:#10141B; border:1px solid rgba(235,229,216,.18); color:#EBE5D8; padding:13px 14px; border-radius:2px; font-size:14px; font-family:'Archivo',sans-serif; outline:none; min-width:0;" style-focus="border-color:#F09A2E;">
         <button onClick="{{ send }}" style="background:#F09A2E; color:#0B0E13; border:none; font-weight:700; font-size:12px; letter-spacing:.12em; text-transform:uppercase; font-family:'Archivo',sans-serif; padding:0 18px; border-radius:2px; cursor:pointer; transition:background .25s ease;" style-hover="background:#FFB042;">Send</button>
       </div>
       <div style="padding:9px 14px; background:#070A0F; border-top:1px solid rgba(235,229,216,.08); display:flex; flex-wrap:wrap; justify-content:space-between; gap:6px 10px;">
         <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; color:rgba(235,229,216,.52);">FREE · NO OBLIGATION</span>
-        <a href="tel:8127745049" style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; color:#F09A2E; text-decoration:none; white-space:nowrap;">URGENT? 812-774-5049</a>
+        <a href="tel:8128501050" style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; color:#F09A2E; text-decoration:none; white-space:nowrap;">URGENT? 812-850-1050</a>
       </div>
     </div>
   </sc-if>
@@ -131,7 +131,7 @@ class Component extends DCLogic {
   // also match dates, dollar amounts, ZIP codes and claim numbers.
   _looksLikeContact(raw) {
     const text = raw.replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, '').replace(/[\u2010-\u2015\u2212\ufe63\uff0d]/g, '-').replace(/[\u00a0\u2007\u202f]/g, ' ');
-    const ownPhones = ['8127745049', '8128501050'];
+    const ownPhones = ['8128501050', '8128501050'];
     const phones = text.match(/(?:^|\D)(?:\+?1[\s.\-]*)?\(?[2-9]\d{2}\)?\s*[\s.\-\/]?\s*[2-9]\d{2}\s*[\s.\-]?\s*\d{4}(?!\d)/g) || [];
     const phone = phones.some((p) => ownPhones.indexOf(p.replace(/\D/g, '').slice(-10)) === -1);
     const emails = text.match(/[A-Za-z0-9._%+\-]+@[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/g) || [];
@@ -151,31 +151,7 @@ class Component extends DCLogic {
     let tail = full.slice(-12000);
     if (/^[\uDC00-\uDFFF]/.test(tail)) tail = tail.slice(1);
     const transcript = full.length > 12000 ? '[earlier messages trimmed]\n' + tail : full;
-    const emailSend = fetch('https://formsubmit.co/ajax/thinksmartpublicadjusting@gmail.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        _subject: 'Website chat — ' + kind,
-        _template: 'table',
-        _captcha: 'false',
-        'Chat transcript': transcript,
-        'Sent from': location.href
-      })
-    })
-      .then((r) => r.json().then((d) => r.ok && d && String(d.success) === 'true'))
-      .catch(() => false);
-    const dbStore = fetch('https://ptvgxvvmvtzsgmqdixef.supabase.co/rest/v1/website_leads', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'sb_publishable_dL2UsKU4RtA0AGB73wS19w_91PBsbOe',
-        'Prefer': 'return=minimal'
-      },
-      body: JSON.stringify({ kind: 'chat', payload: { stage: kind, transcript: transcript, page: location.href } })
-    })
-      .then((r) => r.ok)
-      .catch(() => false);
-    // Same-origin PHP mailer: active on the business's own hosting, fails closed elsewhere.
+    // The website's own lead mailer saves the lead first, then emails it.
     const serverSend = fetch('send-lead.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -183,9 +159,9 @@ class Component extends DCLogic {
     })
       .then((r) => (r.ok ? r.json().then((d) => !!(d && d.success === true)) : false))
       .catch(() => false);
-    // Resolve as soon as any channel delivers; give up on a channel after 15s.
+    // Resolve once the mailer has the lead safe; give up after 15s.
     return new Promise((resolve) => {
-      const ps = [serverSend, emailSend, dbStore];
+      const ps = [serverSend];
       let left = ps.length;
       ps.forEach((p) => Promise.race([p, new Promise((r) => setTimeout(() => r(false), 15000))])
         .then((ok) => { if (ok) resolve(true); else if (--left === 0) resolve(false); }));
@@ -193,7 +169,7 @@ class Component extends DCLogic {
   }
 
   _failText() {
-    return "We couldn't send that just now — please call 812-774-5049 or email thinksmartpublicadjusting@gmail.com and a licensed adjuster will pick it up.";
+    return "We couldn't send that just now — please call 812-850-1050 or email thinksmartpublicadjusting@gmail.com and a licensed adjuster will pick it up.";
   }
 
   _finishDelivery(ok, botText, extraState) {
@@ -218,8 +194,8 @@ class Component extends DCLogic {
     this._deliver('new lead').then((ok) => {
       if (ok) this._leadSent = true;
       const successText = this._contactSeen
-        ? "Done — your message is with our team. A licensed adjuster will call or write back shortly. Urgent? Call 812-774-5049 and we'll pick up."
-        : "Done — your message is with our team. We don't see a callback number in it though — drop your number here, or call 812-774-5049 so an adjuster can reach you.";
+        ? "Done — your message is with our team. A licensed adjuster will call or write back shortly. Urgent? Call 812-850-1050 and we'll pick up."
+        : "Done — your message is with our team. We don't see a callback number in it though — drop your number here, or call 812-850-1050 so an adjuster can reach you.";
       this._finishDelivery(ok, ok ? successText : this._failText(), { step: 'ready' });
     });
   }

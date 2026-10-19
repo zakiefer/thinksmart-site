@@ -50,6 +50,13 @@ live site (IN LOR 2025, OH contract 2024-1 (1), Approved KY LOR 2026, PA Contrac
 (Indiana, Kentucky) are byte-for-byte the live site's. Also changed in `Claim.dc.html` today.
 Gate 1's snapshot (`edit-dev/gate1/files`) keeps the old link: it records the pages as of c5efbf7.
 
+**D14. Muneerah's first changes made real** (content update, 2026-10-19, from her demo session).
+- Main phone is now 812-850-1050, the same as the free claim review line; 812-774-5049 no longer appears anywhere.
+- The callback promise is "within 48 hours" (8 spots on Claim and Contact).
+- The states are listed Indiana, Kentucky, Ohio, Illinois, Tennessee: in the Home titles and descriptions and the Claim cards.
+
+From here the repo's page files are the editor's own build of `edit/seed/content.json`, so staging shows exactly what launches. Tests that hard-coded the old starting number now read it from the starting content.
+
 ## Changes visitors can't see
 
 **D5. Copyright year from the visitor's browser.** "© {{ year }}" with `year` returned by each
